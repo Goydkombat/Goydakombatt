@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goydakombat</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+        }
+        header {
+            background-color: #1d4ed8;
+            color: white;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+        main {
+            padding: 2rem 0;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+        }
+        .card h2 {
+            margin-top: 0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .button {
+            background-color: #1d4ed8;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        footer {
+            background-color: #e5e7eb;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border: 1px solid #d1d5db;
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom: none;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        form div {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+        }
+        #clicker-game {
+            text-align: center;
+            padding: 2rem;
+        }
+        #score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+        #progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        #progress {
+            height: 100%;
+            background-color: #1d4ed8;
+            border-radius: 10px;
+            width: 0%;
+        }
+        #click-button {
+            width: 100px;
+            height: 100px;
+            font-size: 3rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f55c69, #2255e0);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        #click-button:active {
+            transform: scale(0.95);
+        }
+        #continue-message {
+            color: #1d4ed8;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <h1>Goyda kombat</h1>
+                <div>
+                    <a href="#">Главная</a>
+                    <a href="#">Услуги</a>
+                    <a href="#">Новости</a>
+                    <a href="#" class="button" id="openRegister">Регистрация</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="services"><i class="ri-service-line"></i> Услуги</div>
+            <div class="tab" data-tab="news"><i class="ri-newspaper-line"></i> Новости</div>
+            <div class="tab" data-tab="entertainment"><i class="ri-game-line"></i> Развлечения</div>
+            <div class="tab" data-tab="profile"><i class="ri-user-3-line"></i> Личный кабинет</div>
+        </div>
+
+        <div id="services" class="tab-content card active">
+            <h2>Популярные услуги</h2>
+            <p>Выберите нужную услугу</p>
+            <div class="grid">
+                <a href="#" class="button"><i class="ri-passport-line"></i> Получение паспорта</a>
+                <a href="#" class="button"><i class="ri-bank-card-line"></i> Оплата штрафов</a>
+                <a href="#" class="button"><i class="ri-heart-pulse-line"></i> Запись к врачу</a>
+            </div>
+        </div>
+
+        <div id="news" class="tab-content card">
+            <h2>Новости и объявления</h2>
+            <p>Последние обновления и важная информация</p>
+            <div>
+                <h3>Новые меры поддержки для семей с детьми</h3>
+                <p>15 мая 2023</p>
+                <p>Правительство объявило о новых мерах поддержки для семей с детьми...</p>
+            </div>
+            <div>
+                <h3>Изменения в процедуре регистрации автомобилей</h3>
+                <p>10 мая 2023</p>
+                <p>С 1 июня вступают в силу изменения в процедуре регистрации автомобилей...</p>
+            </div>
+            <div>
+                <h3>Расширение программы льготной ипотеки</h3>
+                <p>5 мая 2023</p>
+                <p>Правительство приняло решение о расширении программы льготной ипотеки...</p>
+            </div>
+        </div>
+
+        <div id="entertainment" class="tab-content card">
+            <h2>Развлекательная функция</h2>
+            <div id="entertainment-content">
+                <p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p>
+                <a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>
+            </div>
+            <div id="clicker-game" style="display: none;">
+                <div id="score">0</div>
+                <div id="progress-bar"><div id="progress"></div></div>
+                <div>Гойда <span id="level">1</span></div>
+                <button id="click-button">Z</button>
+                <div id="continue-message" style="display: none;">Продолжай дальше!</div>
+            </div>
+        </div>
+
+        <div id="profile" class="tab-content card">
+            <h2>Личный кабинет</h2>
+            <p>Управление вашим аккаунтом и услугами</p>
+            <div class="grid">
+                <a href="#" class="button"><i class="ri-user-settings-line"></i> Мои данные</a>
+                <a href="#" class="button"><i class="ri-file-list-3-line"></i> Мои документы</a>
+                <a href="#" class="button"><i class="ri-article-line"></i> Мои заявления</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <div>
+                    <label for="firstName">Имя:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div>
+                    <label for="lastName">Фамилия:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="button">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3>О портале</h3>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Контакты</a></li>
+                        <li><a href="#">Часто задаваемые вопросы</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Полезные ссылки</h3>
+                    <ul>
+                        <li><a href="#">Правовая информация</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="#">Карта сайта</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Подписаться на новости</h3>
+                    <form>
+                        <input type="email" placeholder="Ваш email" style="margin-right: 0.5rem;">
+                        <button type="submit" class="button">Подписаться</button>
+                    </form>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem; color: #4b5563;">
+                © 2024 Goyda kombat. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Modal functionality
+        const modal = document.getElementById("registerModal");
+        const openRegisterBtn = document.getElementById("openRegister");
+        const openRegisterEntertainmentBtn = document.getElementById("openRegisterEntertainment");
+        const closeBtn = document.getElementsByClassName("close")[0];
+
+        function openModal(e) {
+            e.preventDefault();
+            modal.style.display = "block";
+        }
+
+        openRegisterBtn.onclick = openModal;
+        openRegisterEntertainmentBtn.onclick = openModal;
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Registration functionality
+        const registerForm = document.getElementById("registerForm");
+        registerForm.onsubmit = function(e) {
+            e.preventDefault();
+            localStorage.setItem('registered', 'true');
+            modal.style.display = "none";
+            updateEntertainmentSection();
+        }
+
+        // Update entertainment section based on registration status
+        function updateEntertainmentSection() {
+            const entertainmentContent = document.getElementById("entertainment-content");
+            const clickerGame = document.getElementById("clicker-game");
+            const isRegistered = localStorage.getItem('registered') === 'true';
+
+            if (isRegistered) {
+                entertainmentContent.innerHTML = '<h3>Игра  "Кликер"</h3><button class="button" id="startClicker">Играть в кликер</button>';
+                document.getElementById("startClicker").addEventListener('click', startClickerGame);
+            } else {
+                entertainmentContent.innerHTML = '<p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p><a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>';
+                document.getElementById("openRegisterEntertainment").addEventListener('click', openModal);
+            }
+        }
+
+        // Clicker game functionality
+        let score = 0;
+        let level = 1;
+        let clickValue = 1;
+        let targetScore = 100;
+
+        function saveGameState() {
+            const gameState = {
+                score: score,
+                level: level,
+                clickValue: clickValue,
+                targetScore: targetScore
+            };
+            localStorage.setItem('clickerGameState', JSON.stringify(gameState));
+        }
+
+        function loadGameState() {
+            const savedState = localStorage.getItem('clickerGameState');
+            if (savedState) {
+                const gameState = JSON.parse(savedState);
+                score = gameState.score;
+                level = gameState.level;
+                clickValue = gameState.clickValue;
+                targetScore = gameState.targetScore;
+            }
+        }
+
+        function startClickerGame() {
+            document.getElementById("entertainment-content").style.display = "none";
+            document.getElementById("clicker-game").style.display = "block";
+            loadGameState();
+            updateGameDisplay();
+        }
+
+        document.getElementById("click-button").addEventListener('click', () => {
+            score += clickValue;
+            if (score >= targetScore) {
+                level++;
+                if (level <= 10) {
+                    clickValue *= 2;
+                    targetScore *= 2;
+                } else {
+                    clickValue *= 4;
+                    targetScore *= 4;
+                    document.getElementById("continue-message").style.display = "block";
+                }
+            }
+            saveGameState();
+            updateGameDisplay();
+        });
+
+        function updateGameDisplay() {
+            document.getElementById("score").textContent = score.toLocaleString();
+            document.getElementById("level").textContent = level;
+            const progress = (score / targetScore) * 100;
+            document.getElementById("progress").style.width = `${Math.min(progress, 100)}%`;
+            if (level > 10) {
+                document.getElementById("continue-message").style.display = "block";
+            }
+        }
+
+        // Initial update of entertainment section
+        updateEntertainmentSection();
+    </script>
+</body>
+</html>
