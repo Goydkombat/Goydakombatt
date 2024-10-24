@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goydakombat</title>
+    <title>ГосУслуги+</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         body {
@@ -145,6 +145,8 @@
         #clicker-game {
             text-align: center;
             padding: 2rem;
+            border-radius: 0.5rem;
+            position: relative;
         }
         #score {
             font-size: 3rem;
@@ -169,7 +171,6 @@
             height: 100px;
             font-size: 3rem;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f55c69, #2255e0);
             color: white;
             border: none;
             cursor: pointer;
@@ -178,9 +179,49 @@
         #click-button:active {
             transform: scale(0.95);
         }
+        #click-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         #continue-message {
             color: #1d4ed8;
             font-weight: bold;
+            margin-top: 1rem;
+        }
+        #clicks-left {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+        #cooldown {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #ef4444;
+        }
+        .skin-default {
+            background: linear-gradient(135deg, #fa6074, #1d4ed8);
+        }
+        .skin-russia {
+            background: linear-gradient(to bottom, #fff 33%, #0039A6 33%, #0039A6 66%, #D52B1E 66%);
+        }
+        .bg-default {
+            background-color: white;
+        }
+        .bg-special {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        #skins-button {
+            position: static;
+            margin-top: 1rem;
+        }
+        .game-button {
+            background-color: #1d4ed8;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
             margin-top: 1rem;
         }
     </style>
@@ -244,12 +285,16 @@
                 <p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p>
                 <a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>
             </div>
-            <div id="clicker-game" style="display: none;">
+            <div id="clicker-game" class="bg-default" style="display: none;">
                 <div id="score">0</div>
                 <div id="progress-bar"><div id="progress"></div></div>
                 <div>Гойда <span id="level">1</span></div>
-                <button id="click-button">Z</button>
+                <button id="click-button" class="skin-default">Z</button>
+                <div id="clicks-left">Осталось кликов: <span id="clicks-remaining">5000</span></div>
+                <div id="cooldown" style="display: none;">Перезарядка: <span id="cooldown-timer">30</span> сек</div>
                 <div id="continue-message" style="display: none;">Продолжай дальше!</div>
+                <button id="withdraw-button" class="game-button" style="display: none;">Вывести</button>
+                <button id="skins-button" class="game-button" style="display: none;">Скины</button>
             </div>
         </div>
 
@@ -290,6 +335,15 @@
         </div>
     </div>
 
+    <div id="skinsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Выбор скина</h2>
+            <button id="defaultSkin" class="button">Стандартный скин</button>
+            <button id="specialSkin" class="button">Специальный скин</button>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -307,6 +361,7 @@
                         <li><a href="#">Правовая информация</a></li>
                         <li><a href="#">Политика конфиденциальности</a></li>
                         <li><a href="#">Карта сайта</a></li>
+                    
                     </ul>
                 </div>
                 <div>
@@ -318,12 +373,19 @@
                 </div>
             </div>
             <div style="text-align: center; margin-top: 2rem; color: #4b5563;">
-                © 2024 Goyda kombat. Все права защищены. Автор ничего плохого не хотел перенести это было сделанного от того что было скучно
+                © 2024 Goydakombat. Все права защищены.
             </div>
         </div>
     </footer>
 
     <script>
+        const INFINITY_SCORE = 1e308; // Примерно максимальное число с плавающей точкой в JavaScript
+
+        let lastClickTime = 0;
+        let rapidClickCount = 0;
+        const RAPID_CLICK_THRESHOLD = 10; // 10 ms
+        const RAPID_CLICK_LIMIT = 50;
+
         // Tab switching functionality
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -342,9 +404,10 @@
 
         // Modal functionality
         const modal = document.getElementById("registerModal");
+        const skinsModal = document.getElementById("skinsModal");
         const openRegisterBtn = document.getElementById("openRegister");
         const openRegisterEntertainmentBtn = document.getElementById("openRegisterEntertainment");
-        const closeBtn = document.getElementsByClassName("close")[0];
+        const closeBtns = document.getElementsByClassName("close");
 
         function openModal(e) {
             e.preventDefault();
@@ -354,13 +417,19 @@
         openRegisterBtn.onclick = openModal;
         openRegisterEntertainmentBtn.onclick = openModal;
 
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
-        }
+        Array.from(closeBtns).forEach(btn => {
+            btn.onclick = function() {
+                modal.style.display = "none";
+                skinsModal.style.display = "none";
+            }
+        });
 
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+            }
+            if (event.target == skinsModal) {
+                skinsModal.style.display = "none";
             }
         }
 
@@ -380,7 +449,7 @@
             const isRegistered = localStorage.getItem('registered') === 'true';
 
             if (isRegistered) {
-                entertainmentContent.innerHTML = '<h3>Игра  "Кликер"</h3><button class="button" id="startClicker">Играть в кликер</button>';
+                entertainmentContent.innerHTML = '<h3>Игра "Кликер"</h3><button class="button" id="startClicker">Играть в кликер</button>';
                 document.getElementById("startClicker").addEventListener('click', startClickerGame);
             } else {
                 entertainmentContent.innerHTML = '<p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p><a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>';
@@ -393,13 +462,18 @@
         let level = 1;
         let clickValue = 1;
         let targetScore = 100;
+        let clicksRemaining = 5000;
+        let cooldownActive = false;
+        let specialSkinUnlocked = false;
 
         function saveGameState() {
             const gameState = {
                 score: score,
                 level: level,
                 clickValue: clickValue,
-                targetScore: targetScore
+                targetScore: targetScore,
+                clicksRemaining: clicksRemaining,
+                specialSkinUnlocked: specialSkinUnlocked
             };
             localStorage.setItem('clickerGameState', JSON.stringify(gameState));
         }
@@ -412,45 +486,162 @@
                 level = gameState.level;
                 clickValue = gameState.clickValue;
                 targetScore = gameState.targetScore;
+                clicksRemaining = gameState.clicksRemaining;
+                specialSkinUnlocked = gameState.specialSkinUnlocked;
             }
         }
 
         function startClickerGame() {
             document.getElementById("entertainment-content").style.display = "none";
             document.getElementById("clicker-game").style.display = "block";
+            document.getElementById("skins-button").style.display = "inline-block";
             loadGameState();
             updateGameDisplay();
         }
 
-        document.getElementById("click-button").addEventListener('click', () => {
+        document.getElementById("click-button").addEventListener('click', (event) => {
+            if (cooldownActive) return;
+
+            const currentTime = new Date().getTime();
+            if (currentTime - lastClickTime <= RAPID_CLICK_THRESHOLD) {
+                rapidClickCount++;
+                if (rapidClickCount >= RAPID_CLICK_LIMIT) {
+                    clicksRemaining = 0;
+                    startCooldown();
+                    alert("Читерить нехорошо");
+                    return;
+                }
+            } else {
+                rapidClickCount = 0;
+            }
+            lastClickTime = currentTime;
+
             score += clickValue;
+            clicksRemaining--;
+
+            if (score >= INFINITY_SCORE) {
+                alert("Поздравляем! Вы достигли бесконечности! Игра начнется заново.");
+                resetGame();
+                return;
+            }
+
             if (score >= targetScore) {
                 level++;
-                if (level <= 10) {
+                if (level <= 15) {
                     clickValue *= 2;
                     targetScore *= 2;
+                } else if (level === 15) {
+                    clickValue = 1000;
+                    targetScore *= 3;
                 } else {
-                    clickValue *= 4;
-                    targetScore *= 4;
-                    document.getElementById("continue-message").style.display = "block";
+                    clickValue *= 1.1;
+                    targetScore *= 3;
                 }
+                clicksRemaining = 5000; // Reset clicks on level up
             }
+
+            if (clicksRemaining <= 0) {
+                startCooldown();
+            }
+
+            if (level >= 100 && !specialSkinUnlocked) {
+                specialSkinUnlocked = true;
+                alert("Поздравляем! Вы разблокировали специальный скин!");
+            }
+
             saveGameState();
             updateGameDisplay();
         });
 
         function updateGameDisplay() {
-            document.getElementById("score").textContent = score.toLocaleString();
+            document.getElementById("score").textContent = Math.floor(score).toLocaleString('fullwide', {useGrouping:false});
             document.getElementById("level").textContent = level;
+            document.getElementById("clicks-remaining").textContent = clicksRemaining;
             const progress = (score / targetScore) * 100;
             document.getElementById("progress").style.width = `${Math.min(progress, 100)}%`;
             if (level > 10) {
                 document.getElementById("continue-message").style.display = "block";
             }
+            document.getElementById("click-button").disabled = cooldownActive;
+            if (level >= 100) {
+                document.getElementById("withdraw-button").style.display = "inline-block";
+            }
         }
 
-        // Initial update of entertainment section
+        function startCooldown() {
+            cooldownActive = true;
+            document.getElementById("cooldown").style.display = "block";
+            let cooldownTime = 30;
+            rapidClickCount = 0; // Reset rapid click count
+            const cooldownTimer = setInterval(() => {
+                cooldownTime--;
+                document.getElementById("cooldown-timer").textContent = cooldownTime;
+                if (cooldownTime <= 0) {
+                    clearInterval(cooldownTimer);
+                    cooldownActive = false;
+                    clicksRemaining = 5000;
+                    document.getElementById("cooldown").style.display = "none";
+                    updateGameDisplay();
+                }
+            }, 1000);
+        }
+
+        function resetGame() {
+            score = 0;
+            level = 1;
+            clickValue = 1;
+            targetScore = 100;
+            clicksRemaining = 5000;
+            cooldownActive = false;
+            // Не сбрасываем specialSkinUnlocked, чтобы сохранить разблокированный скин
+            saveGameState();
+            updateGameDisplay();
+            document.getElementById("withdraw-button").style.display = "none";
+            loadSelectedSkin(); // Загружаем выбранный скин после сброса
+        }
+
+        document.getElementById("skins-button").addEventListener('click', () => {
+            skinsModal.style.display = "block";
+        });
+
+        document.getElementById("defaultSkin").addEventListener('click', () => {
+            document.getElementById("clicker-game").className = "bg-default";
+            document.getElementById("click-button").className = "skin-default";
+            skinsModal.style.display = "none";
+            localStorage.setItem('selectedSkin', 'default');
+        });
+
+        document.getElementById("specialSkin").addEventListener('click', () => {
+            if (specialSkinUnlocked) {
+                document.getElementById("clicker-game").className = "bg-special";
+                document.getElementById("click-button").className = "skin-russia";
+                skinsModal.style.display = "none";
+                localStorage.setItem('selectedSkin', 'special');
+            } else {
+                alert("Этот скин пока не разблокирован. Достигните 100 гойды, чтобы разблокировать его!");
+            }
+        });
+
+        document.getElementById("withdraw-button").addEventListener('click', () => {
+            resetGame();
+            window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+        });
+
+        // Load selected skin
+        function loadSelectedSkin() {
+            const selectedSkin = localStorage.getItem('selectedSkin');
+            if (selectedSkin === 'special' && specialSkinUnlocked) {
+                document.getElementById("clicker-game").className = "bg-special";
+                document.getElementById("click-button").className = "skin-russia";
+            } else {
+                document.getElementById("clicker-game").className = "bg-default";
+                document.getElementById("click-button").className = "skin-default";
+            }
+        }
+
+        // Initial update of entertainment section and load selected skin
         updateEntertainmentSection();
+        loadSelectedSkin();
     </script>
 </body>
 </html>
