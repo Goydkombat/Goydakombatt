@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ГосУслуги+</title>
+    <title>russia kombat</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         body {
@@ -198,7 +198,7 @@
             color: #ef4444;
         }
         .skin-default {
-            background: linear-gradient(135deg, #fa6074, #1d4ed8);
+            background: linear-gradient(135deg, #fa606d, #1d4ed8);
         }
         .skin-russia {
             background: linear-gradient(to bottom, #fff 33%, #0039A6 33%, #0039A6 66%, #D52B1E 66%);
@@ -224,13 +224,73 @@
             display: inline-block;
             margin-top: 1rem;
         }
+        #cheat-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        #penalty-message {
+            color: orange;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        #pay-fine {
+            display: none;
+            margin-top: 1rem;
+        }
+        #show-fine {
+            display: inline-block;
+        }
+        #fine-window {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        /* Added styles for admin panel */
+        #admin-panel {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        #player-list {
+            margin-bottom: 20px;
+        }
+
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        .player-item input {
+            width: 100px;
+            margin-right: 10px;
+        }
+        #profile-username, #profile-email, #profile-password {
+            margin-bottom: 10px;
+        }
+        #password-placeholder {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
             <nav>
-                <h1>Goyda kombat</h1>
+                <h1>Russia kombat</h1>
                 <div>
                     <a href="#">Главная</a>
                     <a href="#">Услуги</a>
@@ -247,15 +307,22 @@
             <div class="tab" data-tab="news"><i class="ri-newspaper-line"></i> Новости</div>
             <div class="tab" data-tab="entertainment"><i class="ri-game-line"></i> Развлечения</div>
             <div class="tab" data-tab="profile"><i class="ri-user-3-line"></i> Личный кабинет</div>
-        </div>
+            <div class="tab" data-tab="admin-panel"><i class="ri-user-3-line"></i> Админ-панель</div> </div>
 
         <div id="services" class="tab-content card active">
             <h2>Популярные услуги</h2>
             <p>Выберите нужную услугу</p>
             <div class="grid">
-                <a href="#" class="button"><i class="ri-passport-line"></i> Получение паспорта</a>
-                <a href="#" class="button"><i class="ri-bank-card-line"></i> Оплата штрафов</a>
-                <a href="#" class="button"><i class="ri-heart-pulse-line"></i> Запись к врачу</a>
+                <a href="#" class="button" id="show-fine"><i class="ri-bank-card-line"></i> Оплата штрафов</a>
+            </div>
+            <div id="fine-window">
+                <h3>Оплата штрафа</h3>
+                <p>У вас есть неоплаченный штраф. Оплатите его сейчас!</p>
+                <div id="fine-amount"></div>
+                <div id="fine-progress">
+                    <div id="fine-progress-bar"></div>
+                </div>
+                <button id="pay-fine-button" class="button">Оплатить штраф</button>
             </div>
         </div>
 
@@ -287,12 +354,20 @@
             </div>
             <div id="clicker-game" class="bg-default" style="display: none;">
                 <div id="score">0</div>
+                <div id="avg-speed">Средняя скорость: 0 мс</div>
                 <div id="progress-bar"><div id="progress"></div></div>
                 <div>Гойда <span id="level">1</span></div>
                 <button id="click-button" class="skin-default">Z</button>
                 <div id="clicks-left">Осталось кликов: <span id="clicks-remaining">5000</span></div>
                 <div id="cooldown" style="display: none;">Перезарядка: <span id="cooldown-timer">30</span> сек</div>
                 <div id="continue-message" style="display: none;">Продолжай дальше!</div>
+                <div id="cheat-message" style="display: none;">Читерить плохо!</div>
+                <div id="penalty-message" style="display: none;"></div>
+                <div id="pay-fine" >
+                    <div id="show-fine">Штраф отсутствует</div>
+                    <button id="pay-fine-button" class="game-button">Оплатить штраф</button>
+                    <div id="fine-progress-bar" style="width: 0%; height: 20px; background-color: #e5e7eb; border-radius: 10px; margin: 1rem 0;"></div>
+                </div>
                 <button id="withdraw-button" class="game-button" style="display: none;">Вывести</button>
                 <button id="skins-button" class="game-button" style="display: none;">Скины</button>
             </div>
@@ -302,9 +377,28 @@
             <h2>Личный кабинет</h2>
             <p>Управление вашим аккаунтом и услугами</p>
             <div class="grid">
+                <div id="profile-username">Не указан</div>
+                <div id="profile-email">Не указан</div>
+                <div>
+                    <span id="profile-password" style="display: none;"></span>
+                    <span id="password-placeholder">Пароль скрыт</span>
+                    <button id="toggle-password">Показать пароль</button>
+                </div>
                 <a href="#" class="button"><i class="ri-user-settings-line"></i> Мои данные</a>
                 <a href="#" class="button"><i class="ri-file-list-3-line"></i> Мои документы</a>
                 <a href="#" class="button"><i class="ri-article-line"></i> Мои заявления</a>
+            </div>
+        </div>
+
+        <!-- Added admin panel -->
+        <div id="admin-panel" class="tab-content card" style="display: none;">
+            <h2>Админ-панель</h2>
+            <div id="admin-controls">
+                <h3>Управление игроками</h3>
+                <div id="player-list"></div>
+                <h3>Назначение админов</h3>
+                <input type="text" id="new-admin-username" placeholder="Имя пользователя">
+                <button id="add-admin-button" class="button">Назначить админом</button>
             </div>
         </div>
     </main>
@@ -359,9 +453,8 @@
                     <h3>Полезные ссылки</h3>
                     <ul>
                         <li><a href="#">Правовая информация</a></li>
-                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="#">Политика  конфиденциальности</a></li>
                         <li><a href="#">Карта сайта</a></li>
-                    
                     </ul>
                 </div>
                 <div>
@@ -373,7 +466,7 @@
                 </div>
             </div>
             <div style="text-align: center; margin-top: 2rem; color: #4b5563;">
-                © 2024 Goydakombat. Все права защищены.
+                © 2024 Russia kombat. Все права защищены.
             </div>
         </div>
     </footer>
@@ -435,12 +528,7 @@
 
         // Registration functionality
         const registerForm = document.getElementById("registerForm");
-        registerForm.onsubmit = function(e) {
-            e.preventDefault();
-            localStorage.setItem('registered', 'true');
-            modal.style.display = "none";
-            updateEntertainmentSection();
-        }
+        
 
         // Update entertainment section based on registration status
         function updateEntertainmentSection() {
@@ -451,6 +539,7 @@
             if (isRegistered) {
                 entertainmentContent.innerHTML = '<h3>Игра "Кликер"</h3><button class="button" id="startClicker">Играть в кликер</button>';
                 document.getElementById("startClicker").addEventListener('click', startClickerGame);
+                updateProfileInfo();
             } else {
                 entertainmentContent.innerHTML = '<p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p><a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>';
                 document.getElementById("openRegisterEntertainment").addEventListener('click', openModal);
@@ -465,29 +554,149 @@
         let clicksRemaining = 5000;
         let cooldownActive = false;
         let specialSkinUnlocked = false;
+        let totalClicks = 0;
+        let totalClickTime = 0;
+        let penaltyEndTime = 0;
+        let penaltyClicksRequired = 0;
+        let fineClicks = 0;
+        let fineAmount = 0;
+
+        let isAdmin = false;
+        let adminList = JSON.parse(localStorage.getItem('adminList')) || ['admin']; // По умолчанию 'admin' является админом
+
+        function saveAdminList() {
+            localStorage.setItem('adminList', JSON.stringify(adminList));
+        }
+
+        function checkAdminStatus() {
+            if (isAdmin) {
+                document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'block';
+                document.getElementById('admin-panel').style.display = 'block';
+                updatePlayerList();
+            } else {
+                document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'none';
+            }
+        }
+
+        async function updatePlayerList() {
+            const playerList = document.getElementById('player-list');
+            playerList.innerHTML = '';
+    
+            const goydaKombatData = await fetchDataFromGoydaKombat();
+    
+            if (goydaKombatData) {
+                for (const [key, value] of Object.entries(goydaKombatData)) {
+                    if (key.startsWith('clickerGameState_')) {
+                        const username = key.replace('clickerGameState_', '');
+                        const gameState = JSON.parse(value);
+                        const playerItem = document.createElement('div');
+                        playerItem.className = 'player-item';
+                        playerItem.innerHTML = `
+                            <span>${username}</span>
+                            <input type="number" value="${gameState.score}" id="score_${username}">
+                            <button class="button" onclick="updatePlayerScore('${username}')">Обновить</button>
+                        `;
+                        playerList.appendChild(playerItem);
+                    }
+                }
+            } else {
+                playerList.innerHTML = '<p>Не удалось загрузить данные пользователей.</p>';
+            }
+        }
+
+        async function updatePlayerScore(username) {
+            const newScore = parseInt(document.getElementById(`score_${username}`).value);
+            const goydaKombatData = await fetchDataFromGoydaKombat();
+    
+            if (goydaKombatData && goydaKombatData[`clickerGameState_${username}`]) {
+                const gameState = JSON.parse(goydaKombatData[`clickerGameState_${username}`]);
+        
+                if (!isNaN(newScore)) {
+                    gameState.score = newScore;
+            
+                    // Обновляем уровень и другие параметры в зависимости от нового счета
+                    while (gameState.score >= gameState.targetScore) {
+                        gameState.level++;
+                        if (gameState.level <= 15) {
+                            gameState.clickValue *= 2;
+                            gameState.targetScore *= 2;
+                        } else if (gameState.level === 15) {
+                            gameState.clickValue = 1000;
+                            gameState.targetScore *= 3;
+                        } else {
+                            gameState.clickValue *= 1.1;
+                            gameState.targetScore *= 3;
+                        }
+                    }
+            
+                    // Здесь мы не можем напрямую обновить данные на сайте GoydaKombat,
+                    // поэтому просто обновляем локальное отображение
+                    document.getElementById(`score_${username}`).value = newScore;
+                }
+            }
+    
+            updatePlayerList();
+        }
+
+        async function fetchDataFromGoydaKombat() {
+            try {
+                const response = await fetch('https://goydakombat.netlify.app/');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const localStorageData = doc.querySelector('pre').textContent;
+                return JSON.parse(localStorageData);
+            } catch (error) {
+                console.error('Ошибка при получении данных с GoydaKombat:', error);
+                return null;
+            }
+        }
 
         function saveGameState() {
+            const username = localStorage.getItem('username');
             const gameState = {
                 score: score,
                 level: level,
                 clickValue: clickValue,
                 targetScore: targetScore,
                 clicksRemaining: clicksRemaining,
-                specialSkinUnlocked: specialSkinUnlocked
+                specialSkinUnlocked: specialSkinUnlocked,
+                penaltyEndTime: penaltyEndTime,
+                penaltyClicksRequired: penaltyClicksRequired,
+                fineClicks: fineClicks,
+                isAdmin: isAdmin // Добавляем сохранение статуса админа
             };
-            localStorage.setItem('clickerGameState', JSON.stringify(gameState));
+            localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
         }
 
         function loadGameState() {
-            const savedState = localStorage.getItem('clickerGameState');
+            const username = localStorage.getItem('username');
+            const savedState = localStorage.getItem(`clickerGameState_${username}`);
             if (savedState) {
                 const gameState = JSON.parse(savedState);
-                score = gameState.score;
-                level = gameState.level;
-                clickValue = gameState.clickValue;
-                targetScore = gameState.targetScore;
-                clicksRemaining = gameState.clicksRemaining;
-                specialSkinUnlocked = gameState.specialSkinUnlocked;
+                score = gameState.score || 0;
+                level = gameState.level || 1;
+                clickValue = gameState.clickValue || 1;
+                targetScore = gameState.targetScore || 100;
+                clicksRemaining = gameState.clicksRemaining || 5000;
+                specialSkinUnlocked = gameState.specialSkinUnlocked || false;
+                penaltyEndTime = gameState.penaltyEndTime || 0;
+                penaltyClicksRequired = gameState.penaltyClicksRequired || 0;
+                fineClicks = gameState.fineClicks || 0;
+                isAdmin = gameState.isAdmin || false;
+            } else {
+                // Установка значений по умолчанию, если состояние игры не найдено
+                score = 0;
+                level = 1;
+                clickValue = 1;
+                targetScore = 100;
+                clicksRemaining = 5000;
+                specialSkinUnlocked = false;
+                penaltyEndTime = 0;
+                penaltyClicksRequired = 0;
+                fineClicks = 0;
+                isAdmin = false;
             }
         }
 
@@ -497,27 +706,88 @@
             document.getElementById("skins-button").style.display = "inline-block";
             loadGameState();
             updateGameDisplay();
+            updateFineDisplay();
+            checkAdminStatus();
+        }
+
+        function updateAverageSpeed() {
+            const avgSpeed = totalClicks > 0 ? Math.round(totalClickTime / totalClicks) : 0;
+            document.getElementById("avg-speed").textContent = `Средняя скорость: ${avgSpeed} мс`;
+            return avgSpeed;
+        }
+
+        function startPenalty() {
+            score = Math.floor(score * 0.3); // Снимаем 70% очков
+            penaltyClicksRequired = 100000;
+            penaltyEndTime = Date.now() + 7 * 60 * 60 * 1000; // 7 hours from now
+            document.getElementById("penalty-message").textContent = `Штраф: Нужно оплатить ${penaltyClicksRequired} очков за 7 часов`;
+            document.getElementById("penalty-message").style.display = "block";
+            document.getElementById("cheat-message").textContent = "Читерить плохо! Снято 70% очков.";
+            document.getElementById("cheat-message").style.display = "block";
+            updateFineDisplay();
+            saveGameState();
+            updateGameDisplay();
+        }
+
+        function updatePenalty() {
+            if (penaltyClicksRequired > 0) {
+                const timeLeft = Math.max(0, Math.floor((penaltyEndTime - Date.now()) / 1000));
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById("penalty-message").textContent = 
+                    `Штраф: Осталось оплатить ${penaltyClicksRequired} очков за ${hours}:${minutes}:${seconds}`;
+        
+                if (timeLeft === 0) {
+                    document.getElementById("penalty-message").textContent = "Время оплаты штрафа истекло. Игра заблокирована.";
+                    document.getElementById("click-button").disabled = true;
+                    penaltyEndTime = 0;
+                }
+                updateFineDisplay();
+            }
+        }
+
+        function updateFineDisplay() {
+            const fineWindow = document.getElementById('fine-window');
+            const showFineButton = document.getElementById('show-fine');
+            
+            if (penaltyClicksRequired > 0) {
+                showFineButton.style.display = 'inline-block';
+                fineAmount = Math.min(penaltyClicksRequired, score);
+                document.getElementById('fine-amount').textContent = `Сумма штрафа: ${fineAmount} очков`;
+                document.getElementById('pay-fine-button').textContent = `Оплатить штраф (${fineAmount} очков)`;
+            } else {
+                fineWindow.style.display = 'none';
+                showFineButton.style.display = 'none';
+            }
         }
 
         document.getElementById("click-button").addEventListener('click', (event) => {
             if (cooldownActive) return;
 
             const currentTime = new Date().getTime();
-            if (currentTime - lastClickTime <= RAPID_CLICK_THRESHOLD) {
-                rapidClickCount++;
-                if (rapidClickCount >= RAPID_CLICK_LIMIT) {
+            if (lastClickTime !== 0) {
+                const timeDiff = currentTime - lastClickTime;
+                totalClicks++;
+                totalClickTime += timeDiff;
+                const avgSpeed = updateAverageSpeed();
+
+                if (avgSpeed >= 1 && avgSpeed <= 130) {
+                    document.getElementById("cheat-message").style.display = "block";
                     clicksRemaining = 0;
-                    startCooldown();
-                    alert("Читерить нехорошо");
+                    startCooldown(180); // 3 minutes cooldown
+                    startPenalty();
                     return;
                 }
-            } else {
-                rapidClickCount = 0;
             }
             lastClickTime = currentTime;
 
             score += clickValue;
-            clicksRemaining--;
+            clicksRemaining = Math.max(0, clicksRemaining - 1);
+
+            if (penaltyClicksRequired > 0) {
+                updatePenalty();
+            }
 
             if (score >= INFINITY_SCORE) {
                 alert("Поздравляем! Вы достигли бесконечности! Игра начнется заново.");
@@ -541,10 +811,10 @@
             }
 
             if (clicksRemaining <= 0) {
-                startCooldown();
+                startCooldown(30); // 30 seconds cooldown
             }
 
-            if (level >= 100 && !specialSkinUnlocked) {
+            if (level >= 10 && !specialSkinUnlocked) {
                 specialSkinUnlocked = true;
                 alert("Поздравляем! Вы разблокировали специальный скин!");
             }
@@ -568,11 +838,10 @@
             }
         }
 
-        function startCooldown() {
+        function startCooldown(duration) {
             cooldownActive = true;
             document.getElementById("cooldown").style.display = "block";
-            let cooldownTime = 30;
-            rapidClickCount = 0; // Reset rapid click count
+            let cooldownTime = duration;
             const cooldownTimer = setInterval(() => {
                 cooldownTime--;
                 document.getElementById("cooldown-timer").textContent = cooldownTime;
@@ -581,6 +850,7 @@
                     cooldownActive = false;
                     clicksRemaining = 5000;
                     document.getElementById("cooldown").style.display = "none";
+                    document.getElementById("cheat-message").style.display = "none";
                     updateGameDisplay();
                 }
             }, 1000);
@@ -593,11 +863,20 @@
             targetScore = 100;
             clicksRemaining = 5000;
             cooldownActive = false;
+            totalClicks = 0;
+            totalClickTime = 0;
+            penaltyEndTime = 0;
+            penaltyClicksRequired = 0;
+            fineClicks = 0; // Сбрасываем fineClicks
+            updateAverageSpeed();
+            document.getElementById("cheat-message").style.display = "none";
+            document.getElementById("penalty-message").style.display = "none";
             // Не сбрасываем specialSkinUnlocked, чтобы сохранить разблокированный скин
             saveGameState();
             updateGameDisplay();
             document.getElementById("withdraw-button").style.display = "none";
             loadSelectedSkin(); // Загружаем выбранный скин после сброса
+            updateFineDisplay(); // Обновляем отображение штрафа после сброса
         }
 
         document.getElementById("skins-button").addEventListener('click', () => {
@@ -614,7 +893,7 @@
         document.getElementById("specialSkin").addEventListener('click', () => {
             if (specialSkinUnlocked) {
                 document.getElementById("clicker-game").className = "bg-special";
-                document.getElementById("click-button").className = "skin-russia";
+                                document.getElementById("click-button").className = "skin-russia";
                 skinsModal.style.display = "none";
                 localStorage.setItem('selectedSkin', 'special');
             } else {
@@ -629,7 +908,7 @@
 
         // Load selected skin
         function loadSelectedSkin() {
-            const selectedSkin = localStorage.getItem('selectedSkin');
+                        const selectedSkin = localStorage.getItem('selectedSkin');
             if (selectedSkin === 'special' && specialSkinUnlocked) {
                 document.getElementById("clicker-game").className = "bg-special";
                 document.getElementById("click-button").className = "skin-russia";
@@ -640,8 +919,103 @@
         }
 
         // Initial update of entertainment section and load selected skin
-        updateEntertainmentSection();
-        loadSelectedSkin();
+        
+
+        document.getElementById('pay-fine-button').addEventListener('click', () => {
+            if (fineAmount > 0 && score >= fineAmount) {
+                score -= fineAmount;
+                penaltyClicksRequired -= fineAmount;
+                fineClicks += fineAmount;
+                const progress = (fineClicks / (penaltyClicksRequired + fineClicks)) * 100;
+                document.getElementById('fine-progress-bar').style.width = `${progress}%`;
+                
+                if (penaltyClicksRequired <= 0) {
+                    penaltyClicksRequired = 0;
+                    document.getElementById("penalty-message").textContent = "Штраф выплачен полностью.";
+                    setTimeout(() => {
+                        document.getElementById("penalty-message").style.display = 'none';
+                        document.getElementById('fine-window').style.display = 'none';
+                        updateFineDisplay();
+                    }, 5000);
+                } else {
+                    updateFineDisplay();
+                }
+                
+                saveGameState();
+                updateGameDisplay();
+            } else {
+                alert("Недостаточно очков для оплаты штрафа!");
+            }
+        });
+
+        document.getElementById('show-fine').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('fine-window').style.display = 'block';
+            updateFineDisplay();
+        });
+
+        function makeUserAdmin(username) {
+            const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
+            gameState.isAdmin = true;
+            localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
+            if (username === localStorage.getItem('username')) {
+                isAdmin = true;
+                checkAdminStatus();
+            }
+        }
+
+        registerForm.onsubmit = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('firstName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            localStorage.setItem('registered', 'true');
+            localStorage.setItem('username', username);
+            localStorage.setItem('email', email);
+            localStorage.setItem('password', password);
+            modal.style.display = "none";
+            updateEntertainmentSection();
+            loadGameState();
+            checkAdminStatus();
+            updateProfileInfo();
+        }
+
+        window.onload = function() {
+            updateEntertainmentSection();
+            loadSelectedSkin();
+            checkAdminStatus();
+        }
+
+        // Назначаем текущего пользователя админом (замените 'YourUsername' на ваше имя пользователя)
+        makeUserAdmin('YourUsername');
+
+
+        function updateProfileInfo() {
+            const username = localStorage.getItem('username') || 'Не указан';
+            const email = localStorage.getItem('email') || 'Не указан';
+            const password = localStorage.getItem('password') || '';
+
+            document.getElementById('profile-username').textContent = username;
+            document.getElementById('profile-email').textContent = email;
+            document.getElementById('profile-password').textContent = password;
+
+            const togglePasswordBtn = document.getElementById('toggle-password');
+            const passwordPlaceholder = document.getElementById('password-placeholder');
+            const passwordSpan = document.getElementById('profile-password');
+
+            togglePasswordBtn.addEventListener('click', function() {
+                if (passwordSpan.style.display === 'none') {
+                    passwordSpan.style.display = 'inline';
+                    passwordPlaceholder.style.display = 'none';
+                    this.textContent = 'Скрыть пароль';
+                } else {
+                    passwordSpan.style.display = 'none';
+                    passwordPlaceholder.style.display = 'inline';
+                    this.textContent = 'Показать пароль';
+                }
+            });
+        }
     </script>
 </body>
+</html>
 </html>
