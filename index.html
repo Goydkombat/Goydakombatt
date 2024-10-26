@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>russia kombat</title>
+    <title>Russia kombat</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         body {
@@ -198,7 +198,7 @@
             color: #ef4444;
         }
         .skin-default {
-            background: linear-gradient(135deg, #fa606d, #1d4ed8);
+            background: linear-gradient(135deg, #fa607a, #1d4ed8);
         }
         .skin-russia {
             background: linear-gradient(to bottom, #fff 33%, #0039A6 33%, #0039A6 66%, #D52B1E 66%);
@@ -466,7 +466,7 @@
                 </div>
             </div>
             <div style="text-align: center; margin-top: 2rem; color: #4b5563;">
-                © 2024 Russia kombat. Все права защищены.
+                © 2023 Russia kombat. Все права защищены.
             </div>
         </div>
     </footer>
@@ -579,78 +579,63 @@
             }
         }
 
-        async function updatePlayerList() {
+        function updatePlayerList() {
             const playerList = document.getElementById('player-list');
             playerList.innerHTML = '';
-    
-            const goydaKombatData = await fetchDataFromGoydaKombat();
-    
-            if (goydaKombatData) {
-                for (const [key, value] of Object.entries(goydaKombatData)) {
-                    if (key.startsWith('clickerGameState_')) {
-                        const username = key.replace('clickerGameState_', '');
-                        const gameState = JSON.parse(value);
-                        const playerItem = document.createElement('div');
-                        playerItem.className = 'player-item';
-                        playerItem.innerHTML = `
-                            <span>${username}</span>
-                            <input type="number" value="${gameState.score}" id="score_${username}">
-                            <button class="button" onclick="updatePlayerScore('${username}')">Обновить</button>
-                        `;
-                        playerList.appendChild(playerItem);
-                    }
+            let hasPlayers = false;
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('clickerGameState_')) {
+                    hasPlayers = true;
+                    const username = key.replace('clickerGameState_', '');
+                    const gameState = JSON.parse(localStorage.getItem(key));
+                    const playerItem = document.createElement('div');
+                    playerItem.className = 'player-item';
+                    playerItem.innerHTML = `
+                        <span>${username}</span>
+                        <input type="number" value="${gameState.score}" id="score_${username}">
+                        <button class="button" onclick="updatePlayerScore('${username}')">Обновить</button>
+                    `;
+                    playerList.appendChild(playerItem);
                 }
-            } else {
-                playerList.innerHTML = '<p>Не удалось загрузить данные пользователей.</p>';
+            }
+
+            if (!hasPlayers) {
+                playerList.innerHTML = '<p>Нет данных о пользователях.</p>';
             }
         }
 
-        async function updatePlayerScore(username) {
+        function updatePlayerScore(username) {
             const newScore = parseInt(document.getElementById(`score_${username}`).value);
-            const goydaKombatData = await fetchDataFromGoydaKombat();
-    
-            if (goydaKombatData && goydaKombatData[`clickerGameState_${username}`]) {
-                const gameState = JSON.parse(goydaKombatData[`clickerGameState_${username}`]);
-        
-                if (!isNaN(newScore)) {
-                    gameState.score = newScore;
-            
-                    // Обновляем уровень и другие параметры в зависимости от нового счета
-                    while (gameState.score >= gameState.targetScore) {
-                        gameState.level++;
-                        if (gameState.level <= 15) {
-                            gameState.clickValue *= 2;
-                            gameState.targetScore *= 2;
-                        } else if (gameState.level === 15) {
-                            gameState.clickValue = 1000;
-                            gameState.targetScore *= 3;
-                        } else {
-                            gameState.clickValue *= 1.1;
-                            gameState.targetScore *= 3;
-                        }
-                    }
-            
-                    // Здесь мы не можем напрямую обновить данные на сайте GoydaKombat,
-                    // поэтому просто обновляем локальное отображение
-                    document.getElementById(`score_${username}`).value = newScore;
-                }
-            }
-    
-            updatePlayerList();
-        }
+            const gameStateKey = `clickerGameState_${username}`;
+            const gameState = JSON.parse(localStorage.getItem(gameStateKey));
 
-        async function fetchDataFromGoydaKombat() {
-            try {
-                const response = await fetch('https://goydakombat.netlify.app/');
-                const text = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-                const localStorageData = doc.querySelector('pre').textContent;
-                return JSON.parse(localStorageData);
-            } catch (error) {
-                console.error('Ошибка при получении данных с GoydaKombat:', error);
-                return null;
+            if (gameState && !isNaN(newScore)) {
+                gameState.score = newScore;
+
+                // Обновляем уровень и другие параметры в зависимости от нового счета
+                while (gameState.score >= gameState.targetScore) {
+                    gameState.level++;
+                    if (gameState.level <= 15) {
+                        gameState.clickValue *= 2;
+                        gameState.targetScore *= 2;
+                    } else if (gameState.level === 15) {
+                        gameState.clickValue = 1000;
+                        gameState.targetScore *= 3;
+                    } else {
+                        gameState.clickValue *= 1.1;
+                        gameState.targetScore *= 3;
+                    }
+                }
+
+                localStorage.setItem(gameStateKey, JSON.stringify(gameState));
+                alert(`Счет пользователя ${username} обновлен до ${newScore}`);
+            } else {
+                alert('Не удалось обновить счет пользователя. Пожалуйста, проверьте введенные данные.');
             }
+
+            updatePlayerList();
         }
 
         function saveGameState() {
@@ -867,9 +852,7 @@
             totalClickTime = 0;
             penaltyEndTime = 0;
             penaltyClicksRequired = 0;
-            fineClicks = 0; // Сбрасываем fineClicks
-            updateAverageSpeed();
-            document.getElementById("cheat-message").style.display = "none";
+            fineClicks = 0; //                         document.getElementById("cheat-message").style.display = "none";
             document.getElementById("penalty-message").style.display = "none";
             // Не сбрасываем specialSkinUnlocked, чтобы сохранить разблокированный скин
             saveGameState();
@@ -980,23 +963,13 @@
             updateProfileInfo();
         }
 
-        window.onload = function() {
-            updateEntertainmentSection();
-            loadSelectedSkin();
-            checkAdminStatus();
-        }
-
-        // Назначаем текущего пользователя админом (замените 'YourUsername' на ваше имя пользователя)
-        makeUserAdmin('YourUsername');
-
-
         function updateProfileInfo() {
             const username = localStorage.getItem('username') || 'Не указан';
             const email = localStorage.getItem('email') || 'Не указан';
             const password = localStorage.getItem('password') || '';
 
-            document.getElementById('profile-username').textContent = username;
-            document.getElementById('profile-email').textContent = email;
+            document.getElementById('profile-username').textContent = `Имя пользователя: ${username}`;
+            document.getElementById('profile-email').textContent = `Email: ${email}`;
             document.getElementById('profile-password').textContent = password;
 
             const togglePasswordBtn = document.getElementById('toggle-password');
@@ -1015,7 +988,16 @@
                 }
             });
         }
+
+        window.onload = function() {
+            updateEntertainmentSection();
+            loadSelectedSkin();
+            checkAdminStatus();
+            updateProfileInfo();
+        }
+
+        // Назначаем текущего пользователя админом (замените 'YourUsername' на ваше имя пользователя)
+        makeUserAdmin('test');
     </script>
 </body>
-</html>
 </html>
