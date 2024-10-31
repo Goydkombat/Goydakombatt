@@ -1,1357 +1,1717 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Russian kombat</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f3f4f6;
-        }
-        header {
-            background-color: #1d4ed8;
-            color: white;
-            padding: 1rem;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav h1 {
-            font-size: 1.5rem;
-            margin: 0;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1rem;
-        }
-        main {
-            padding: 2rem 0;
-        }
-        .card {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
-            padding: 1.5rem;
-        }
-        .card h2 {
-            margin-top: 0;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .button {
-            background-color: #1d4ed8;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        footer {
-            background-color: #e5e7eb;
-            padding: 2rem 0;
-            margin-top: 2rem;
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-        .tabs {
-            display: flex;
-            margin-bottom: 1rem;
-        }
-        .tab {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border: 1px solid #d1d5db;
-            background-color: #f3f4f6;
-            color: #374151;
-        }
-        .tab.active {
-            background-color: white;
-            border-bottom: none;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        form div {
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-        }
-        #clicker-game {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            position: relative;
-            transition: background-color 0.5s ease;
-        }
-        #score {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #1d4ed8;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        #progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #e5e7eb;
-            border-radius: 10px;
-            margin: 1rem 0;
-            overflow: hidden;
-            position: relative;
-        }
-        #progress {
-            height: 100%;
-            background-color: #1d4ed8;
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        #progress::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 100%);
-            animation: shimmer 2s infinite;
-        }
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-        #click-button {
-            width: 100px;
-            height: 100px;
-            font-size: 3rem;
-            border-radius: 50%;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        #click-button:active {
-            transform: scale(0.95);
-        }
-        #click-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        #continue-message {
-            color: #1d4ed8;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-        #clicks-left {
-            font-size: 1.2rem;
-            margin-top: 1rem;
-        }
-        #cooldown {
-            font-size: 1.2rem;
-            margin-top: 1rem;
-            color: #ef4444;
-        }
-        .skin-default {
-            background: linear-gradient(135deg, #f2545c, #1d4ed8);
-        }
-        .skin-russia {
-            background: linear-gradient(to bottom, #fff 33%, #0039A6 33%, #0039A6 66%, #D52B1E 66%);
-        }
-        .bg-default {
-            background-color: white;
-        }
-        .bg-special {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        }
-        .bg-amber {
-            background: linear-gradient(135deg, #FFA500, #FFD700);
-            position: relative;
-            overflow: hidden;
-        }
-        .bg-amber::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(255,165,0,0) 70%);
-            animation: rotate 20s linear infinite;
-        }
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        .skin-amber {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #8B4513;
-            font-weight: bold;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            box-shadow: 0 0 15px rgba(255,215,0,0.7);
-            border: 2px solid #DAA520;
-            transition: all 0.3s ease;
-        }
-        .skin-amber:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255,215,0,0.9);
-        }
-        .skin-amber:active {
-            transform: scale(0.95);
-        }
-        #skins-button {
-            position: static;
-            margin-top: 1rem;
-        }
-        .game-button {
-            background-color: #1d4ed8;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 1rem;
-        }
-        #cheat-message {
-            color: red;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-        #penalty-message {
-            color: orange;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-        #pay-fine {
-            display: none;
-            margin-top: 1rem;
-        }
-        #show-fine {
-            display: inline-block;
-        }
-        #fine-window {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        #level {
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        /* Added styles for admin panel */
-        #admin-panel {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 5px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Russian kombat</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f3f4f6;
+      }
+      header {
+          background-color: #1d4ed8;
+          color: white;
+          padding: 1rem;
+      }
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1rem;
+      }
+      nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+      nav h1 {
+          font-size: 1.5rem;
+          margin: 0;
+      }
+      nav a {
+          color: white;
+          text-decoration: none;
+          margin-left: 1rem;
+      }
+      main {
+          padding: 2rem 0;
+      }
+      .card {
+          background-color: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          margin-bottom: 1rem;
+          padding: 1.5rem;
+      }
+      .card h2 {
+          margin-top: 0;
+      }
+      .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1rem;
+      }
+      .button {
+          background-color: #1d4ed8;
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 0.25rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-block;
+      }
+      footer {
+          background-color: #e5e7eb;
+          padding: 2rem 0;
+          margin-top: 2rem;
+      }
+      .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 2rem;
+      }
+      .tabs {
+          display: flex;
+          margin-bottom: 1rem;
+      }
+      .tab {
+          padding: 0.5rem 1rem;
+          cursor: pointer;
+          border: 1px solid #d1d5db;
+          background-color: #f3f4f6;
+          color: #374151;
+      }
+      .tab.active {
+          background-color: white;
+          border-bottom: none;
+      }
+      .tab-content {
+          display: none;
+      }
+      .tab-content.active {
+          display: block;
+      }
+      .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0,0,0,0.4);
+      }
+      .modal-content {
+          background-color: #fefefe;
+          margin: 15% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+          max-width: 500px;
+      }
+      .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+      }
+      .close:hover,
+      .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+      }
+      form div {
+          margin-bottom: 1rem;
+      }
+      label {
+          display: block;
+          margin-bottom: 0.5rem;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.25rem;
+      }
+      #clicker-game {
+          text-align: center;
+          padding: 2rem;
+          border-radius: 0.5rem;
+          position: relative;
+          transition: background-color 0.5s ease;
+      }
+      #score {
+          font-size: 3rem;
+          font-weight: bold;
+          color: #1d4ed8;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      #progress-bar {
+          width: 100%;
+          height: 20px;
+          background-color: #e5e7eb;
+          border-radius: 10px;
+          margin: 1rem 0;
+          overflow: hidden;
+          position: relative;
+      }
+      #progress {
+          height: 100%;
+          background-color: #1d4ed8;
+          border-radius: 10px;
+          width: 0%;
+          transition: width 0.3s ease;
+      }
+      #progress::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 100%);
+          animation: shimmer 2s infinite;
+      }
+      @keyframes shimmer {
+          0% {
+              transform: translateX(-100%);
+          }
+          100% {
+              transform: translateX(100%);
+          }
+      }
+      #click-button {
+          width: 100px;
+          height: 100px;
+          font-size: 3rem;
+          border-radius: 50%;
+          color: white;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.1s;
+      }
+      #click-button:active {
+          transform: scale(0.95);
+      }
+      #click-button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+      }
+      #continue-message {
+          color: #1d4ed8;
+          font-weight: bold;
+          margin-top: 1rem;
+      }
+      #clicks-left {
+          font-size: 1.2rem;
+          margin-top: 1rem;
+      }
+      #cooldown {
+          font-size: 1.2rem;
+          margin-top: 1rem;
+          color: #ef4444;
+      }
+      .skin-default {
+          background: linear-gradient(135deg, #ee204d, #1d4ed8);
+      }
+      .skin-russia {
+          background: linear-gradient(to bottom, #fff 33%, #0039A6 33%, #0039A6 66%, #D52B1E 66%);
+      }
+      .bg-default {
+          background-color: white;
+      }
+      .bg-special {
+          background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      }
+      .bg-amber {
+          background: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202024-10-27%20at%2018.08.55-MWBYsrmGSm8jZFeaVbRiDJXvy0bozn.jpeg') no-repeat center center;
+          background-size: cover;
+      }
+      .bg-amber::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(255,165,0,0) 70%);
+          animation: rotate 20s linear infinite;
+      }
+      @keyframes rotate {
+          0% {
+              transform: rotate(0deg);
+          }
+          100% {
+              transform: rotate(360deg);
+          }
+      }
+      .skin-amber {
+          background: linear-gradient(135deg, #FFD700, #FFA500);
+          color: #8B4513;
+          font-weight: bold;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+          box-shadow: 0 0 15px rgba(255,215,0,0.7);
+          border: 2px solid #DAA520;
+          transition: all 0.3s ease;
+      }
+      .skin-amber:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 20px rgba(255,215,0,0.9);
+      }
+      .skin-amber:active {
+          transform: scale(0.95);
+      }
+      .skin-poop {
+          background: linear-gradient(135deg, #8B4513, #A0522D);
+      }
+      .bg-poop {
+          background: linear-gradient(135deg, #D2691E, #CD853F);
+      }
+      #player-search {
+          width: 100%;
+          padding: 0.5rem;
+          margin-bottom: 1rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.25rem;
+      }
+      .bg-amber #skins-button {
+          background: linear-gradient(135deg, #FFD700, #FFA500);
+          color: #8B4513;
+          font-weight: bold;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+          box-shadow: 0 0 15px rgba(255,215,0,0.7);
+          border: 2px solid #DAA520;
+      }
+      /* Новые стили для ритм-игры */
+      #rhythm-game {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.8);
+          z-index: 1000;
+      }
+      #rhythm-game-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 300px;
+          height: 500px;
+          background-color: #2c2c2c;
+          border-radius: 10px;
+          padding: 20px;
+          color: white;
+          text-align: center;
+      }
+      #rhythm-game-welcome {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+      }
+      #rhythm-game-play {
+          display: none;
+          height: 100%;
+      }
+      .note-line {
+          position: relative;
+          height: 400px;
+          width: 100%;
+          overflow: hidden;
+      }
+      .note {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          top: -30px;
+      }
+      .hit-line {
+          position: absolute;
+          bottom: 50px;
+          width: 100%;
+          height: 5px;
+          background-color: #ffa500;
+      }
+      .note-buttons {
+          display: flex;
+          justify-content: space-around;
+          margin-top: 20px;
+      }
+      .note-button {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+      }
+      #close-rhythm-game {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 24px;
+          cursor: pointer;
+      }
+      #play-button {
+          background-color: #ffa500;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+          font-size: 18px;
+          cursor: pointer;
+          margin-top: 20px;
+      }
+      #rhythm-combo, #rhythm-score {
+          font-size: 24px;
+          margin: 10px 0;
+      }
+      /* Стили для мобильных кнопок и настроек */
+      .mobile-buttons {
+          display: none;
+          position: absolute;
+          bottom: 20px;
+          left: 0;
+          right: 0;
+          justify-content: space-around;
+      }
 
-        #player-list {
-            margin-bottom: 20px;
-        }
+      @media (max-width: 768px) {
+          .mobile-buttons {
+              display: flex;
+          }
+      }
 
-        .player-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 5px;
-        }
+      .mobile-button {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background-color: rgba(255, 255, 255, 0.3);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 24px;
+          color: white;
+          border: none;
+          outline: none;
+      }
 
-        .player-item input {
-            width: 100px;
-            margin-right: 10px;
-        }
-        #profile-username, #profile-email, #profile-password {
-            margin-bottom: 10px;
-        }
-        #password-placeholder {
-            display: none;
-        }
-        .authTab {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border: 1px solid #d1d5db;
-            background-color: #f3f4f6;
-            color: #374151;
-            margin-right: 0.5rem;
-        }
-        .authTab.active {
-            background-color: white;
-        }
-        .authForm {
-            display: none;
-        }
-        .authForm.active {
-            display: block;
-        }
-        .bg-amber {
-            background: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202024-10-27%20at%2018.08.55-MWBYsrmGSm8jZFeaVbRiDJXvy0bozn.jpeg') no-repeat center center;
-            background-size: cover;
-        }
-        .skin-amber {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #8B4513;
-            font-weight: bold;
-        }
-        .skin-poop {
-            background: linear-gradient(135deg, #8B4513, #A0522D);
-        }
-        .bg-poop {
-            background: linear-gradient(135deg, #D2691E, #CD853F);
-        }
-        #player-search {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-        }
-    </style>
+      .settings-button {
+          position: absolute;
+          top: 10px;
+          right: 40px;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 24px;
+          cursor: pointer;
+      }
+
+      .settings-modal {
+          display: none;
+          position: fixed;
+          z-index: 1001;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .settings-content {
+          background-color: #2c2c2c;
+          margin: 15% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+          max-width: 500px;
+          color: white;
+      }
+
+      .close-settings {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+      }
+
+      .close-settings:hover,
+      .close-settings:focus {
+          color: #fff;
+          text-decoration: none;
+          cursor: pointer;
+      }
+      .red-blue-gradient {
+          background: linear-gradient(135deg, #ff0000, #0000ff);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+      }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <h1>Russian kombat</h1>
-                <div>
-                    <a href="#">Главная</a>
-                    <a href="#">Услуги</a>
-                    <a href="#">Новости</a>
-                    <a href="#" class="button" id="openAuth">Войти / Регистрация</a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <main class="container">
-        <div class="tabs">
-            <div class="tab active" data-tab="services"><i class="ri-service-line"></i> Услуги</div>
-            <div class="tab" data-tab="news"><i class="ri-newspaper-line"></i> Новости</div>
-            <div class="tab" data-tab="entertainment"><i class="ri-game-line"></i> Развлечения</div>
-            <div class="tab" data-tab="profile"><i class="ri-user-3-line"></i> Личный кабинет</div>
-            <div class="tab" data-tab="admin-panel"><i class="ri-user-3-line"></i> Админ-панель</div> </div>
-
-        <div id="services" class="tab-content card active">
-            <h2>Популярные услуги</h2>
-            <p>Выберите нужную услугу</p>
-            <div class="grid">
-                <a href="#" class="button" id="show-fine"><i class="ri-bank-card-line"></i> Оплата штрафов</a>
-            </div>
-            <div id="fine-window">
-                <h3>Оплата штрафа</h3>
-                <p>У вас есть неоплаченный штраф. Оплатите его сейчас!</p>
-                <div id="fine-amount"></div>
-                <div id="fine-progress">
-                    <div id="fine-progress-bar"></div>
-                </div>
-                <button id="pay-fine-button" class="button">Оплатить штраф</button>
-            </div>
-        </div>
-
-        <div id="news" class="tab-content card">
-            <h2>Новости и объявления</h2>
-            <p>Последние обновления и важная информация</p>
-            <div>
-                <h3>Новые меры поддержки для семей с детьми</h3>
-                <p>15 мая 2023</p>
-                <p>Правительство объявило о новых мерах поддержки для семей с детьми...</p>
-            </div>
-            <div>
-                <h3>Изменения в процедуре регистрации автомобилей</h3>
-                <p>10 мая 2023</p>
-                <p>С 1 июня вступают в силу изменения в процедуре регистрации автомобилей...</p>
-            </div>
-            <div>
-                <h3>Расширение программы льготной ипотеки</h3>
-                <p>5 мая 2023</p>
-                <p>Правительство приняло решение о расширении программы льготной ипотеки...</p>
-            </div>
-        </div>
-
-        <div id="entertainment" class="tab-content card">
-            <h2>Развлекательная функция</h2>
-            <div id="entertainment-content">
-                <p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p>
-                <a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>
-            </div>
-            <div id="clicker-game" class="bg-default" style="display: none;">
-                <div id="score">0</div>
-                <div id="avg-speed">Средняя скорость: 0 мс</div>
-                <div id="progress-bar"><div id="progress"></div></div>
-                <div>Гойда <span id="level">1</span></div>
-                <button id="click-button" class="skin-default">Z</button>
-                <div id="clicks-left">Осталось кликов: <span id="clicks-remaining">5000</span></div>
-                <div id="cooldown" style="display: none;">Перезарядка: <span id="cooldown-timer">30</span> сек</div>
-                <div id="continue-message" style="display: none;">Продолжай дальше!</div>
-                <div id="cheat-message" style="display: none;">Читерить плохо!</div>
-                <div id="penalty-message" style="display: none;"></div>
-                <div id="pay-fine" >
-                    <div id="show-fine">Штраф отсутствует</div>
-                    <button id="pay-fine-button" class="game-button">Оплатить штраф</button>
-                    <div id="fine-progress-bar" style="width: 0%; height: 20px; background-color: #e5e7eb; border-radius: 10px; margin: 1rem 0;"></div>
-                </div>
-                <button id="withdraw-button" class="game-button" style="display: none;">Вывести</button>
-                <button id="skins-button" class="game-button" style="display: none;">Скины</button>
-            </div>
-        </div>
-
-        <div id="profile" class="tab-content card">
-            <h2>Личный кабинет</h2>
-            <p>Управление вашим аккаунтом и услугами</p>
-            <div class="grid">
-                <div id="profile-username">Не указан</div>
-                <div id="profile-email">Не указан</div>
-                <div>
-                    <span id="profile-password" style="display: none;"></span>
-                    <span id="password-placeholder">Пароль скрыт</span>
-                    <button id="toggle-password">Показать пароль</button>
-                </div>
-                
-                <a href="#" class="button"><i class="ri-user-settings-line"></i> Мои данные</a>
-                <a href="#" class="button"><i class="ri-file-list-3-line"></i> Мои документы</a>
-                <a href="#" class="button"><i class="ri-article-line"></i> Мои заявления</a>
-                <button id="logoutButton" class="button">Выйти</button>
-            </div>
-        </div>
-
-        <!-- Added admin panel -->
-        <div id="admin-panel" class="tab-content card" style="display: none;">
-            <h2>Админ-панель</h2>
-            <div id="admin-controls">
-                <h3>Управление игроками</h3>
-                <input type="text" id="player-search" placeholder="Поиск игроков...">
-                <div id="player-list"></div>
-                <h3>Назначение админов</h3>
-                <input type="text" id="new-admin-username" placeholder="Имя пользователя">
-                <button id="add-admin-button" class="button">Назначить админом</button>
-                <h3>Выдача скинов</h3>
-                <select id="player-select">
-                    <option value="">Выберите игрока</option>
-                </select>
-                <select id="skin-select">
-                    <option value="default">Стандартный скин</option>
-                    <option value="special">Специальный скин</option>
-                    <option value="amber">Янтарный скин</option>
-                    <option value="poop">Какашечный скин</option>
-                </select>
-                <button id="give-skin-button" class="button">Выдать скин</button>
-            </div>
-        </div>
-    </main>
-
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="authTabs">
-                <button class="authTab active" data-tab="login">Войти</button>
-                <button class="authTab" data-tab="register">Регистрация</button>
-            </div>
-            <div id="loginForm" class="authForm active">
-                <h2>Вход</h2>
-                <form id="loginFormElement">
-                    <div>
-                        <label for="loginUsername">Имя пользователя или Email:</label>
-                        <input type="text" id="loginUsername" name="loginUsername" required>
-                    </div>
-                    <div>
-                        <label for="loginPassword">Пароль:</label>
-                        <input type="password" id="loginPassword" name="loginPassword" required>
-                    </div>
-                    <button type="submit" class="button">Войти</button>
-                </form>
-            </div>
-            <div id="registerForm" class="authForm">
-                <h2>Регистрация</h2>
-                <form id="registerFormElement">
-                    <div>
-                        <label for="firstName">Имя:</label>
-                        <input type="text" id="firstName" name="firstName" required>
-                    </div>
-                    <div>
-                        <label for="lastName">Фамилия:</label>
-                        <input type="text" id="lastName" name="lastName" required>
-                    </div>
-                    <div>
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div>
-                        <label for="password">Пароль:</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="button">Зарегистрироваться</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="skinsModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Выбор скина</h2>
-            <button id="defaultSkin" class="button">Стандартный скин</button>
-            <button id="specialSkin" class="button">Специальный скин</button>
-            <button id="amberSkin" class="button">Янтарный скин</button>
-            <button id="poopSkin" class="button" style="display: none;">Какашечный скин</button>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <h3>О портале</h3>
-                    <ul>
-                        <li><a href="#">О нас</a></li>
-                        <li><a href="#">Контакты</a></li>
-                        <li><a href="#">Часто задаваемые вопросы</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Полезные ссылки</h3>
-                    <ul>
-                        <li><a href="#">Правовая информация</a></li>
-                        <li><a href="#">Политика  конфиденциальности</a></li>
-                        <li><a href="#">Карта сайта</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Подписаться на новости</h3>
-                    <form>
-                        <input type="email" placeholder="Ваш email" style="margin-right: 0.5rem;">
-                        <button type="submit" class="button">Подписаться</button>
-                    </form>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 2rem; color: #4b5563;">
-                © 2024 Russian kombat. Все права защищены.
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        const INFINITY_SCORE = 1e308; // Примерно максимальное число с плавающей точкой в JavaScript
-
-        let lastClickTime = 0;
-        let rapidClickCount = 0;
-        const RAPID_CLICK_THRESHOLD = 10; // 10 ms
-        const RAPID_CLICK_LIMIT = 50;
-
-        // Tab switching functionality
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-
-        // Modal functionality
-        const modal = document.getElementById("authModal");
-        const skinsModal = document.getElementById("skinsModal");
-        const openAuthBtn = document.getElementById("openAuth");
-        const openRegisterEntertainmentBtn = document.getElementById("openRegisterEntertainment");
-        const closeBtns = document.getElementsByClassName("close");
-
-        function openModal(e) {
-            e.preventDefault();
-            modal.style.display = "block";
-        }
-
-        openAuthBtn.onclick = openModal;
-        openRegisterEntertainmentBtn.onclick = openModal;
-
-        Array.from(closeBtns).forEach(btn => {
-            btn.onclick = function() {
-                modal.style.display = "none";
-                skinsModal.style.display = "none";
-            }
-        });
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-            if (event.target == skinsModal) {
-                skinsModal.style.display = "none";
-            }
-        }
-
-        // Auth Tabs functionality
-        const authTabs = document.querySelectorAll('.authTab');
-        const authForms = document.querySelectorAll('.authForm');
-
-        authTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                authTabs.forEach(t => t.classList.remove('active'));
-                authForms.forEach(form => form.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(tabId + 'Form').classList.add('active');
-            });
-        });
-
-
-        // Registration functionality
-        const registerFormElement = document.getElementById("registerFormElement");
-        const loginFormElement = document.getElementById("loginFormElement");
-
-        loginFormElement.onsubmit = function(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            const storedUsername = localStorage.getItem('username');
-            const storedPassword = localStorage.getItem('password');
-
-            if (username === storedUsername && password === storedPassword) {
-                modal.style.display = "none";
-                localStorage.setItem('registered', 'true');
-                updateEntertainmentSection();
-                loadGameState();
-                checkAdminStatus();
-                updateProfileInfo();
-                console.log('Успешный вход:', username);
-            } else {
-                alert('Неверный логин или пароль');
-                console.log('Неудачная попытка входа. Введено:', username, 'Сохранено:', storedUsername);
-            }
-        }
-
-        function checkLoggedInStatus() {
-            const isRegistered = localStorage.getItem('registered') === 'true';
-            const username = localStorage.getItem('username');
-            if (isRegistered && username) {
-                console.log('Пользователь уже вошел:', username);
-                updateEntertainmentSection();
-                loadGameState();
-                checkAdminStatus();
-                updateProfileInfo();
-            } else {
-                console.log('Пользователь не вошел в систему');
-            }
-        }
-
-        // Update entertainment section based on registration status
-        function updateEntertainmentSection() {
-            const entertainmentContent = document.getElementById("entertainment-content");
-            const clickerGame = document.getElementById("clicker-game");
-            const isRegistered = localStorage.getItem('registered') === 'true';
-
-            if (isRegistered) {
-                entertainmentContent.innerHTML = '<h3>Игра "Кликер"</h3><button class="button" id="startClicker">Играть в кликер</button>';
-                document.getElementById("startClicker").addEventListener('click', startClickerGame);
-                updateProfileInfo();
-            } else {
-                entertainmentContent.innerHTML = '<p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p><a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>';
-                document.getElementById("openRegisterEntertainment").addEventListener('click', openModal);
-            }
-        }
-
-        // Clicker game functionality
-        let score = 0;
-        let level = 1;
-        let clickValue = 1;
-        let targetScore = 100;
-        let clicksRemaining = 5000;
-        let cooldownActive = false;
-        let specialSkinUnlocked = false;
-        let amberSkinUnlocked = false;
-        let totalClicks = 0;
-        let totalClickTime = 0;
-        let penaltyEndTime = 0;
-        let penaltyClicksRequired = 0;
-        let fineClicks = 0;
-        let fineAmount = 0;
-        let selectedSkin = 'default';
-
-        let isAdmin = false;
-        let adminList = JSON.parse(localStorage.getItem('adminList')) || ['admin']; // По умолчанию 'admin' является админом
-
-        function saveAdminList() {
-            localStorage.setItem('adminList', JSON.stringify(adminList));
-        }
-
-        function checkAdminStatus() {
-            const username = localStorage.getItem('username');
-            if (username === 'fun' || adminList.includes(username)) {
-                isAdmin = true;
-                document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'block';
-                document.getElementById('admin-panel').style.display = 'block';
-                updatePlayerList();
-                updatePlayerSelect();
-            } else {
-                isAdmin = false;
-                document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'none';
-            }
-        }
-
-        function updatePlayerList() {
-            const playerList = document.getElementById('player-list');
-            const searchTerm = document.getElementById('player-search').value.toLowerCase();
-            playerList.innerHTML = '';
-            let hasPlayers = false;
-
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('clickerGameState_')) {
-                    const username = key.replace('clickerGameState_', '');
-                    if (username.toLowerCase().includes(searchTerm)) {
-                        hasPlayers = true;
-                        const gameState = JSON.parse(localStorage.getItem(key));
-                        const playerItem = document.createElement('div');
-                        playerItem.className = 'player-item';
-                        playerItem.innerHTML = `
-                            <span>${username}</span>
-                            <input type="number" value="${gameState.score}" id="score_${username}">
-                            <button class="button" onclick="updatePlayerScore('${username}')">Обновить</button>
-                            <button class="button" onclick="confirmDeletePlayer('${username}')">Удалить</button>
-                        `;
-                        playerList.appendChild(playerItem);
-                    }
-                }
-            }
-
-            if (!hasPlayers) {
-                playerList.innerHTML = '<p>Нет данных о пользователях.</p>';
-            }
-        }
-
-        function confirmDeletePlayer(username) {
-            if (confirm(`Вы уверены, что хотите удалить аккаунт игрока ${username}?`)) {
-                deletePlayer(username);
-            }
-        }
-
-        function deletePlayer(username) {
-            localStorage.removeItem(`clickerGameState_${username}`);
-            updatePlayerList();
-            updatePlayerSelect();
-            alert(`Аккаунт игрока ${username} успешно удален.`);
-        }
-
-
-        function saveGameState() {
-            const username = localStorage.getItem('username');
-            const gameState = {
-                score: score,
-                level: level,
-                clickValue: clickValue,
-                targetScore: targetScore,
-                clicksRemaining: clicksRemaining,
-                specialSkinUnlocked: specialSkinUnlocked,
-                amberSkinUnlocked: amberSkinUnlocked,
-                penaltyEndTime: penaltyEndTime,
-                penaltyClicksRequired: penaltyClicksRequired,
-                                fineClicks: fineClicks,
-                isAdmin: isAdmin,
-                selectedSkin: selectedSkin, // Добавляем сохранение выбранного скина
-                poopSkinUnlocked: false // Добавляем поле для какашечного скина
-            };
-            localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
-        }
-
-        function loadGameState() {
-            const username = localStorage.getItem('username');
-            const savedState = localStorage.getItem(`clickerGameState_${username}`);
-            if (savedState) {
-                const gameState = JSON.parse(savedState);
-                score = gameState.score || 0;
-                level = gameState.level || 1;
-                clickValue = gameState.clickValue || 1;
-                targetScore = gameState.targetScore || 100;
-                clicksRemaining = gameState.clicksRemaining || 5000;
-                specialSkinUnlocked = gameState.specialSkinUnlocked || false;
-                amberSkinUnlocked = gameState.amberSkinUnlocked || false;
-                penaltyEndTime = gameState.penaltyEndTime || 0;
-                penaltyClicksRequired = gameState.penaltyClicksRequired || 0;
-                fineClicks = gameState.fineClicks || 0;
-                isAdmin = gameState.isAdmin || false;
-                selectedSkin = gameState.selectedSkin || 'default';
-                if (gameState.poopSkinUnlocked) {
-                    document.getElementById("poopSkin").style.display = "inline-block";
-                }
-            } else {
-                // Установка значений по умолчанию, если состояние игры не найдено
-                score = 0;
-                level = 1;
-                clickValue = 1;
-                targetScore = 100;
-                clicksRemaining = 5000;
-                specialSkinUnlocked = false;
-                amberSkinUnlocked = false;
-                penaltyEndTime = 0;
-                penaltyClicksRequired = 0;
-                fineClicks = 0;
-                isAdmin = false;
-                selectedSkin = 'default';
-            }
-            loadSelectedSkin();
-        }
-
-        function startClickerGame() {
-            document.getElementById("entertainment-content").style.display = "none";
-            document.getElementById("clicker-game").style.display = "block";
-            document.getElementById("skins-button").style.display = "inline-block";
-            loadGameState();
-            loadSelectedSkin(); // Добавляем эту строку
-            updateGameDisplay();
-            updateFineDisplay();
-            checkAdminStatus();
-        }
-
-        function updateAverageSpeed() {
-            const avgSpeed = totalClicks > 0 ? Math.round(totalClickTime / totalClicks) : 0;
-            document.getElementById("avg-speed").textContent = `Средняя скорость: ${avgSpeed} мс`;
-            return avgSpeed;
-        }
-
-        function startPenalty() {
-            score = Math.floor(score * 0.3); // Снимаем 70% очков
-            penaltyClicksRequired = 100000;
-            penaltyEndTime = Date.now() + 7 * 60 * 60 * 1000; // 7 hours from now
-                        document.getElementById("penalty-message").textContent = `Штраф:  Нужно оплатить ${penaltyClicksRequired} очков за 7 часов`;
-            document.getElementById("penalty-message").style.display = "block";
-            document.getElementById("cheat-message").textContent = "Читерить плохо! Снято 70% очков.";
-            document.getElementById("cheat-message").style.display = "block";
-            updateFineDisplay();
-            saveGameState();
-            updateGameDisplay();
-        }
-
-        function updatePenalty() {
-            if (penaltyClicksRequired > 0) {
-                const timeLeft = Math.max(0, Math.floor((penaltyEndTime - Date.now()) / 1000));
-                const hours = Math.floor(timeLeft / 3600);
-                const minutes = Math.floor((timeLeft % 3600) / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById("penalty-message").textContent = 
-                    `Штраф: Осталось оплатить ${penaltyClicksRequired} очков за ${hours}:${minutes}:${seconds}`;
-        
-                if (timeLeft === 0) {
-                    document.getElementById("penalty-message").textContent = "Время оплаты штрафа истекло. Игра заблокирована.";
-                    document.getElementById("click-button").disabled = true;
-                    penaltyEndTime = 0;
-                }
-                updateFineDisplay();
-                        }
-        }
-
-        function updateFineDisplay() {
-            const fineWindow = document.getElementById('fine-window');
-            const showFineButton = document.getElementById('show-fine');
-            
-            if (penaltyClicksRequired > 0) {
-                showFineButton.style.display = 'inline-block';
-                fineAmount = Math.min(penaltyClicksRequired, score);
-                document.getElementById('fine-amount').textContent = `Сумма штрафа: ${fineAmount} очков`;
-                document.getElementById('pay-fine-button').textContent = `Оплатить штраф (${fineAmount} очков)`;
-                fineWindow.style.display = 'block';
-            } else {
-                fineWindow.style.display = 'none';
-                showFineButton.style.display = 'none';
-            }
-        }
-
-        document.getElementById("click-button").addEventListener('click', (event) => {
-            if (cooldownActive) return;
-
-            const currentTime = new Date().getTime();
-            if (lastClickTime !== 0) {
-                const timeDiff = currentTime - lastClickTime;
-                totalClicks++;
-                totalClickTime += timeDiff;
-                const avgSpeed = updateAverageSpeed();
-
-                if (avgSpeed >= 1 && avgSpeed <= 130) {
-                    document.getElementById("cheat-message").style.display = "block";
-                    clicksRemaining = 0;
-                    startCooldown(180); // 3 minutes cooldown
-                    startPenalty();
-                    return;
-                }
-            }
-            lastClickTime = currentTime;
-
-            score += clickValue;
-            clicksRemaining = Math.max(0, clicksRemaining - 1);
-
-            if (penaltyClicksRequired > 0) {
-                updatePenalty();
-            }
-
-            if (score >= INFINITY_SCORE) {
-                alert("Поздравляем! Вы достигли бесконечности! Игра начнется заново.");
-                resetGame();
-                return;
-            }
-
-            if (score >= targetScore) {
-                level++;
-                if (level <= 15) {
-                    clickValue *= 2;
-                    targetScore *= 2;
-                } else if (level === 15) {
-                    clickValue = 1000;
-                    targetScore *= 3;
-                } else {
-                    clickValue *= 1.1;
-                    targetScore *= 3;
-                }
-                clicksRemaining = 5000; // Reset clicks on level up
-            }
-
-            if (clicksRemaining <= 0) {
-                startCooldown(30); // 30 seconds cooldown
-            }
-
-            if (level >= 10 && !specialSkinUnlocked) {
-                specialSkinUnlocked = true;
-                alert("Поздравляем! Вы разблокировали специальный скин!");
-            }
-
-            if (level >= 30 && !amberSkinUnlocked) {
-                amberSkinUnlocked = true;
-                alert("Поздравляем! Вы разблокировали янтарный скин!");
-            }
-
-            saveGameState();
-            updateGameDisplay();
-        });
-
-        function updateGameDisplay() {
-            document.getElementById("score").textContent = Math.floor(score).toLocaleString('fullwide', {useGrouping:false});
-            document.getElementById("level").textContent = level;
-            document.getElementById("clicks-remaining").textContent = clicksRemaining;
-            const progress = (score / targetScore) * 100;
-            document.getElementById("progress").style.width = `${Math.min(progress, 100)}%`;
-            if (level > 10) {
-                document.getElementById("continue-message").style.display = "block";
-            }
-            document.getElementById("click-button").disabled = cooldownActive;
-            if (level >= 100) {
-                document.getElementById("withdraw-button").style.display = "inline-block";
-            }
-        }
-
-        function startCooldown(duration) {
-            cooldownActive = true;
-            document.getElementById("cooldown").style.display = "block";
-            let cooldownTime = duration;
-            const cooldownTimer = setInterval(() => {
-                cooldownTime--;
-                document.getElementById("cooldown-timer").textContent = cooldownTime;
-                if (cooldownTime <= 0) {
-                    clearInterval(cooldownTimer);
-                    cooldownActive = false;
-                    clicksRemaining = 5000;
-                    document.getElementById("cooldown").style.display = "none";
-                    document.getElementById("cheat-message").style.display = "none";
-                    updateGameDisplay();
-                }
-            }, 1000);
-        }
-
-        function resetGame() {
-            score = 0;
-            level = 1;
-            clickValue = 1;
-            targetScore = 100;
-            clicksRemaining = 5000;
-            cooldownActive = false;
-            totalClicks = 0;
-            totalClickTime = 0;
-            penaltyEndTime = 0;
-            penaltyClicksRequired = 0;
-            fineClicks = 0; //                         document.getElementById("cheat-message").style.display = "none";
-            document.getElementById("penalty-message").style.display = "none";
-            // Не сбрасываем specialSkinUnlocked, чтобы сохранить разблокированный скин
-            saveGameState();
-            updateGameDisplay();
-            document.getElementById("withdraw-button").style.display = "none";
-            loadSelectedSkin(); // Загружаем выбранный скин после сброса
-            updateFineDisplay(); // Обновляем отображение штрафа после сброса
-        }
-
-        document.getElementById("skins-button").addEventListener('click', () => {
-            skinsModal.style.display = "block";
-        });
-
-        document.getElementById("defaultSkin").addEventListener('click', () => {
-            document.getElementById("clicker-game").className = "bg-default";
-            document.getElementById("click-button").className = "skin-default";
-            document.getElementById("click-button").textContent = "Z";
-            skinsModal.style.display = "none";
-            localStorage.setItem('selectedSkin', 'default');
-        });
-
-        document.getElementById("specialSkin").addEventListener('click', () => {
-            if (specialSkinUnlocked || isAdmin) {
-                document.getElementById("clicker-game").className = "bg-special";
-                document.getElementById("click-button").className = "skin-russia";
-                document.getElementById("click-button").textContent = "Z";
-                skinsModal.style.display = "none";
-                localStorage.setItem('selectedSkin', 'special');
-            } else {
-                alert("Этот скин пока не разблокирован. Достигните 100 гойды, чтобы разблокировать его!");
-            }
-        });
-
-        document.getElementById("amberSkin").addEventListener('click', () => {
-            if (amberSkinUnlocked || isAdmin) {
-                document.getElementById("clicker-game").className = "bg-amber";
-                document.getElementById("click-button").className = "skin-amber";
-                document.getElementById("click-button").textContent = "A";
-                document.getElementById("click-button").style.fontSize = "2.5rem";
-                document.getElementById("score").style.color = "#8B4513";
-                document.getElementById("level").style.color = "#8B4513";
-                document.getElementById("progress").style.backgroundColor = "#DAA520";
-                skinsModal.style.display = "none";
-                localStorage.setItem('selectedSkin', 'amber');
-            } else {
-                alert("Этот скин пока не разблокирован. Достигните 30 уровня, чтобы разблокировать его!");
-            }
-        });
-
-        document.getElementById("withdraw-button").addEventListener('click', () => {
-            resetGame();
-            window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-        });
-
-        function loadSelectedSkin() {
-            const username = localStorage.getItem('username');
-            const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
-            const selectedSkin = gameState.selectedSkin || 'default';
-            if (selectedSkin === 'special' && (gameState.specialSkinUnlocked || isAdmin)) {
-                document.getElementById("clicker-game").className = "bg-special";
-                document.getElementById("click-button").className = "skin-russia";
-                document.getElementById("click-button").textContent = "Z";
-            } else if (selectedSkin === 'amber' && (gameState.amberSkinUnlocked || isAdmin)) {
-                document.getElementById("clicker-game").className = "bg-amber";
-                document.getElementById("click-button").className = "skin-amber";
-                document.getElementById("click-button").textContent = "A";
-                document.getElementById("click-button").style.fontSize = "2.5rem";
-                document.getElementById("score").style.color = "#8B4513";
-                document.getElementById("level").style.color = "#8B4513";
-                document.getElementById("progress").style.backgroundColor = "#DAA520";
-            } else if (selectedSkin === 'poop' && gameState.poopSkinUnlocked) {
-                document.getElementById("clicker-game").className = "bg-poop";
-                document.getElementById("click-button").className = "skin-poop";
-                document.getElementById("click-button").textContent = "💩";
-            } else {
-                document.getElementById("clicker-game").className = "bg-default";
-                document.getElementById("click-button").className = "skin-default";
-                document.getElementById("click-button").textContent = "Z";
-            }
-    
-            // Показываем кнопку какашечного скина, если он разблокирован
-            if (gameState.poopSkinUnlocked) {
-                document.getElementById("poopSkin").style.display = "inline-block";
-            } else {
-                document.getElementById("poopSkin").style.display = "none";
-            }
-        }
-
-        // Initial update of entertainment section and l\oad selected skin
-        
-
-        document.getElementById('pay-fine-button').addEventListener('click', () => {
-            if (fineAmount > 0 && score >= fineAmount) {
-                score -= fineAmount;
-                penaltyClicksRequired -= fineAmount;
-                fineClicks += fineAmount;
-                const progress = (fineClicks / (penaltyClicksRequired + fineClicks)) * 100;
-                document.getElementById('fine-progress-bar').style.width = `${progress}%`;
-                
-                if (penaltyClicksRequired <= 0) {
-                    penaltyClicksRequired = 0;
-                    document.getElementById("penalty-message").textContent = "Штраф выплачен полностью.";
-                    setTimeout(() => {
-                        document.getElementById("penalty-message").style.display = 'none';
-                        document.getElementById('fine-window').style.display = 'none';
-                        updateFineDisplay();
-                    }, 5000);
-                } else {
-                    updateFineDisplay();
-                }
-                
-                saveGameState();
-                updateGameDisplay();
-            } else {
-                alert("Недостаточно очков для оплаты штрафа!");
-            }
-        });
-
-        document.getElementById('show-fine').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('fine-window').style.display = 'block';
-            updateFineDisplay();
-        });
-
-        function makeUserAdmin(username) {
-            const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
-            gameState.isAdmin = true;
-            localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
-            if (username === localStorage.getItem('username')) {
-                isAdmin = true;
-                checkAdminStatus();
-            }
-        }
-
-        registerFormElement.onsubmit = function(e) {
-            e.preventDefault();
-            const username = document.getElementById('firstName').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            localStorage.setItem('registered', 'true');
-            localStorage.setItem('username', username);
-            localStorage.setItem('email', email);
-            localStorage.setItem('password', password);
-            
-            // Создаем начальное состояние игры для нового пользователя
-            const initialGameState = {
-                score: 0,
-                level: 1,
-                clickValue: 1,
-                targetScore: 100,
-                clicksRemaining: 5000,
-                specialSkinUnlocked: false,
-                amberSkinUnlocked: false,
-                penaltyEndTime: 0,
-                penaltyClicksRequired: 0,
-                fineClicks: 0,
-                isAdmin: username === 'fun', // Автоматически делаем 'fun' админом
-                selectedSkin: 'default',
-                poopSkinUnlocked: false
-            };
-            localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(initialGameState));
-            
-            modal.style.display = "none";
-            updateEntertainmentSection();
-            loadGameState();
-            checkAdminStatus();
-            updateProfileInfo();
-            updatePlayerList();
-        }
-
-        function updateProfileInfo() {
-            const username = localStorage.getItem('username') || 'Не указан';
-            const email = localStorage.getItem('email') || 'Не указан';
-            const password = localStorage.getItem('password') || '';
-
-            document.getElementById('profile-username').textContent = `Имя пользователя: ${username}`;
-            document.getElementById('profile-email').textContent = `Email: ${email}`;
-            document.getElementById('profile-password').textContent = password;
-
-            const togglePasswordBtn = document.getElementById('toggle-password');
-            const passwordPlaceholder = document.getElementById('password-placeholder');
-            const passwordSpan = document.getElementById('profile-password');
-
-            togglePasswordBtn.addEventListener('click', function() {
-                if (passwordSpan.style.display === 'none') {
-                    passwordSpan.style.display = 'inline';
-                    passwordPlaceholder.style.display = 'none';
-                    this.textContent = 'Скрыть пароль';
-                } else {
-                    passwordSpan.style.display = 'none';
-                    passwordPlaceholder.style.display = 'inline';
-                    this.textContent = 'Показать пароль';
-                }
-            });
-        }
-
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            localStorage.removeItem('registered');
-            localStorage.removeItem('username');
-            localStorage.removeItem('email');
-            localStorage.removeItem('password');
-            updateEntertainmentSection();
-            updateProfileInfo();
-            isAdmin = false;
-            checkAdminStatus();
-            resetGame();
-        });
-
-        function updatePlayerSelect() {
-            const playerSelect = document.getElementById('player-select');
-            playerSelect.innerHTML = '<option value="">Выберите игрока</option>';
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('clickerGameState_')) {
-                    const username = key.replace('clickerGameState_', '');
-                    const option = document.createElement('option');
-                    option.value = username;
-                    option.textContent = username;
-                    playerSelect.appendChild(option);
-                }
-            }
-        }
-
-        function giveSkinToPlayer(username, skin) {
-            const gameStateKey = `clickerGameState_${username}`;
-            const gameState = JSON.parse(localStorage.getItem(gameStateKey));
-            if (gameState) {
-                gameState.selectedSkin = skin;
-                if (skin === 'special') {
-                    gameState.specialSkinUnlocked = true;
-                } else if (skin === 'amber') {
-                    gameState.amberSkinUnlocked = true;
-                } else if (skin === 'poop') {
-                    gameState.poopSkinUnlocked = true;
-                }
-                localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-                alert(`Скин "${skin}" выдан игроку ${username}`);
-            } else {
-                alert(`Игрок ${username} не найден`);
-            }
-        }
-
-        document.getElementById('give-skin-button').addEventListener('click', () => {
-            const username = document.getElementById('player-select').value;
-            const skin = document.getElementById('skin-select').value;
-            if (username && skin) {
-                giveSkinToPlayer(username, skin);
-            } else {
-                alert('Выберите игрока и скин');
-            }
-        });
-
-        window.onload = function() {
-            checkLoggedInStatus();
-            checkFirstVisit();
-            updateEntertainmentSection();
-            loadSelectedSkin();
-            checkAdminStatus();
-            updateProfileInfo();
-            updatePlayerSelect();
-            
-            console.log('Current username:', localStorage.getItem('username'));
-            console.log('Is admin:', isAdmin);
-        }
-
-        function checkFirstVisit() {
-            if (!localStorage.getItem('visited')) {
-                localStorage.setItem('visited', 'true');
-                if (!localStorage.getItem('username')) {
-                    // Не создаем гостевой аккаунт автоматически
-                    console.log('First visit, but no username set');
-                }
-            }
-        }
-
-        // Убедимся, что 'fun' всегда админ
-        if (localStorage.getItem('username') === 'fun') {
-            makeUserAdmin('fun');
-            makeUserAdmin('tees');
-            makeUserAdmin('vyrfel');
-            makeUserAdmin('Vyrfel02');
-        }
-
-        document.getElementById("poopSkin").addEventListener('click', () => {
-            const username = localStorage.getItem('username');
-            const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
-            if (gameState.poopSkinUnlocked) {
-                document.getElementById("clicker-game").className = "bg-poop";
-                document.getElementById("click-button").className = "skin-poop";
-                document.getElementById("click-button").textContent = "💩";
-                skinsModal.style.display = "none";
-                gameState.selectedSkin = 'poop';
-                localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
-            } else {
-                alert("Этот скин пока не разблокирован. Обратитесь к администратору для его получения.");
-            }
-        });
-
-        document.getElementById('player-search').addEventListener('input', updatePlayerList);
-    </script>
+  <header>
+      <div class="container">
+          <nav>
+              <h1>Russian kombat</h1>
+              <div>
+                  <a href="#">Главная</a>
+                  <a href="#">Услуги</a>
+                  <a href="#">Новости</a>
+                  <a href="#" class="button" id="openAuth">Войти / Регистрация</a>
+              </div>
+          </nav>
+      </div>
+  </header>
+
+  <main class="container">
+      <div class="tabs">
+          <div class="tab active" data-tab="services"><i class="ri-service-line"></i> Услуги</div>
+          <div class="tab" data-tab="news"><i class="ri-newspaper-line"></i> Новости</div>
+          <div class="tab" data-tab="entertainment"><i class="ri-game-line"></i> Развлечения</div>
+          <div class="tab" data-tab="profile"><i class="ri-user-3-line"></i> Личный кабинет</div>
+          <div class="tab" data-tab="admin-panel"><i class="ri-user-3-line"></i> Админ-панель</div> </div>
+
+      <div id="services" class="tab-content card active">
+          <h2>Популярные услуги</h2>
+          <p>Выберите нужную услугу</p>
+          <div class="grid">
+              <a href="#" class="button" id="show-fine"><i class="ri-bank-card-line"></i> Оплата  штрафов</a>
+          </div>
+          <div id="fine-window">
+              <h3>Оплата штрафа</h3>
+              <p>У вас есть неоплаченный штраф. Оплатите его сейчас!</p>
+              <div id="fine-amount"></div>
+              <div id="fine-progress">
+                  <div id="fine-progress-bar"></div>
+              </div>
+              <button id="pay-fine-button" class="button">Оплатить штраф</button>
+          
+          </div>
+      </div>
+
+      <div id="news" class="tab-content card">
+          <h2>Новости и объявления</h2>
+          <p>Последние обновления и важная информация</p>
+          <div>
+              <h3>Новые меры поддержки для семей с детьми</h3>
+              <p>15 мая 2023</p>
+              <p>Правительство объявило о новых мерах поддержки для семей с детьми...</p>
+          </div>
+          <div>
+              <h3>Изменения в процедуре регистрации автомобилей</h3>
+              <p>10 мая 2023</p>
+              <p>С 1 июня вступают в силу изменения в процедуре регистрации автомобилей...</p>
+          </div>
+          <div>
+              <h3>Расширение программы льготной ипотеки</h3>
+              <p>5 мая 2023</p>
+              <p>Правительство приняло решение о расширении программы льготной ипотеки...</p>
+          </div>
+      </div>
+
+      <div id="entertainment" class="tab-content card">
+          <h2>Развлекательная функция</h2>
+          <div id="entertainment-content">
+              <p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p>
+              <a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>
+          </div>
+          <div id="clicker-game" class="bg-default" style="display: none;">
+              <div id="score">0</div>
+              <div id="avg-speed">Средняя скорость: 0 мс</div>
+              <div id="progress-bar"><div id="progress"></div></div>
+              <div>Гойда <span id="level">1</span></div>
+              <button id="click-button" class="skin-default">Z</button>
+              <div id="clicks-left">Осталось кликов: <span id="clicks-remaining">5000</span></div>
+              <div id="cooldown" style="display: none;">Перезарядка: <span id="cooldown-timer">30</span> сек</div>
+              <div id="continue-message" style="display: none;">Продолжай дальше!</div>
+              <div id="cheat-message" style="display: none;">Читерить плохо!</div>
+              <div id="penalty-message" style="display: none;"></div>
+              <div id="pay-fine" style="display: none;">
+                  <div id="show-fine">Штраф отсутствует</div>
+                  <button id="pay-fine-button" class="game-button">Оплатить штраф</button>
+                  <div id="fine-progress-bar" style="width: 0%; height: 20px; background-color: #e5e7eb; border-radius: 10px; margin: 1rem 0;"></div>
+              </div>
+              <button id="withdraw-button" class="game-button" style="display: none;">Вывести</button>
+              <button id="skins-button" class="button game-button" style="display: none;">Скины</button>
+          </div>
+          <button id="open-rhythm-game" class="button game-button" style="display: none;">Играть в ритм-игру</button>
+      </div>
+
+      <div id="profile" class="tab-content card">
+          <h2>Личный кабинет</h2>
+          <p>Управление вашим аккаунтом и услугами</p>
+          <div class="grid">
+              <div id="profile-username">Не указан</div>
+              <div id="profile-email">Не указан</div>
+              <div>
+                  <span id="profile-password" style="display: none;"></span>
+                  <span id="password-placeholder">Пароль скрыт</span>
+                  <button id="toggle-password">Показать пароль</button>
+              </div>
+              
+              <a href="#" class="button"><i class="ri-user-settings-line"></i> Мои данные</a>
+              <a href="#" class="button"><i class="ri-file-list-3-line"></i> Мои документы</a>
+              <a href="#" class="button"><i class="ri-article-line"></i> Мои заявления</a>
+              <button id="logoutButton" class="button">Выйти</button>
+          </div>
+      </div>
+
+      <!-- Added admin panel -->
+      <div id="admin-panel" class="tab-content card" style="display: none;">
+          <h2>Админ-панель</h2>
+          <div id="admin-controls">
+              <h3>Управление игроками</h3>
+              <input type="text" id="player-search" placeholder="Поиск игроков...">
+              <div id="player-list"></div>
+              <h3>Назначение админов</h3>
+              <input type="text" id="new-admin-username" placeholder="Имя пользователя">
+              <button id="add-admin-button" class="button">Назначить админом</button>
+              <h3>Выдача скинов</h3>
+              <select id="player-select">
+                  <option value="">Выберите игрока</option>
+              </select>
+              <select id="skin-select">
+                  <option value="default">Стандартный скин</option>
+                  <option value="special">Специальный скин</option>
+                  <option value="amber">Янтарный скин</option>
+                  <option value="poop">Какашечный скин</option>
+              </select>
+              <button id="give-skin-button" class="button">Выдать скин</button>
+          </div>
+      </div>
+  </main>
+
+  <div id="authModal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="authTabs">
+              <button class="authTab active" data-tab="login">Войти</button>
+              <button class="authTab" data-tab="register">Регистрация</button>
+          </div>
+          <div id="loginForm" class="authForm active">
+              <h2>Вход</h2>
+              <form id="loginFormElement">
+                  <div>
+                      <label for="loginUsername">Имя пользователя или Email:</label>
+                      <input type="text" id="loginUsername" name="loginUsername" required>
+                  </div>
+                  <div>
+                      <label for="loginPassword">Пароль:</label>
+                      <input type="password" id="loginPassword" name="loginPassword" required>
+                  </div>
+                  <button type="submit" class="button">Войти</button>
+              </form>
+          </div>
+          <div id="registerForm" class="authForm">
+              <h2>Регистрация</h2>
+              <form id="registerFormElement">
+                  <div>
+                      <label for="firstName">Имя:</label>
+                      <input type="text" id="firstName" name="firstName" required>
+                  </div>
+                  <div>
+                      <label for="lastName">Фамилия:</label>
+                      <input type="text" id="lastName" name="lastName" required>
+                  </div>
+                  <div>
+                      <label for="email">Email:</label>
+                      <input type="email" id="email" name="email" required>
+                  </div>
+                  <div>
+                      <label for="password">Пароль:</label>
+                      <input type="password" id="password" name="password" required>
+                  </div>
+                  <button type="submit" class="button">Зарегистрироваться</button>
+              </form>
+          </div>
+      </div>
+  </div>
+
+  <div id="skinsModal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Выбор скина</h2>
+          <button id="defaultSkin" class="button">Стандартный скин</button>
+          <button id="specialSkin" class="button">Специальный скин</button>
+          <button id="amberSkin" class="button">Янтарный скин</button>
+          <button id="poopSkin" class="button" style="display: none;">Какашечный скин</button>
+      </div>
+  </div>
+
+  <!-- Добавляем разметку для ритм-игры -->
+  <div id="rhythm-game">
+      <div id="rhythm-game-content">
+          <button id="close-rhythm-game">&times;</button>
+          <div id="rhythm-game-welcome">
+              <h2>Retro Cassette</h2>
+              <p>Добро пожаловать в ритм-игру!</p>
+              <button id="play-button">Play</button>
+          </div>
+          <div id="rhythm-game-play">
+              <div id="rhythm-combo">Combo: 0</div>
+              <div id="rhythm-score">Score: 0</div>
+              <div id="max-score">Максимальный рекорд: 0</div>
+              <div class="note-line">
+                  <div class="hit-line"></div>
+              </div>
+              <div class="note-buttons">
+                  <button class="note-button">Z</button>
+                  <button class="note-button">X</button>
+                  <button class="note-button">C</button>
+                  <button class="note-button">V</button>
+              </div>
+              <div class="mobile-buttons">
+                  <button class="mobile-button" data-key="KeyZ">Z</button>
+                  <button class="mobile-button" data-key="KeyX">X</button>
+                  <button class="mobile-button" data-key="KeyC">C</button>
+                  <button class="mobile-button" data-key="KeyV">V</button>
+              </div>
+              <button class="settings-button" id="open-settings">⚙️</button>
+          </div>
+      </div>
+      <audio id="rhythm-game-audio" src="retro.mp3"></audio>
+  </div>
+
+  <div id="settings-modal" class="settings-modal">
+      <div class="settings-content">
+          <span class="close-settings">&times;</span>
+          <h2>Настройки управления</h2>
+          <div id="key-bindings"></div>
+      </div>
+  </div>
+
+  <footer>
+      <div class="container">
+          <div class="footer-grid">
+              <div>
+                  <h3>О портале</h3>
+                  <ul>
+                      <li><a href="#">О нас</a></li>
+                      <li><a href="#">Контакты</a></li>
+                      <li><a href="#">Часто задаваемые вопросы</a></li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>Полезные ссылки</h3>
+                  <ul>
+                      <li><a href="#">Правовая информация</a></li>
+                      <li><a href="#">Политика  конфиденциальности</a></li>
+                      <li><a href="#">Карта сайта</a></li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>Подписаться на новости</h3>
+                  <form>
+                      <input type="email" placeholder="Ваш email" style="margin-right: 0.5rem;">
+                      <button type="submit" class="button">Подписаться</button>
+                  </form>
+              </div>
+          </div>
+          <div style="text-align: center; margin-top: 2rem; color: #4b5563;">
+              © 2024 Russian kombat. Все права защищены.
+          </div>
+      </div>
+  </footer>
+
+  <script>
+      const INFINITY_SCORE = 1e308; // Примерно максимальное число с плавающей точкой в JavaScript
+
+      let lastClickTime = 0;
+      let rapidClickCount = 0;
+      const RAPID_CLICK_THRESHOLD = 10; // 10 ms
+      const RAPID_CLICK_LIMIT = 50;
+
+      // Tab switching functionality
+      const tabs = document.querySelectorAll('.tab');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      console.log('Найдено вкладок:', tabs.length);
+      console.log('Найдено содержимого вкладок:', tabContents.length);
+
+      tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+              const tabId = tab.getAttribute('data-tab');
+              
+              tabs.forEach(t => t.classList.remove('active'));
+              tabContents.forEach(content => content.classList.remove('active'));
+              
+              tab.classList.add('active');
+              const activeContent = document.getElementById(tabId);
+              if (activeContent) {
+                  activeContent.classList.add('active');
+              }
+          });
+      });
+
+      // Modal functionality
+      const modal = document.getElementById("authModal");
+      const skinsModal = document.getElementById("skinsModal");
+      const openAuthBtn = document.getElementById("openAuth");
+      const openRegisterEntertainmentBtn = document.getElementById("openRegisterEntertainment");
+      const closeBtns = document.getElementsByClassName("close");
+
+      function openModal(e) {
+          e.preventDefault();
+          modal.style.display = "block";
+      }
+
+      openAuthBtn.onclick = openModal;
+      openRegisterEntertainmentBtn.onclick = openModal;
+
+      Array.from(closeBtns).forEach(btn => {
+          btn.onclick = function() {
+              modal.style.display = "none";
+              skinsModal.style.display = "none";
+          }
+      });
+
+      window.onclick = function(event) {
+          if (event.target == modal) {
+              modal.style.display = "none";
+          }
+          if (event.target == skinsModal) {
+              skinsModal.style.display = "none";
+          }
+      }
+
+      // Auth Tabs functionality
+      const authTabs = document.querySelectorAll('.authTab');
+      const authForms = document.querySelectorAll('.authForm');
+
+      authTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+              const tabId = tab.getAttribute('data-tab');
+              authTabs.forEach(t => t.classList.remove('active'));
+              authForms.forEach(form => form.classList.remove('active'));
+              tab.classList.add('active');
+              document.getElementById(tabId + 'Form').classList.add('active');
+          });
+      });
+
+
+      // Registration functionality
+      const registerFormElement = document.getElementById("registerFormElement");
+      const loginFormElement = document.getElementById("loginFormElement");
+
+      loginFormElement.onsubmit = function(e) {
+          e.preventDefault();
+          const username = document.getElementById('loginUsername').value;
+          const password = document.getElementById('loginPassword').value;
+          const storedUsername = localStorage.getItem('username');
+          const storedPassword = localStorage.getItem('password');
+
+          if (username === storedUsername && password === storedPassword) {
+              modal.style.display = "none";
+              localStorage.setItem('registered', 'true');
+              updateEntertainmentSection();
+              loadGameState();
+              checkAdminStatus();
+                            updateProfileInfo();
+              console.log('Успешный вход:', username);
+          } else {
+              alert('Неверный логин или пароль');
+              console.log('Неудачная попытка входа. Введено:', username, 'Сохранено:', storedUsername);
+          }
+      }
+
+      function checkLoggedInStatus() {
+          const isRegistered = localStorage.getItem('registered') === 'true';
+          const username = localStorage.getItem('username');
+                    if (isRegistered && username) {
+              console.log('Пользователь уже вошел:', username);
+              updateEntertainmentSection();
+              loadGameState();
+              checkAdminStatus();
+              updateProfileInfo();
+          } else {
+              console.log('Пользователь не вошел в систему');
+          }
+      }
+
+      // Update entertainment section based on registration status
+      function updateEntertainmentSection() {
+          const entertainmentContent = document.getElementById("entertainment-content");
+          const clickerGame = document.getElementById("clicker-game");
+          const openRhythmGameBtn = document.getElementById("open-rhythm-game");
+          const isRegistered = localStorage.getItem('registered') === 'true';
+
+          if (isRegistered) {
+              entertainmentContent.innerHTML = '<h3>Игры</h3><button class="button" id="startClicker">Играть в кликер</button>';
+              document.getElementById("startClicker").addEventListener('click', startClickerGame);
+              openRhythmGameBtn.style.display = 'inline-block';
+              updateProfileInfo();
+          } else {
+              entertainmentContent.innerHTML = '<p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p><a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>';
+              document.getElementById("openRegisterEntertainment").addEventListener('click', openModal);
+              openRhythmGameBtn.style.display = 'none';
+          }
+      }
+
+      // Clicker game functionality
+      let score = 0;
+      let level = 1;
+      let clickValue = 1;
+      let targetScore = 100;
+      let clicksRemaining = 5000;
+      let cooldownActive = false;
+      let specialSkinUnlocked = false;
+      let amberSkinUnlocked = false;
+      let totalClicks = 0;
+      let totalClickTime = 0;
+      let penaltyEndTime = 0;
+      let penaltyClicksRequired = 0;
+      let fineClicks = 0;
+      let fineAmount = 0;
+      let selectedSkin = 'default';
+
+      let isAdmin = false;
+      let adminList = JSON.parse(localStorage.getItem('adminList')) || ['admin']; // По умолчанию 'admin' является админом
+
+      function saveAdminList() {
+          localStorage.setItem('adminList', JSON.stringify(adminList));
+      }
+
+      function checkAdminStatus() {
+          const username = localStorage.getItem('username');
+          if (username === 'fun' || adminList.includes(username)) {
+              isAdmin = true;
+              document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'block';
+              document.getElementById('admin-panel').style.display = 'block';
+              updatePlayerList();
+              updatePlayerSelect();
+          } else {
+              isAdmin = false;
+              document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'none';
+              document.getElementById('admin-panel').style.display = 'none';
+          }
+      }
+
+      function updatePlayerList() {
+          const playerList = document.getElementById('player-list');
+          const searchTerm = document.getElementById('player-search').value.toLowerCase();
+          playerList.innerHTML = '';
+          let hasPlayers = false;
+
+          for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key.startsWith('clickerGameState_')) {
+                  const username = key.replace('clickerGameState_', '');
+                  if (username.toLowerCase().includes(searchTerm)) {
+                      hasPlayers = true;
+                      const gameState = JSON.parse(localStorage.getItem(key));
+                      const playerItem = document.createElement('div');
+                      playerItem.className = 'player-item';
+                      playerItem.innerHTML = `
+                          <span>${username}</span>
+                          <input type="number" value="${gameState.score}" id="score_${username}">
+                          <button class="button" onclick="updatePlayerScore('${username}')">Обновить</button>
+                          <button class="button" onclick="confirmDeletePlayer('${username}')">Удалить</button>
+                      `;
+                      playerList.appendChild(playerItem);
+                  }
+              }
+          }
+
+          if (!hasPlayers) {
+              playerList.innerHTML = '<p>Нет данных о пользователях.</p>';
+          }
+      }
+
+      function confirmDeletePlayer(username) {
+          if (confirm(`Вы уверены, что хотите удалить аккаунт игрока ${username}?`)) {
+              deletePlayer(username);
+          }
+      }
+
+      function deletePlayer(username) {
+          localStorage.removeItem(`clickerGameState_${username}`);
+          updatePlayerList();
+          updatePlayerSelect();
+          alert(`Аккаунт игрока ${username} успешно удален.`);
+      }
+
+
+      function saveGameState() {
+          const username = localStorage.getItem('username');
+          const gameState = {
+              score: score,
+              level: level,
+              clickValue: clickValue,
+              targetScore: targetScore,
+              clicksRemaining: clicksRemaining,
+              specialSkinUnlocked: specialSkinUnlocked,
+              amberSkinUnlocked: amberSkinUnlocked,
+              penaltyEndTime: penaltyEndTime,
+              penaltyClicksRequired: penaltyClicksRequired,
+                              fineClicks: fineClicks,
+              isAdmin: isAdmin,
+              selectedSkin: selectedSkin, // Добавляем сохранение выбранного скина
+              poopSkinUnlocked: false // Добавляем поле для какашечного скина
+          };
+          localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
+      }
+
+      function loadGameState() {
+          const username = localStorage.getItem('username');
+          const savedState = localStorage.getItem(`clickerGameState_${username}`);
+          if (savedState) {
+              const gameState = JSON.parse(savedState);
+              score = gameState.score || 0;
+              level = gameState.level || 1;
+              clickValue = gameState.clickValue || 1;
+              targetScore = gameState.targetScore || 100;
+              clicksRemaining = gameState.clicksRemaining || 5000;
+              specialSkinUnlocked = gameState.specialSkinUnlocked || false;
+              amberSkinUnlocked = gameState.amberSkinUnlocked || false;
+              penaltyEndTime = gameState.penaltyEndTime || 0;
+              penaltyClicksRequired = gameState.penaltyClicksRequired || 0;
+              fineClicks = gameState.fineClicks || 0;
+              isAdmin = gameState.isAdmin || false;
+              selectedSkin = gameState.selectedSkin || 'default';
+              if (gameState.poopSkinUnlocked) {
+                  document.getElementById("poopSkin").style.display = "inline-block";
+              }
+          } else {
+              // Установка значений по умолчанию, если состояние игры не найдено
+              score = 0;
+              level = 1;
+              clickValue = 1;
+              targetScore = 100;
+              clicksRemaining = 5000;
+              specialSkinUnlocked = false;
+              amberSkinUnlocked = false;
+              penaltyEndTime = 0;
+              penaltyClicksRequired = 0;
+              fineClicks = 0;
+              isAdmin = false;
+              selectedSkin = 'default';
+          }
+          loadSelectedSkin();
+      }
+
+      function startClickerGame() {
+          document.getElementById("entertainment-content").style.display = "none";
+          document.getElementById("clicker-game").style.display = "block";
+          document.getElementById("skins-button").style.display = "inline-block";
+          loadGameState();
+          loadSelectedSkin(); // Добавляем эту строку
+          updateGameDisplay();
+          updateFineDisplay();
+          checkAdminStatus();
+      }
+
+      function updateAverageSpeed() {
+          const avgSpeed = totalClicks > 0 ? Math.round(totalClickTime / totalClicks) : 0;
+          document.getElementById("avg-speed").textContent = `Средняя скорость: ${avgSpeed} мс`;
+          return avgSpeed;
+      }
+
+      function startPenalty() {
+          score = Math.floor(score * 0.3); // Снимаем 70% очков
+          penaltyClicksRequired = 100000;
+          penaltyEndTime = Date.now() + 7 * 60 * 60 * 1000; // 7 hours from now
+                      document.getElementById("penalty-message").textContent = `Штраф:  Нужно оплатить ${penaltyClicksRequired} очков за 7 часов`;
+          document.getElementById("penalty-message").style.display = "block";
+          document.getElementById("cheat-message").textContent = "Читерить плохо! Снято 70% очков.";
+          document.getElementById("cheat-message").style.display = "block";
+          updateFineDisplay();
+                      saveGameState();
+          updateGameDisplay();
+      }
+
+      function updatePenalty() {
+          if (penaltyClicksRequired > 0) {
+              const timeLeft = Math.max(0, Math.floor((penaltyEndTime - Date.now()) / 1000));
+              const hours = Math.floor(timeLeft / 3600);
+              const minutes = Math.floor((timeLeft % 3600) / 60);
+              const seconds = timeLeft % 60;
+              document.getElementById("penalty-message").textContent = 
+                  `Штраф: Осталось оплатить ${penaltyClicksRequired} очков за ${hours}:${minutes}:${seconds}`;
+      
+              if (timeLeft === 0) {
+                  document.getElementById("penalty-message").textContent = "Время оплаты штрафа истекло. Игра заблокирована.";
+                  document.getElementById("click-button").disabled = true;
+                  penaltyEndTime = 0;
+              }
+              updateFineDisplay();
+                      }
+      }
+
+      function updateFineDisplay() {
+          const fineWindow = document.getElementById('fine-window');
+          const showFineButton = document.getElementById('show-fine');
+          
+          if (penaltyClicksRequired > 0) {
+              showFineButton.style.display = 'inline-block';
+              fineAmount = Math.min(penaltyClicksRequired, score);
+              document.getElementById('fine-amount').textContent = `Сумма штрафа: ${fineAmount} очков`;
+              document.getElementById('pay-fine-button').textContent = `Оплатить штраф (${fineAmount} очков)`;
+              fineWindow.style.display = 'block';
+          } else {
+              fineWindow.style.display = 'none';
+              showFineButton.style.display = 'none';
+          }
+      }
+
+      document.getElementById("click-button").addEventListener('click', (event) => {
+          if (cooldownActive) return;
+
+          const currentTime = new Date().getTime();
+          if (lastClickTime !== 0) {
+              const timeDiff = currentTime - lastClickTime;
+              totalClicks++;
+              totalClickTime += timeDiff;
+              const avgSpeed = updateAverageSpeed();
+
+              if (avgSpeed >= 1 && avgSpeed <= 130) {
+                  document.getElementById("cheat-message").style.display = "block";
+                  clicksRemaining = 0;
+                  startCooldown(180); // 3 minutes cooldown
+                  startPenalty();
+                  return;
+              }
+          }
+          lastClickTime = currentTime;
+
+          score += clickValue;
+          clicksRemaining = Math.max(0, clicksRemaining - 1);
+
+          if (penaltyClicksRequired > 0) {
+              updatePenalty();
+          }
+
+          if (score >= INFINITY_SCORE) {
+              alert("Поздравляем! Вы достигли бесконечности! Игра начнется заново.");
+              resetGame();
+              return;
+          }
+
+          if (score >= targetScore) {
+              level++;
+              if (level % 10 === 0) {
+                  clickValue *= 2;
+              }
+              if (level > 17) {
+                  clickValue *= 1.4; // Увеличение клика на 40% после 17 гойды
+              }
+              if (level <= 5) {
+                  targetScore *= 2;
+              } else if (level <= 20) {
+                  targetScore *= 1.05; // Увеличение на 5% после 5 гойды
+              } else {
+                  targetScore *= 1.4; // Увеличение на 40% после 20 гойды
+              }
+              clicksRemaining = 5000; // Сброс кликов при повышении уровня
+          }
+
+          if (clicksRemaining <= 0) {
+              startCooldown(30); // 30 seconds cooldown
+          }
+
+          if (level >= 100 && !specialSkinUnlocked) {
+              specialSkinUnlocked = true;
+              alert("Поздравляем! Вы разблокировали специальный скин!");
+          }
+
+          if (level >= 30 && !amberSkinUnlocked) {
+              amberSkinUnlocked = true;
+              alert("Поздравляем! Вы разблокировали янтарный скин!");
+          }
+
+          saveGameState();
+          updateGameDisplay();
+          event.stopPropagation(); // Предотвращает всплытие события
+      });
+
+      function updateGameDisplay() {
+          document.getElementById("score").textContent = Math.floor(score).toLocaleString('fullwide', {useGrouping:false});
+          document.getElementById("level").textContent = level;
+          document.getElementById("clicks-remaining").textContent = clicksRemaining;
+          const progress = (score / targetScore) * 100;
+          document.getElementById("progress").style.width = `${Math.min(progress, 100)}%`;
+          if (level > 10) {
+              document.getElementById("continue-message").style.display = "block";
+          }
+          document.getElementById("click-button").disabled = cooldownActive;
+          if (level >= 100) {
+              document.getElementById("withdraw-button").style.display = "inline-block";
+          }
+      }
+
+      function startCooldown(duration) {
+          cooldownActive = true;
+          document.getElementById("cooldown").style.display = "block";
+          let cooldownTime = duration;
+          const cooldownTimer = setInterval(() => {
+              cooldownTime--;
+              document.getElementById("cooldown-timer").textContent = cooldownTime;
+              if (cooldownTime <= 0) {
+                  clearInterval(cooldownTimer);
+                  cooldownActive = false;
+                  clicksRemaining = 5000;
+                  document.getElementById("cooldown").style.display = "none";
+                  document.getElementById("cheat-message").style.display = "none";
+                  updateGameDisplay();
+              }
+          }, 1000);
+      }
+
+      function resetGame() {
+          score = 0;
+          level = 1;
+          clickValue = 1;
+          targetScore = 100;
+          clicksRemaining = 5000;
+          cooldownActive = false;
+          totalClicks = 0;
+          totalClickTime = 0;
+          penaltyEndTime = 0;
+          penaltyClicksRequired = 0;
+          fineClicks = 0; //                         document.getElementById("cheat-message").style.display = "none";
+          document.getElementById("penalty-message").style.display = "none";
+          // Не сбрасываем specialSkinUnlocked, чтобы сохранить разблокированный скин
+          saveGameState();
+          updateGameDisplay();
+          document.getElementById("withdraw-button").style.display = "none";
+          loadSelectedSkin(); // Загружаем выбранный скин после сброса
+          updateFineDisplay(); // Обновляем отображение штрафа после сброса
+      }
+
+      document.getElementById("skins-button").addEventListener('click', () => {
+          skinsModal.style.display = "block";
+      });
+
+      document.getElementById("defaultSkin").addEventListener('click', () => {
+          document.getElementById("clicker-game").className = "bg-default";
+          document.getElementById("click-button").className = "skin-default";
+          document.getElementById("click-button").textContent = "Z";
+          skinsModal.style.display = "none";
+          localStorage.setItem('selectedSkin', 'default');
+      });
+
+      document.getElementById("specialSkin").addEventListener('click', () => {
+          if (specialSkinUnlocked || isAdmin) {
+              document.getElementById("clicker-game").className = "bg-special";
+              document.getElementById("click-button").className = "skin-russia";
+              document.getElementById("click-button").textContent = "Z";
+              skinsModal.style.display = "none";
+              localStorage.setItem('selectedSkin', 'special');
+          } else {
+              alert("Этот скин пока не разблокирован. Достигните 100 гойды, чтобы разблокировать его!");
+          }
+      });
+
+      document.getElementById("amberSkin").addEventListener('click', () => {
+          if (amberSkinUnlocked || isAdmin) {
+              document.getElementById("clicker-game").className = "bg-amber";
+              document.getElementById("click-button").className = "skin-amber";
+              document.getElementById("click-button").textContent = "A";
+              document.getElementById("click-button").style.fontSize = "2.5rem";
+              document.getElementById("score").style.color = "#8B4513";
+              document.getElementById("level").style.color = "#8B4513";
+              document.getElementById("progress").style.backgroundColor = "#DAA520";
+              document.getElementById("click-button").style.pointerEvents = "auto";
+              document.getElementById("skins-button").style.display = "inline-block";
+              skinsModal.style.display = "none";
+              localStorage.setItem('selectedSkin', 'amber');
+          } else {
+              alert("Этот скин пока не разблокирован. Достигните 30 уровня, чтобы разблокировать его!");
+          }
+      });
+
+      document.getElementById("withdraw-button").addEventListener('click', () => {
+          resetGame();
+          window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+      });
+
+      function loadSelectedSkin() {
+          const username = localStorage.getItem('username');
+          const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
+          const selectedSkin = gameState.selectedSkin || 'default';
+          if (selectedSkin === 'special' && (gameState.specialSkinUnlocked || isAdmin)) {
+              document.getElementById("clicker-game").className = "bg-special";
+              document.getElementById("click-button").className = "skin-russia";
+              document.getElementById("click-button").textContent = "Z";
+          } else if (selectedSkin === 'amber' && (gameState.amberSkinUnlocked || isAdmin)) {
+              document.getElementById("clicker-game").className = "bg-amber";
+              document.getElementById("click-button").className = "skin-amber";
+              document.getElementById("click-button").textContent = "A";
+              document.getElementById("click-button").style.fontSize = "2.5rem";
+              document.getElementById("score").style.color = "#8B4513";
+              document.getElementById("level").style.color = "#8B4513";
+              document.getElementById("progress").style.backgroundColor = "#DAA520";
+              // Убедимся, что кнопка кликабельна
+              document.getElementById("click-button").style.pointerEvents = "auto";
+          } else if (selectedSkin === 'poop' && gameState.poopSkinUnlocked) {
+              document.getElementById("clicker-game").className = "bg-poop";
+              document.getElementById("click-button").className = "skin-poop";
+              document.getElementById("click-button").textContent = "💩";
+          } else {
+              document.getElementById("clicker-game").className = "bg-default";
+              document.getElementById("click-button").className = "skin-default";
+              document.getElementById("click-button").textContent = "Z";
+          }
+
+          // Показываем кнопку какашечного скина, если он разблокирован
+          if (gameState.poopSkinUnlocked) {
+              document.getElementById("poopSkin").style.display = "inline-block";
+          } else {
+              document.getElementById("poopSkin").style.display = "none";
+          }
+      }
+
+      // Initial update of entertainment section and l\oad selected skin
+      
+
+      document.getElementById('pay-fine-button').addEventListener('click', () => {
+          if (fineAmount > 0 && score >= fineAmount) {
+              score -= fineAmount;
+              penaltyClicksRequired -= fineAmount;
+              fineClicks += fineAmount;
+              const progress = (fineClicks / (penaltyClicksRequired + fineClicks)) * 100;
+              document.getElementById('fine-progress-bar').style.width = `${progress}%`;
+              
+              if (penaltyClicksRequired <= 0) {
+                  penaltyClicksRequired = 0;
+                  document.getElementById("penalty-message").textContent = "Штраф выплачен полностью.";
+                  setTimeout(() => {
+                      document.getElementById("penalty-message").style.display = 'none';
+                      document.getElementById('fine-window').style.display = 'none';
+                      updateFineDisplay();
+                  }, 5000);
+              } else {
+                  updateFineDisplay();
+              }
+              
+              saveGameState();
+              updateGameDisplay();
+          } else {
+              alert("Недостаточно очков для оплаты штрафа!");
+          }
+      });
+
+      document.getElementById('show-fine').addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById('fine-window').style.display = 'block';
+          updateFineDisplay();
+      });
+
+      function makeUserAdmin(username) {
+          const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
+          gameState.isAdmin = true;
+          localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
+          if (username === localStorage.getItem('username')) {
+              isAdmin = true;
+              checkAdminStatus();
+          }
+      }
+
+      registerFormElement.onsubmit = function(e) {
+          e.preventDefault();
+          const username = document.getElementById('firstName').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          localStorage.setItem('registered', 'true');
+          localStorage.setItem('username', username);
+          localStorage.setItem('email', email);
+          localStorage.setItem('password', password);
+          
+          // Создаем начальное состояние игры для нового пользователя
+          const initialGameState = {
+              score: 0,
+              level: 1,
+              clickValue: 1,
+              targetScore: 100,
+              clicksRemaining: 5000,
+              specialSkinUnlocked: false,
+              amberSkinUnlocked: false,
+              penaltyEndTime: 0,
+              penaltyClicksRequired: 0,
+              fineClicks: 0,
+              isAdmin: username === 'fun', // Автоматически делаем 'fun' админом
+              selectedSkin: 'default',
+              poopSkinUnlocked: false
+          };
+          localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(initialGameState));
+          
+          modal.style.display = "none";
+          updateEntertainmentSection();
+          loadGameState();
+          checkAdminStatus();
+          updateProfileInfo();
+          updatePlayerList();
+      }
+
+      function updateProfileInfo() {
+          const username = localStorage.getItem('username') || 'Не указан';
+          const email = localStorage.getItem('email') || 'Не указан';
+          const password = localStorage.getItem('password') || '';
+
+          document.getElementById('profile-username').textContent = `Имя пользователя: ${username}`;
+          document.getElementById('profile-email').textContent = `Email: ${email}`;
+          document.getElementById('profile-password').textContent = password;
+
+          const togglePasswordBtn = document.getElementById('toggle-password');
+          const passwordPlaceholder = document.getElementById('password-placeholder');
+          const passwordSpan = document.getElementById('profile-password');
+
+          togglePasswordBtn.addEventListener('click', function() {
+              if (passwordSpan.style.display === 'none') {
+                  passwordSpan.style.display = 'inline';
+                  passwordPlaceholder.style.display = 'none';
+                  this.textContent = 'Скрыть пароль';
+              } else {
+                  passwordSpan.style.display = 'none';
+                  passwordPlaceholder.style.display = 'inline';
+                  this.textContent = 'Показать пароль';
+              }
+          });
+      }
+
+      document.getElementById('logoutButton').addEventListener('click', () => {
+          localStorage.removeItem('registered');
+          localStorage.removeItem('username');
+          localStorage.removeItem('email');
+          localStorage.removeItem('password');
+          updateEntertainmentSection();
+          updateProfileInfo();
+          isAdmin = false;
+          checkAdminStatus();
+          resetGame();
+      });
+
+      function updatePlayerSelect() {
+          const playerSelect = document.getElementById('player-select');
+          playerSelect.innerHTML = '<option value="">Выберите игрока</option>';
+          for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key.startsWith('clickerGameState_')) {
+                  const username = key.replace('clickerGameState_', '');
+                  const option = document.createElement('option');
+                  option.value = username;
+                  option.textContent = username;
+                  playerSelect.appendChild(option);
+              }
+          }
+      }
+
+      function giveSkinToPlayer(username, skin) {
+          const gameStateKey = `clickerGameState_${username}`;
+          const gameState = JSON.parse(localStorage.getItem(gameStateKey));
+          if (gameState) {
+              gameState.selectedSkin = skin;
+              if (skin === 'special') {
+                  gameState.specialSkinUnlocked = true;
+              } else if (skin === 'amber') {
+                  gameState.amberSkinUnlocked = true;
+              } else if (skin === 'poop') {
+                  gameState.poopSkinUnlocked = true;
+              }
+              localStorage.setItem(gameStateKey, JSON.stringify(gameState));
+              alert(`Скин "${skin}" выдан игроку ${username}`);
+          } else {
+              alert(`Игрок ${username} не найден`);
+          }
+      }
+
+      document.getElementById('give-skin-button').addEventListener('click', () => {
+          const username = document.getElementById('player-select').value;
+          const skin = document.getElementById('skin-select').value;
+          if (username && skin) {
+              giveSkinToPlayer(username, skin);
+          } else {
+              alert('Выберите игрока и скин');
+          }
+      });
+
+      window.onload = function() {
+          checkLoggedInStatus();
+          checkFirstVisit();
+          updateEntertainmentSection();
+          loadSelectedSkin();
+          checkAdminStatus();
+          updateProfileInfo();
+          updatePlayerSelect();
+          
+          console.log('Current username:', localStorage.getItem('username'));
+          console.log('Is admin:', isAdmin);
+      }
+
+      function checkFirstVisit() {
+          if (!localStorage.getItem('visited')) {
+              localStorage.setItem('visited', 'true');
+              if (!localStorage.getItem('username')) {
+                  // Не создаем гостевой аккаунт автоматически
+                  console.log('First visit, but no username set');
+              }
+          }
+      }
+
+      // Убедимся, что 'fun' всегда админ
+      if (localStorage.getItem('username') === 'fun') {
+          makeUserAdmin('fun');
+      }
+
+      document.getElementById("poopSkin").addEventListener('click', () => {
+          const username = localStorage.getItem('username');
+          const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
+          if (gameState.poopSkinUnlocked) {
+              document.getElementById("clicker-game").className = "bg-poop";
+              document.getElementById("click-button").className = "skin-poop";
+              document.getElementById("click-button").textContent = "💩";
+              skinsModal.style.display = "none";
+              gameState.selectedSkin = 'poop';
+              localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
+          } else {
+              alert("Этот скин пока не разблокирован. Обратитесь к администратору для его получения.");
+          }
+      });
+
+      document.getElementById('player-search').addEventListener('input', updatePlayerList);
+
+      // Ритм-игра
+      const rhythmGame = document.getElementById('rhythm-game');
+      const rhythmGameWelcome = document.getElementById('rhythm-game-welcome');
+      const rhythmGamePlay = document.getElementById('rhythm-game-play');
+      const playButton = document.getElementById('play-button');
+      const closeRhythmGameButton = document.getElementById('close-rhythm-game');
+      const noteLine = document.querySelector('.note-line');
+      const noteButtons = document.querySelectorAll('.note-button');
+      const comboDisplay = document.getElementById('rhythm-combo');
+      const scoreDisplay = document.getElementById('rhythm-score');
+      const maxScoreDisplay = document.getElementById('max-score');
+      const audio = document.getElementById('rhythm-game-audio');
+
+      let rhythmGameScore = 0;
+      let combo = 0;
+      let noteInterval;
+      let maxScore = 0;
+      const noteColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00'];
+      const noteKeys = ['KeyZ', 'KeyX', 'KeyC', 'KeyV'];
+
+      document.getElementById('open-rhythm-game').addEventListener('click', () => {
+          rhythmGame.style.display = 'block';
+          rhythmGameWelcome.style.display = 'flex';
+          rhythmGamePlay.style.display = 'none';
+          maxScoreDisplay.textContent = `Максимальный рекорд: ${maxScore}`;
+      });
+
+      closeRhythmGameButton.addEventListener('click', () => {
+          rhythmGame.style.display = 'none';
+          audio.pause();
+          audio.currentTime = 0;
+          clearInterval(noteInterval);
+      });
+
+      playButton.addEventListener('click', startRhythmGame);
+
+      // Настройки управления
+      const defaultKeyBindings = {
+          'lane1': 'KeyZ',
+          'lane2': 'KeyX',
+          'lane3': 'KeyC',
+          'lane4': 'KeyV'
+      };
+
+      let currentKeyBindings = {...defaultKeyBindings};
+
+      function updateKeyBindings() {
+          const keyBindingsElement = document.getElementById('key-bindings');
+          keyBindingsElement.innerHTML = '';
+          Object.entries(currentKeyBindings).forEach(([lane, key]) => {
+              const button = document.createElement('button');
+              button.textContent = `${lane}: ${key.replace('Key', '')}`;
+              button.onclick = () => {
+                  const newKey = prompt(`Введите новую клавишу для ${lane}:`);
+                  if (newKey) {
+                      currentKeyBindings[lane] = `Key${newKey.toUpperCase()}`;
+                      updateKeyBindings();
+                  }
+              };
+              keyBindingsElement.appendChild(button);
+          });
+      }
+
+      document.getElementById('open-settings').addEventListener('click', () => {
+          document.getElementById('settings-modal').style.display = 'block';
+          updateKeyBindings();
+      });
+
+      document.querySelector('.close-settings').addEventListener('click', () => {
+          document.getElementById('settings-modal').style.display = 'none';
+      });
+
+      // Обновленная функция для проверки нажатия клавиш
+      function checkKeyPress(event) {
+          if (rhythmGamePlay.style.display === 'block') {
+              const pressedKey = event.code;
+              const laneIndex = Object.values(currentKeyBindings).indexOf(pressedKey);
+              if (laneIndex !== -1) {
+                  checkNoteHit(laneIndex);
+              }
+          }
+      }
+
+      document.addEventListener('keydown', checkKeyPress);
+
+      // Обработка нажатий на мобильные кнопки
+      document.querySelectorAll('.mobile-button').forEach((button, index) => {
+          button.addEventListener('click', () => {
+              if (rhythmGamePlay.style.display === 'block') {
+                  checkNoteHit(index);
+              }
+          });
+      });
+
+      // Генерация нот под ритм аудиофайла
+      function generateNotesFromAudio() {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const source = audioContext.createMediaElementSource(audio);
+          const analyser = audioContext.createAnalyser();
+          source.connect(analyser);
+          analyser.connect(audioContext.destination);
+
+          analyser.fftSize = 256;
+          const bufferLength = analyser.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+
+          function createNote() {
+              analyser.getByteFrequencyData(dataArray);
+              const average = dataArray.reduce((sum, value) => sum + value, 0) / bufferLength;
+              
+              if (average > 100) { // Пороговое значение для создания ноты
+                  const note = document.createElement('div');
+                  note.className = 'note';
+                  const noteType = Math.floor(Math.random() * 4);
+                  note.style.backgroundColor = noteColors[noteType];
+                  note.style.left = `${noteType * 25}%`;
+                  noteLine.appendChild(note);
+
+                  const animation = note.animate([
+                      { top: '-30px' },
+                      { top: '400px' }
+                  ], {
+                      duration: 2000,
+                      easing: 'linear'
+                  });
+
+                  animation.onfinish = () => {
+                      note.remove();
+                      missNote();
+                  };
+              }
+
+              if (rhythmGamePlay.style.display === 'block') {
+                  requestAnimationFrame(createNote);
+              }
+          }
+
+          return createNote;
+      }
+
+      function startRhythmGame() {
+          rhythmGameWelcome.style.display = 'none';
+          rhythmGamePlay.style.display = 'block';
+          rhythmGameScore = 0;
+          combo = 0;
+          updateRhythmGameDisplay();
+          
+          const createNote = generateNotesFromAudio();
+          requestAnimationFrame(createNote);
+
+          audio.onended = () => {
+              endRhythmGame();
+          };
+      }
+
+
+      function createNote() {
+          const note = document.createElement('div');
+          note.className = 'note';
+          const noteType = Math.floor(Math.random() * 4);
+          note.style.backgroundColor = noteColors[noteType];
+          note.style.left = `${noteType * 25}%`;
+          noteLine.appendChild(note);
+
+          const animation = note.animate([
+              { top: '-30px' },
+              { top: '400px' }
+          ], {
+              duration: 2000,
+              easing: 'linear'
+          });
+
+          animation.onfinish = () => {
+              note.remove();
+                            missNote();
+          };
+      }
+
+      function checkNoteHit(laneIndex) {
+          const notes = document.querySelectorAll('.note');
+          const hitLineRect = document.querySelector('.hit-line').getBoundingClientRect();
+          
+          for (const note of notes) {
+              const noteRect = note.getBoundingClientRect();
+              if (noteRect.bottom >= hitLineRect.top && noteRect.top <= hitLineRect.bottom && parseInt(note.style.left) === laneIndex * 25) {
+                  note.remove();
+                  hitNote();
+                  return;
+              }
+          }
+          missNote();
+      }
+
+      function hitNote() {
+          rhythmGameScore += 100;
+          combo++;
+          updateRhythmGameDisplay();
+      }
+
+      function missNote() {
+          combo = 0;
+          updateRhythmGameDisplay();
+      }
+
+      function updateRhythmGameDisplay() {
+          comboDisplay.textContent = `Combo: ${combo}`;
+          scoreDisplay.textContent = `Score: ${rhythmGameScore}`;
+      }
+
+      function endRhythmGame() {
+          if (rhythmGameScore > maxScore) {
+              maxScore = rhythmGameScore;
+              maxScoreDisplay.textContent = `Максимальный рекорд: ${maxScore}`;
+          }
+          rhythmGamePlay.style.display = 'none';
+          rhythmGameWelcome.style.display = 'flex';
+          alert(`Игра окончена! Ваш счет: ${rhythmGameScore}`);
+          audio.pause();
+          audio.currentTime = 0;
+      }
+
+      audio.onerror = function() {
+          console.error('Error loading audio file');
+          alert('Не удалось загрузить аудиофайл. Игра продолжится без музыки.');
+          startRhythmGame(); // Начинаем игру даже если аудио не загрузилось
+      };
+  </script>
 </body>
 </html>
