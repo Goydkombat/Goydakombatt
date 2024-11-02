@@ -221,7 +221,7 @@
           color: #ef4444;
       }
       .skin-default {
-          background: linear-gradient(135deg, #60a5fa, #1d4ed8);
+          background: linear-gradient(135deg, #ee204d, #1d4ed8);
       }
       .skin-russia {
           background: linear-gradient(to bottom, #fff 33%, #0039A6 33%, #0039A6 66%, #D52B1E 66%);
@@ -382,86 +382,31 @@
           font-size: 24px;
           margin: 10px 0;
       }
-      /* Стили для мобильных кнопок и настроек */
-      .mobile-buttons {
+      /* Стили для мобильных кнопок */
+      .mobile-note-buttons {
           display: none;
           position: absolute;
-          bottom: 20px;
+          bottom: 10px;
           left: 0;
           right: 0;
           justify-content: space-around;
       }
-
-      @media (max-width: 768px) {
-          .mobile-buttons {
-              display: flex;
-          }
-      }
-
-      .mobile-button {
+      .mobile-note-button {
           width: 60px;
           height: 60px;
           border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.3);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 24px;
-          color: white;
           border: none;
-          outline: none;
-      }
-
-      .settings-button {
-          position: absolute;
-          top: 10px;
-          right: 40px;
-          background: none;
-          border: none;
-          color: white;
+          background-color: rgba(255, 255, 255, 0.5);
           font-size: 24px;
-          cursor: pointer;
+          color: #000;
       }
-
-      .settings-modal {
-          display: none;
-          position: fixed;
-          z-index: 1001;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-      }
-
-      .settings-content {
-          background-color: #2c2c2c;
-          margin: 15% auto;
-          padding: 20px;
-          border: 1px solid #888;
-          width: 80%;
-          max-width: 500px;
-          color: white;
-      }
-
-      .close-settings {
-          color: #aaa;
-          float: right;
-          font-size: 28px;
-          font-weight: bold;
-          cursor: pointer;
-      }
-
-      .close-settings:hover,
-      .close-settings:focus {
-          color: #fff;
-          text-decoration: none;
-          cursor: pointer;
-      }
-      .red-blue-gradient {
-          background: linear-gradient(135deg, #ff0000, #0000ff);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+      @media (max-width: 768px) {
+          .mobile-note-buttons {
+              display: flex;
+          }
+          .note-buttons {
+              display: none;
+          }
       }
   </style>
 </head>
@@ -469,7 +414,7 @@
   <header>
       <div class="container">
           <nav>
-              <h1>Russian kombat</h1>
+              <h1>ГосУслуги+</h1>
               <div>
                   <a href="#">Главная</a>
                   <a href="#">Услуги</a>
@@ -507,22 +452,23 @@
       </div>
 
       <div id="news" class="tab-content card">
+          
           <h2>Новости и объявления</h2>
           <p>Последние обновления и важная информация</p>
           <div>
-              <h3>Новые меры поддержки для семей с детьми</h3>
-              <p>15 мая 2023</p>
-              <p>Правительство объявило о новых мерах поддержки для семей с детьми...</p>
+              <h3>Ничего</h3>
+              <p>Ничего</p>
+              <p>Ничего</p>
           </div>
           <div>
-              <h3>Изменения в процедуре регистрации автомобилей</h3>
-              <p>10 мая 2023</p>
-              <p>С 1 июня вступают в силу изменения в процедуре регистрации автомобилей...</p>
+              <h3>Ничего</h3>
+              <p>Ничего</p>
+              <p>Ничего</p>
           </div>
           <div>
-              <h3>Расширение программы льготной ипотеки</h3>
-              <p>5 мая 2023</p>
-              <p>Правительство приняло решение о расширении программы льготной ипотеки...</p>
+              <h3>Ничего</h3>
+              <p>Ничего</p>
+              <p>Ничего</p>
           </div>
       </div>
 
@@ -534,7 +480,6 @@
           </div>
           <div id="clicker-game" class="bg-default" style="display: none;">
               <div id="score">0</div>
-              <div id="avg-speed">Средняя скорость: 0 мс</div>
               <div id="progress-bar"><div id="progress"></div></div>
               <div>Гойда <span id="level">1</span></div>
               <button id="click-button" class="skin-default">Z</button>
@@ -590,7 +535,6 @@
               <select id="skin-select">
                   <option value="default">Стандартный скин</option>
                   <option value="special">Специальный скин</option>
-                  <option value="amber">Янтарный скин</option>
                   <option value="poop">Какашечный скин</option>
               </select>
               <button id="give-skin-button" class="button">Выдать скин</button>
@@ -650,7 +594,6 @@
           <h2>Выбор скина</h2>
           <button id="defaultSkin" class="button">Стандартный скин</button>
           <button id="specialSkin" class="button">Специальный скин</button>
-          <button id="amberSkin" class="button">Янтарный скин</button>
           <button id="poopSkin" class="button" style="display: none;">Какашечный скин</button>
       </div>
   </div>
@@ -677,24 +620,15 @@
                   <button class="note-button">C</button>
                   <button class="note-button">V</button>
               </div>
-              <div class="mobile-buttons">
-                  <button class="mobile-button" data-key="KeyZ">Z</button>
-                  <button class="mobile-button" data-key="KeyX">X</button>
-                  <button class="mobile-button" data-key="KeyC">C</button>
-                  <button class="mobile-button" data-key="KeyV">V</button>
+              <div class="mobile-note-buttons">
+                  <button class="mobile-note-button">Z</button>
+                  <button class="mobile-note-button">X</button>
+                  <button class="mobile-note-button">C</button>
+                  <button class="mobile-note-button">V</button>
               </div>
-              <button class="settings-button" id="open-settings">⚙️</button>
           </div>
       </div>
-      <audio id="rhythm-game-audio" src="retro.mp3"></audio>
-  </div>
-
-  <div id="settings-modal" class="settings-modal">
-      <div class="settings-content">
-          <span class="close-settings">&times;</span>
-          <h2>Настройки управления</h2>
-          <div id="key-bindings"></div>
-      </div>
+      <audio id="rhythm-game-audio" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%A5%D1%80%D1%8F%D0%BA%20-%20Retro%20Cassette%20-%20Dusk%20-%2017%20%D0%BE%D0%BA%D1%82.%202024%20%D0%B3.,%202247%202024-10-29%2015_10--online-audio-convert.com-DaxLtHBkn6SU2fUkf27QJbMieF2QGu.mp3"></audio>
   </div>
 
   <footer>
@@ -731,987 +665,857 @@
   </footer>
 
   <script>
-      const INFINITY_SCORE = 1e308; // Примерно максимальное число с плавающей точкой в JavaScript
+      document.addEventListener('DOMContentLoaded', function() {
+          let isAdmin = false;
+          let adminList = JSON.parse(localStorage.getItem('adminList')) || ['admin']; // По умолчанию 'admin' является админом
 
-      let lastClickTime = 0;
-      let rapidClickCount = 0;
-      const RAPID_CLICK_THRESHOLD = 10; // 10 ms
-      const RAPID_CLICK_LIMIT = 50;
+          const INFINITY_SCORE = 1e308; // Примерно максимальное число с плавающей точкой в JavaScript
 
-      // Tab switching functionality
-      const tabs = document.querySelectorAll('.tab');
-      const tabContents = document.querySelectorAll('.tab-content');
+          let lastClickTime = 0;
+          let rapidClickCount = 0;
+          const RAPID_CLICK_THRESHOLD = 10; // 10 ms
+          const RAPID_CLICK_LIMIT = 50;
 
-      console.log('Найдено вкладок:', tabs.length);
-      console.log('Найдено содержимого вкладок:', tabContents.length);
+          // Tab switching functionality
+          const tabs = document.querySelectorAll('.tab');
+          const tabContents = document.querySelectorAll('.tab-content');
 
-      tabs.forEach(tab => {
-          tab.addEventListener('click', () => {
-              const tabId = tab.getAttribute('data-tab');
-              
-              tabs.forEach(t => t.classList.remove('active'));
-              tabContents.forEach(content => content.classList.remove('active'));
-              
-              tab.classList.add('active');
-              const activeContent = document.getElementById(tabId);
-              if (activeContent) {
-                  activeContent.classList.add('active');
+          console.log('Найдено вкладок:', tabs.length);
+          console.log('Найдено содержимого вкладок:', tabContents.length);
+
+          tabs.forEach(tab => {
+              tab.addEventListener('click', () => {
+                  const tabId = tab.getAttribute('data-tab');
+                  
+                  tabs.forEach(t => t.classList.remove('active'));
+                  tabContents.forEach(content => content.classList.remove('active'));
+                  
+                  tab.classList.add('active');
+                  const activeContent = document.getElementById(tabId);
+                  if (activeContent) {
+                      activeContent.classList.add('active');
+                  }
+              });
+          });
+
+          // Modal functionality
+          const modal = document.getElementById("authModal");
+          const skinsModal = document.getElementById("skinsModal");
+          const openAuthBtn = document.getElementById("openAuth");
+          const openRegisterEntertainmentBtn = document.getElementById("openRegisterEntertainment");
+          const closeBtns = document.getElementsByClassName("close");
+
+          function openModal(e) {
+              e.preventDefault();
+              modal.style.display = "block";
+          }
+
+          openAuthBtn.onclick = openModal;
+          openRegisterEntertainmentBtn.onclick = openModal;
+
+          Array.from(closeBtns).forEach(btn => {
+              btn.onclick = function() {
+                  modal.style.display = "none";
+                  skinsModal.style.display = "none";
               }
           });
-      });
 
-      // Modal functionality
-      const modal = document.getElementById("authModal");
-      const skinsModal = document.getElementById("skinsModal");
-      const openAuthBtn = document.getElementById("openAuth");
-      const openRegisterEntertainmentBtn = document.getElementById("openRegisterEntertainment");
-      const closeBtns = document.getElementsByClassName("close");
-
-      function openModal(e) {
-          e.preventDefault();
-          modal.style.display = "block";
-      }
-
-      openAuthBtn.onclick = openModal;
-      openRegisterEntertainmentBtn.onclick = openModal;
-
-      Array.from(closeBtns).forEach(btn => {
-          btn.onclick = function() {
-              modal.style.display = "none";
-              skinsModal.style.display = "none";
+          window.onclick = function(event) {
+              if (event.target == modal) {
+                  modal.style.display = "none";
+              }
+              if (event.target == skinsModal) {
+                  skinsModal.style.display = "none";
+              }
           }
-      });
 
-      window.onclick = function(event) {
-          if (event.target == modal) {
-              modal.style.display = "none";
-          }
-          if (event.target == skinsModal) {
-              skinsModal.style.display = "none";
-          }
-      }
+          // Auth Tabs functionality
+          const authTabs = document.querySelectorAll('.authTab');
+          const authForms = document.querySelectorAll('.authForm');
 
-      // Auth Tabs functionality
-      const authTabs = document.querySelectorAll('.authTab');
-      const authForms = document.querySelectorAll('.authForm');
-
-      authTabs.forEach(tab => {
-          tab.addEventListener('click', () => {
-              const tabId = tab.getAttribute('data-tab');
-              authTabs.forEach(t => t.classList.remove('active'));
-              authForms.forEach(form => form.classList.remove('active'));
-              tab.classList.add('active');
-              document.getElementById(tabId + 'Form').classList.add('active');
+          authTabs.forEach(tab => {
+              tab.addEventListener('click', () => {
+                  const tabId = tab.getAttribute('data-tab');
+                  authTabs.forEach(t => t.classList.remove('active'));
+                  authForms.forEach(form => form.classList.remove('active'));
+                  tab.classList.add('active');
+                  document.getElementById(tabId + 'Form').classList.add('active');
+              });
           });
-      });
 
 
-      // Registration functionality
-      const registerFormElement = document.getElementById("registerFormElement");
-      const loginFormElement = document.getElementById("loginFormElement");
+          // Registration functionality
+          const registerFormElement = document.getElementById("registerFormElement");
+          const loginFormElement = document.getElementById("loginFormElement");
 
-      loginFormElement.onsubmit = function(e) {
-          e.preventDefault();
-          const username = document.getElementById('loginUsername').value;
-          const password = document.getElementById('loginPassword').value;
-          const storedUsername = localStorage.getItem('username');
-          const storedPassword = localStorage.getItem('password');
+          loginFormElement.onsubmit = function(e) {
+              e.preventDefault();
+              const username = document.getElementById('loginUsername').value;
+              const password = document.getElementById('loginPassword').value;
+              const storedUsername = localStorage.getItem('username');
+              const storedPassword = localStorage.getItem('password');
 
-          if (username === storedUsername && password === storedPassword) {
-              modal.style.display = "none";
-              localStorage.setItem('registered', 'true');
-              updateEntertainmentSection();
-              loadGameState();
-              checkAdminStatus();
-                            updateProfileInfo();
-              console.log('Успешный вход:', username);
-          } else {
-              alert('Неверный логин или пароль');
-              console.log('Неудачная попытка входа. Введено:', username, 'Сохранено:', storedUsername);
+              if (username === storedUsername && password === storedPassword) {
+                  modal.style.display = "none";
+                  localStorage.setItem('registered', 'true');
+                  updateEntertainmentSection();
+                  loadGameState();
+                  checkAdminStatus();
+                  updateProfileInfo();
+                  console.log('Успешный вход:', username);
+              } else {
+                  alert('Неверный логин или пароль');
+                  console.log('Неудачная попытка входа. Введено:', username, 'Сохранено:', storedUsername);
+              }
           }
-      }
 
-      function checkLoggedInStatus() {
-          const isRegistered = localStorage.getItem('registered') === 'true';
-          const username = localStorage.getItem('username');
-                    if (isRegistered && username) {
-              console.log('Пользователь уже вошел:', username);
-              updateEntertainmentSection();
-              loadGameState();
-              checkAdminStatus();
-              updateProfileInfo();
-          } else {
-              console.log('Пользователь не вошел в систему');
+          function checkLoggedInStatus() {
+              const isRegistered = localStorage.getItem('registered') === 'true';
+              const username = localStorage.getItem('username');
+              if (isRegistered && username) {
+                  console.log('Пользователь уже вошел:', username);
+                  updateEntertainmentSection();
+                  loadGameState();
+                  checkAdminStatus();
+                  updateProfileInfo();
+              } else {
+                  console.log('Пользователь не вошел в систему');
+              }
           }
-      }
 
-      // Update entertainment section based on registration status
-      function updateEntertainmentSection() {
-          const entertainmentContent = document.getElementById("entertainment-content");
-          const clickerGame = document.getElementById("clicker-game");
-          const openRhythmGameBtn = document.getElementById("open-rhythm-game");
-          const isRegistered = localStorage.getItem('registered') === 'true';
+          // Update entertainment section based on registration status
+          function updateEntertainmentSection() {
+              const entertainmentContent = document.getElementById("entertainment-content");
+              const clickerGame = document.getElementById("clicker-game");
+              const openRhythmGameBtn = document.getElementById("open-rhythm-game");
+              const isRegistered = localStorage.getItem('registered') === 'true';
 
-          if (isRegistered) {
-              entertainmentContent.innerHTML = '<h3>Игры</h3><button class="button" id="startClicker">Играть в кликер</button>';
-              document.getElementById("startClicker").addEventListener('click', startClickerGame);
-              openRhythmGameBtn.style.display = 'inline-block';
-              updateProfileInfo();
-          } else {
-              entertainmentContent.innerHTML = '<p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p><a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>';
-              document.getElementById("openRegisterEntertainment").addEventListener('click', openModal);
-              openRhythmGameBtn.style.display = 'none';
+              if (isRegistered) {
+                  entertainmentContent.innerHTML = '<h3>Игры</h3><button class="button" id="startClicker">Играть в кликер</button>';
+                  document.getElementById("startClicker").addEventListener('click', startClickerGame);
+                  openRhythmGameBtn.style.display = 'inline-block';
+                  updateProfileInfo();
+              } else {
+                  entertainmentContent.innerHTML = '<p>Для доступа к развлекательным функциям необходимо зарегистрироваться.</p><a href="#" class="button" id="openRegisterEntertainment">Регистрация</a>';
+                  document.getElementById("openRegisterEntertainment").addEventListener('click', openModal);
+                  openRhythmGameBtn.style.display = 'none';
+              }
           }
-      }
 
-      // Clicker game functionality
-      let score = 0;
-      let level = 1;
-      let clickValue = 1;
-      let targetScore = 100;
-      let clicksRemaining = 5000;
-      let cooldownActive = false;
-      let specialSkinUnlocked = false;
-      let amberSkinUnlocked = false;
-      let totalClicks = 0;
-      let totalClickTime = 0;
-      let penaltyEndTime = 0;
-      let penaltyClicksRequired = 0;
-      let fineClicks = 0;
-      let fineAmount = 0;
-      let selectedSkin = 'default';
+          // Clicker game functionality
+          let score = 0;
+          let level = 1;
+          let clickValue = 1;
+          let targetScore = 100;
+          let clicksRemaining = 5000;
+          let cooldownActive = false;
+          let specialSkinUnlocked = false;
+          let totalClicks = 0;
+          let totalClickTime = 0;
+          let penaltyEndTime = 0;
+          let penaltyClicksRequired = 0;
+          let fineClicks = 0;
+          let fineAmount = 0;
+          let selectedSkin = 'default';
 
-      let isAdmin = false;
-      let adminList = JSON.parse(localStorage.getItem('adminList')) || ['admin']; // По умолчанию 'admin' является админом
-
-      function saveAdminList() {
-          localStorage.setItem('adminList', JSON.stringify(adminList));
-      }
-
-      function checkAdminStatus() {
-          const username = localStorage.getItem('username');
-          if (username === 'fun' || adminList.includes(username)) {
-              isAdmin = true;
-              document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'block';
-              document.getElementById('admin-panel').style.display = 'block';
-              updatePlayerList();
-              updatePlayerSelect();
-          } else {
-              isAdmin = false;
-              document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'none';
-              document.getElementById('admin-panel').style.display = 'none';
+          function saveAdminList() {
+              localStorage.setItem('adminList', JSON.stringify(adminList));
           }
-      }
 
-      function updatePlayerList() {
-          const playerList = document.getElementById('player-list');
-          const searchTerm = document.getElementById('player-search').value.toLowerCase();
-          playerList.innerHTML = '';
-          let hasPlayers = false;
+          function checkAdminStatus() {
+              const username = localStorage.getItem('username');
+              if (username && (username === 'fun' || adminList.includes(username))) {
+                  isAdmin = true;
+                  document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'block';
+                  document.getElementById('admin-panel').style.display = 'block';
+                  updatePlayerList();
+                  updatePlayerSelect();
+              } else {
+                  isAdmin = false;
+                  document.querySelector('.tab[data-tab="admin-panel"]').style.display = 'none';
+                  document.getElementById('admin-panel').style.display = 'none';
+              }
+          }
 
-          for (let i = 0; i < localStorage.length; i++) {
-              const key = localStorage.key(i);
-              if (key.startsWith('clickerGameState_')) {
-                  const username = key.replace('clickerGameState_', '');
-                  if (username.toLowerCase().includes(searchTerm)) {
-                      hasPlayers = true;
-                      const gameState = JSON.parse(localStorage.getItem(key));
-                      const playerItem = document.createElement('div');
-                      playerItem.className = 'player-item';
-                      playerItem.innerHTML = `
-                          <span>${username}</span>
-                          <input type="number" value="${gameState.score}" id="score_${username}">
-                          <button class="button" onclick="updatePlayerScore('${username}')">Обновить</button>
-                          <button class="button" onclick="confirmDeletePlayer('${username}')">Удалить</button>
-                      `;
-                      playerList.appendChild(playerItem);
+          function updatePlayerList() {
+              const playerList = document.getElementById('player-list');
+              const searchTerm = document.getElementById('player-search').value.toLowerCase();
+              playerList.innerHTML = '';
+              let hasPlayers = false;
+
+              for (let i = 0; i < localStorage.length; i++) {
+                  const key = localStorage.key(i);
+                  if (key.startsWith('clickerGameState_')) {
+                      const username = key.replace('clickerGameState_', '');
+                      if (username.toLowerCase().includes(searchTerm)) {
+                          hasPlayers = true;
+                          const gameState = JSON.parse(localStorage.getItem(key));
+                          const playerItem = document.createElement('div');
+                          playerItem.className = 'player-item';
+                          playerItem.innerHTML = `
+                              <span>${username}</span>
+                              <input type="number" value="${gameState.score}" id="score_${username}">
+                              <button class="button" onclick="updatePlayerScore('${username}')">Обновить</button>
+                              <button class="button" onclick="confirmDeletePlayer('${username}')">Удалить</button>
+                          `;
+                          playerList.appendChild(playerItem);
+                      }
                   }
               }
-          }
 
-          if (!hasPlayers) {
-              playerList.innerHTML = '<p>Нет данных о пользователях.</p>';
-          }
-      }
-
-      function confirmDeletePlayer(username) {
-          if (confirm(`Вы уверены, что хотите удалить аккаунт игрока ${username}?`)) {
-              deletePlayer(username);
-          }
-      }
-
-      function deletePlayer(username) {
-          localStorage.removeItem(`clickerGameState_${username}`);
-          updatePlayerList();
-          updatePlayerSelect();
-          alert(`Аккаунт игрока ${username} успешно удален.`);
-      }
-
-
-      function saveGameState() {
-          const username = localStorage.getItem('username');
-          const gameState = {
-              score: score,
-              level: level,
-              clickValue: clickValue,
-              targetScore: targetScore,
-              clicksRemaining: clicksRemaining,
-              specialSkinUnlocked: specialSkinUnlocked,
-              amberSkinUnlocked: amberSkinUnlocked,
-              penaltyEndTime: penaltyEndTime,
-              penaltyClicksRequired: penaltyClicksRequired,
-                              fineClicks: fineClicks,
-              isAdmin: isAdmin,
-              selectedSkin: selectedSkin, // Добавляем сохранение выбранного скина
-              poopSkinUnlocked: false // Добавляем поле для какашечного скина
-          };
-          localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
-      }
-
-      function loadGameState() {
-          const username = localStorage.getItem('username');
-          const savedState = localStorage.getItem(`clickerGameState_${username}`);
-          if (savedState) {
-              const gameState = JSON.parse(savedState);
-              score = gameState.score || 0;
-              level = gameState.level || 1;
-              clickValue = gameState.clickValue || 1;
-              targetScore = gameState.targetScore || 100;
-              clicksRemaining = gameState.clicksRemaining || 5000;
-              specialSkinUnlocked = gameState.specialSkinUnlocked || false;
-              amberSkinUnlocked = gameState.amberSkinUnlocked || false;
-              penaltyEndTime = gameState.penaltyEndTime || 0;
-              penaltyClicksRequired = gameState.penaltyClicksRequired || 0;
-              fineClicks = gameState.fineClicks || 0;
-              isAdmin = gameState.isAdmin || false;
-              selectedSkin = gameState.selectedSkin || 'default';
-              if (gameState.poopSkinUnlocked) {
-                  document.getElementById("poopSkin").style.display = "inline-block";
+              if (!hasPlayers) {
+                  playerList.innerHTML = '<p>Нет данных о пользователях.</p>';
               }
-          } else {
-              // Установка значений по умолчанию, если состояние игры не найдено
+          }
+
+          function confirmDeletePlayer(username) {
+              if (confirm(`Вы уверены, что хотите удалить аккаунт игрока ${username}?`)) {
+                  deletePlayer(username);
+              }
+          }
+
+          function deletePlayer(username) {
+              localStorage.removeItem(`clickerGameState_${username}`);
+              updatePlayerList();
+              updatePlayerSelect();
+              alert(`Аккаунт игрока ${username} успешно удален.`);
+          }
+
+
+          function saveGameState() {
+              const username = localStorage.getItem('username');
+              const gameState = {
+                  score: score,
+                  level: level,
+                  clickValue: clickValue,
+                  targetScore: targetScore,
+                  clicksRemaining: clicksRemaining,
+                  specialSkinUnlocked: specialSkinUnlocked,
+                  penaltyEndTime: penaltyEndTime,
+                  penaltyClicksRequired: penaltyClicksRequired,
+                                  fineClicks: fineClicks,
+                  isAdmin: isAdmin,
+                  selectedSkin: selectedSkin, // Добавляем сохранение выбранного скина
+                  poopSkinUnlocked: false // Добавляем поле для какашечного скина
+              };
+              localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
+          }
+
+          function loadGameState() {
+              const username = localStorage.getItem('username');
+              const savedState = localStorage.getItem(`clickerGameState_${username}`);
+              if (savedState) {
+                  const gameState = JSON.parse(savedState);
+                  score = gameState.score || 0;
+                  level = gameState.level || 1;
+                  clickValue = gameState.clickValue || 1;
+                  targetScore = gameState.targetScore || 100;
+                  clicksRemaining = gameState.clicksRemaining || 5000;
+                  specialSkinUnlocked = gameState.specialSkinUnlocked || false;
+                  penaltyEndTime = gameState.penaltyEndTime || 0;
+                  penaltyClicksRequired = gameState.penaltyClicksRequired || 0;
+                  fineClicks = gameState.fineClicks || 0;
+                  isAdmin = gameState.isAdmin || false;
+                  selectedSkin = gameState.selectedSkin || 'default';
+                  if (gameState.poopSkinUnlocked) {
+                      document.getElementById("poopSkin").style.display = "inline-block";
+                  }
+              } else {
+                  // Установка значений по умолчанию, если состояние игры не найдено
+                  score = 0;
+                  level = 1;
+                  clickValue = 1;
+                  targetScore = 100;
+                  clicksRemaining = 5000;
+                  specialSkinUnlocked = false;
+                  penaltyEndTime = 0;
+                  penaltyClicksRequired = 0;
+                  fineClicks = 0;
+                  isAdmin = false;
+                  selectedSkin = 'default';
+              }
+              loadSelectedSkin();
+          }
+
+          function startClickerGame() {
+              document.getElementById("entertainment-content").style.display = "none";
+              document.getElementById("clicker-game").style.display = "block";
+              document.getElementById("skins-button").style.display = "inline-block";
+              loadGameState();
+              loadSelectedSkin(); // Добавляем эту строку
+              updateGameDisplay();
+              updateFineDisplay();
+              checkAdminStatus();
+          }
+
+
+          function startPenalty() {
+              score = Math.floor(score * 0.3); // Снимаем 70% очков
+              penaltyClicksRequired = 100000;
+              penaltyEndTime = Date.now() + 7 * 60 * 60 * 1000; // 7 hours from now
+                          document.getElementById("penalty-message").textContent = `Штраф:  Нужно оплатить ${penaltyClicksRequired} очков за 7 часов`;
+              document.getElementById("penalty-message").style.display = "block";
+              document.getElementById("cheat-message").textContent = "Читерить плохо! Снято 70% очков.";
+              document.getElementById("cheat-message").style.display = "block";
+              updateFineDisplay();
+                          saveGameState();
+              updateGameDisplay();
+          }
+
+          function updatePenalty() {
+              if (penaltyClicksRequired > 0) {
+                  const timeLeft = Math.max(0, Math.floor((penaltyEndTime - Date.now()) / 1000));
+                  const hours = Math.floor(timeLeft / 3600);
+                  const minutes = Math.floor((timeLeft % 3600) / 60);
+                  const seconds = timeLeft % 60;
+                  document.getElementById("penalty-message").textContent = 
+                      `Штраф: Осталось оплатить ${penaltyClicksRequired} очков за ${hours}:${minutes}:${seconds}`;
+          
+                  if (timeLeft === 0) {
+                      document.getElementById("penalty-message").textContent = "Время оплаты штрафа истекло. Игра заблокирована.";
+                      document.getElementById("click-button").disabled = true;
+                      penaltyEndTime = 0;
+                  }
+                  updateFineDisplay();
+                          }
+          }
+
+          function updateFineDisplay() {
+              const fineWindow = document.getElementById('fine-window');
+              const showFineButton = document.getElementById('show-fine');
+              
+              if (penaltyClicksRequired > 0) {
+                  showFineButton.style.display = 'inline-block';
+                  fineAmount = Math.min(penaltyClicksRequired, score);
+                  document.getElementById('fine-amount').textContent = `Сумма штрафа: ${fineAmount} очков`;
+                  document.getElementById('pay-fine-button').textContent = `Оплатить штраф (${fineAmount} очков)`;
+                  fineWindow.style.display = 'block';
+              } else {
+                  fineWindow.style.display = 'none';
+                  showFineButton.style.display = 'none';
+              }
+          }
+
+          document.getElementById("click-button").addEventListener('click', (event) => {
+              if (cooldownActive) return;
+
+              const currentTime = new Date().getTime();
+              if (lastClickTime !== 0) {
+                  const timeDiff = currentTime - lastClickTime;
+                  totalClicks++;
+                  totalClickTime += timeDiff;
+
+                  if (timeDiff >= 1 && timeDiff <= 130) {
+                      document.getElementById("cheat-message").style.display = "block";
+                      clicksRemaining = 0;
+                      startCooldown(180); // 3 minutes cooldown
+                      startPenalty();
+                      return;
+                  }
+              }
+              lastClickTime = currentTime;
+
+              score += clickValue;
+              clicksRemaining = Math.max(0, clicksRemaining - 1);
+
+              if (penaltyClicksRequired > 0) {
+                  updatePenalty();
+              }
+
+              if (score >= INFINITY_SCORE) {
+                  alert("Поздравляем! Вы достигли бесконечности! Игра начнется заново.");
+                  resetGame();
+                  return;
+              }
+
+              if (score >= targetScore) {
+                  level++;
+                  if (level % 10 === 0) {
+                      clickValue *= 2;
+                  }
+                  if (level > 17) {
+                      clickValue *= 1.4; // Увеличение клика на 40% после 17 гойды
+                  }
+                  if (level <= 5) {
+                      targetScore *= 2;
+                  } else if (level <= 20) {
+                      targetScore *= 1.05; // Увеличение на 5% после 5 гойды
+                  } else {
+                      targetScore *= 1.4; // Увеличение на 40% после 20 гойды
+                  }
+                  clicksRemaining = 5000; // Сброс кликов при повышении уровня
+              }
+
+              if (clicksRemaining <= 0) {
+                  startCooldown(30); // 30 seconds cooldown
+              }
+
+              if (level >= 100 && !specialSkinUnlocked) {
+                  specialSkinUnlocked = true;
+                  alert("Поздравляем! Вы разблокировали специальный скин!");
+              }
+
+
+              saveGameState();
+              updateGameDisplay();
+              event.stopPropagation(); // Предотвращает всплытие события
+          });
+
+          function updateGameDisplay() {
+              document.getElementById("score").textContent = Math.floor(score).toLocaleString('fullwide', {useGrouping:false});
+              document.getElementById("level").textContent = level;
+              document.getElementById("clicks-remaining").textContent = clicksRemaining;
+              const progress = (score / targetScore) * 100;
+              document.getElementById("progress").style.width = `${Math.min(progress, 100)}%`;
+              if (level > 10) {
+                  document.getElementById("continue-message").style.display = "block";
+              }
+              document.getElementById("click-button").disabled = cooldownActive;
+              if (level >= 100) {
+                  document.getElementById("withdraw-button").style.display = "inline-block";
+              }
+          }
+
+          function startCooldown(duration) {
+              cooldownActive = true;
+              document.getElementById("cooldown").style.display = "block";
+              let cooldownTime = duration;
+              const cooldownTimer = setInterval(() => {
+                  cooldownTime--;
+                  document.getElementById("cooldown-timer").textContent = cooldownTime;
+                  if (cooldownTime <= 0) {
+                      clearInterval(cooldownTimer);
+                      cooldownActive = false;
+                      clicksRemaining = 5000;
+                      document.getElementById("cooldown").style.display = "none";
+                      document.getElementById("cheat-message").style.display = "none";
+                      updateGameDisplay();
+                  }
+              }, 1000);
+          }
+
+          function resetGame() {
               score = 0;
               level = 1;
               clickValue = 1;
               targetScore = 100;
               clicksRemaining = 5000;
-              specialSkinUnlocked = false;
-              amberSkinUnlocked = false;
+              cooldownActive = false;
+              totalClicks = 0;
+              totalClickTime = 0;
               penaltyEndTime = 0;
               penaltyClicksRequired = 0;
-              fineClicks = 0;
-              isAdmin = false;
-              selectedSkin = 'default';
-          }
-          loadSelectedSkin();
-      }
-
-      function startClickerGame() {
-          document.getElementById("entertainment-content").style.display = "none";
-          document.getElementById("clicker-game").style.display = "block";
-          document.getElementById("skins-button").style.display = "inline-block";
-          loadGameState();
-          loadSelectedSkin(); // Добавляем эту строку
-          updateGameDisplay();
-          updateFineDisplay();
-          checkAdminStatus();
-      }
-
-      function updateAverageSpeed() {
-          const avgSpeed = totalClicks > 0 ? Math.round(totalClickTime / totalClicks) : 0;
-          document.getElementById("avg-speed").textContent = `Средняя скорость: ${avgSpeed} мс`;
-          return avgSpeed;
-      }
-
-      function startPenalty() {
-          score = Math.floor(score * 0.3); // Снимаем 70% очков
-          penaltyClicksRequired = 100000;
-          penaltyEndTime = Date.now() + 7 * 60 * 60 * 1000; // 7 hours from now
-                      document.getElementById("penalty-message").textContent = `Штраф:  Нужно оплатить ${penaltyClicksRequired} очков за 7 часов`;
-          document.getElementById("penalty-message").style.display = "block";
-          document.getElementById("cheat-message").textContent = "Читерить плохо! Снято 70% очков.";
-          document.getElementById("cheat-message").style.display = "block";
-          updateFineDisplay();
-                      saveGameState();
-          updateGameDisplay();
-      }
-
-      function updatePenalty() {
-          if (penaltyClicksRequired > 0) {
-              const timeLeft = Math.max(0, Math.floor((penaltyEndTime - Date.now()) / 1000));
-              const hours = Math.floor(timeLeft / 3600);
-              const minutes = Math.floor((timeLeft % 3600) / 60);
-              const seconds = timeLeft % 60;
-              document.getElementById("penalty-message").textContent = 
-                  `Штраф: Осталось оплатить ${penaltyClicksRequired} очков за ${hours}:${minutes}:${seconds}`;
-      
-              if (timeLeft === 0) {
-                  document.getElementById("penalty-message").textContent = "Время оплаты штрафа истекло. Игра заблокирована.";
-                  document.getElementById("click-button").disabled = true;
-                  penaltyEndTime = 0;
-              }
-              updateFineDisplay();
-                      }
-      }
-
-      function updateFineDisplay() {
-          const fineWindow = document.getElementById('fine-window');
-          const showFineButton = document.getElementById('show-fine');
-          
-          if (penaltyClicksRequired > 0) {
-              showFineButton.style.display = 'inline-block';
-              fineAmount = Math.min(penaltyClicksRequired, score);
-              document.getElementById('fine-amount').textContent = `Сумма штрафа: ${fineAmount} очков`;
-              document.getElementById('pay-fine-button').textContent = `Оплатить штраф (${fineAmount} очков)`;
-              fineWindow.style.display = 'block';
-          } else {
-              fineWindow.style.display = 'none';
-              showFineButton.style.display = 'none';
-          }
-      }
-
-      document.getElementById("click-button").addEventListener('click', (event) => {
-          if (cooldownActive) return;
-
-          const currentTime = new Date().getTime();
-          if (lastClickTime !== 0) {
-              const timeDiff = currentTime - lastClickTime;
-              totalClicks++;
-              totalClickTime += timeDiff;
-              const avgSpeed = updateAverageSpeed();
-
-              if (avgSpeed >= 1 && avgSpeed <= 130) {
-                  document.getElementById("cheat-message").style.display = "block";
-                  clicksRemaining = 0;
-                  startCooldown(180); // 3 minutes cooldown
-                  startPenalty();
-                  return;
-              }
-          }
-          lastClickTime = currentTime;
-
-          score += clickValue;
-          clicksRemaining = Math.max(0, clicksRemaining - 1);
-
-          if (penaltyClicksRequired > 0) {
-              updatePenalty();
+              fineClicks = 0; //                         document.getElementById("cheat-message").style.display = "none";
+              document.getElementById("penalty-message").style.display = "none";
+              // Не сбрасываем specialSkinUnlocked, чтобы сохранить разблокированный скин
+              saveGameState();
+              updateGameDisplay();
+              document.getElementById("withdraw-button").style.display = "none";
+              loadSelectedSkin(); // Загружаем выбранный скин после сброса
+              updateFineDisplay(); // Обновляем отображение штрафа после сброса
           }
 
-          if (score >= INFINITY_SCORE) {
-              alert("Поздравляем! Вы достигли бесконечности! Игра начнется заново.");
-              resetGame();
-              return;
-          }
+          document.getElementById("skins-button").addEventListener('click', () => {
+              skinsModal.style.display = "block";
+          });
 
-          if (score >= targetScore) {
-              level++;
-              if (level % 10 === 0) {
-                  clickValue *= 2;
-              }
-              if (level > 17) {
-                  clickValue *= 1.4; // Увеличение клика на 40% после 17 гойды
-              }
-              if (level <= 5) {
-                  targetScore *= 2;
-              } else if (level <= 20) {
-                  targetScore *= 1.05; // Увеличение на 5% после 5 гойды
-              } else {
-                  targetScore *= 1.4; // Увеличение на 40% после 20 гойды
-              }
-              clicksRemaining = 5000; // Сброс кликов при повышении уровня
-          }
-
-          if (clicksRemaining <= 0) {
-              startCooldown(30); // 30 seconds cooldown
-          }
-
-          if (level >= 100 && !specialSkinUnlocked) {
-              specialSkinUnlocked = true;
-              alert("Поздравляем! Вы разблокировали специальный скин!");
-          }
-
-          if (level >= 30 && !amberSkinUnlocked) {
-              amberSkinUnlocked = true;
-              alert("Поздравляем! Вы разблокировали янтарный скин!");
-          }
-
-          saveGameState();
-          updateGameDisplay();
-          event.stopPropagation(); // Предотвращает всплытие события
-      });
-
-      function updateGameDisplay() {
-          document.getElementById("score").textContent = Math.floor(score).toLocaleString('fullwide', {useGrouping:false});
-          document.getElementById("level").textContent = level;
-          document.getElementById("clicks-remaining").textContent = clicksRemaining;
-          const progress = (score / targetScore) * 100;
-          document.getElementById("progress").style.width = `${Math.min(progress, 100)}%`;
-          if (level > 10) {
-              document.getElementById("continue-message").style.display = "block";
-          }
-          document.getElementById("click-button").disabled = cooldownActive;
-          if (level >= 100) {
-              document.getElementById("withdraw-button").style.display = "inline-block";
-          }
-      }
-
-      function startCooldown(duration) {
-          cooldownActive = true;
-          document.getElementById("cooldown").style.display = "block";
-          let cooldownTime = duration;
-          const cooldownTimer = setInterval(() => {
-              cooldownTime--;
-              document.getElementById("cooldown-timer").textContent = cooldownTime;
-              if (cooldownTime <= 0) {
-                  clearInterval(cooldownTimer);
-                  cooldownActive = false;
-                  clicksRemaining = 5000;
-                  document.getElementById("cooldown").style.display = "none";
-                  document.getElementById("cheat-message").style.display = "none";
-                  updateGameDisplay();
-              }
-          }, 1000);
-      }
-
-      function resetGame() {
-          score = 0;
-          level = 1;
-          clickValue = 1;
-          targetScore = 100;
-          clicksRemaining = 5000;
-          cooldownActive = false;
-          totalClicks = 0;
-          totalClickTime = 0;
-          penaltyEndTime = 0;
-          penaltyClicksRequired = 0;
-          fineClicks = 0; //                         document.getElementById("cheat-message").style.display = "none";
-          document.getElementById("penalty-message").style.display = "none";
-          // Не сбрасываем specialSkinUnlocked, чтобы сохранить разблокированный скин
-          saveGameState();
-          updateGameDisplay();
-          document.getElementById("withdraw-button").style.display = "none";
-          loadSelectedSkin(); // Загружаем выбранный скин после сброса
-          updateFineDisplay(); // Обновляем отображение штрафа после сброса
-      }
-
-      document.getElementById("skins-button").addEventListener('click', () => {
-          skinsModal.style.display = "block";
-      });
-
-      document.getElementById("defaultSkin").addEventListener('click', () => {
-          document.getElementById("clicker-game").className = "bg-default";
-          document.getElementById("click-button").className = "skin-default";
-          document.getElementById("click-button").textContent = "Z";
-          skinsModal.style.display = "none";
-          localStorage.setItem('selectedSkin', 'default');
-      });
-
-      document.getElementById("specialSkin").addEventListener('click', () => {
-          if (specialSkinUnlocked || isAdmin) {
-              document.getElementById("clicker-game").className = "bg-special";
-              document.getElementById("click-button").className = "skin-russia";
-              document.getElementById("click-button").textContent = "Z";
-              skinsModal.style.display = "none";
-              localStorage.setItem('selectedSkin', 'special');
-          } else {
-              alert("Этот скин пока не разблокирован. Достигните 100 гойды, чтобы разблокировать его!");
-          }
-      });
-
-      document.getElementById("amberSkin").addEventListener('click', () => {
-          if (amberSkinUnlocked || isAdmin) {
-              document.getElementById("clicker-game").className = "bg-amber";
-              document.getElementById("click-button").className = "skin-amber";
-              document.getElementById("click-button").textContent = "A";
-              document.getElementById("click-button").style.fontSize = "2.5rem";
-              document.getElementById("score").style.color = "#8B4513";
-              document.getElementById("level").style.color = "#8B4513";
-              document.getElementById("progress").style.backgroundColor = "#DAA520";
-              document.getElementById("click-button").style.pointerEvents = "auto";
-              document.getElementById("skins-button").style.display = "inline-block";
-              skinsModal.style.display = "none";
-              localStorage.setItem('selectedSkin', 'amber');
-          } else {
-              alert("Этот скин пока не разблокирован. Достигните 30 уровня, чтобы разблокировать его!");
-          }
-      });
-
-      document.getElementById("withdraw-button").addEventListener('click', () => {
-          resetGame();
-          window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-      });
-
-      function loadSelectedSkin() {
-          const username = localStorage.getItem('username');
-          const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
-          const selectedSkin = gameState.selectedSkin || 'default';
-          if (selectedSkin === 'special' && (gameState.specialSkinUnlocked || isAdmin)) {
-              document.getElementById("clicker-game").className = "bg-special";
-              document.getElementById("click-button").className = "skin-russia";
-              document.getElementById("click-button").textContent = "Z";
-          } else if (selectedSkin === 'amber' && (gameState.amberSkinUnlocked || isAdmin)) {
-              document.getElementById("clicker-game").className = "bg-amber";
-              document.getElementById("click-button").className = "skin-amber";
-              document.getElementById("click-button").textContent = "A";
-              document.getElementById("click-button").style.fontSize = "2.5rem";
-              document.getElementById("score").style.color = "#8B4513";
-              document.getElementById("level").style.color = "#8B4513";
-              document.getElementById("progress").style.backgroundColor = "#DAA520";
-              // Убедимся, что кнопка кликабельна
-              document.getElementById("click-button").style.pointerEvents = "auto";
-          } else if (selectedSkin === 'poop' && gameState.poopSkinUnlocked) {
-              document.getElementById("clicker-game").className = "bg-poop";
-              document.getElementById("click-button").className = "skin-poop";
-              document.getElementById("click-button").textContent = "💩";
-          } else {
+          document.getElementById("defaultSkin").addEventListener('click', () => {
               document.getElementById("clicker-game").className = "bg-default";
               document.getElementById("click-button").className = "skin-default";
               document.getElementById("click-button").textContent = "Z";
-          }
-
-          // Показываем кнопку какашечного скина, если он разблокирован
-          if (gameState.poopSkinUnlocked) {
-              document.getElementById("poopSkin").style.display = "inline-block";
-          } else {
-              document.getElementById("poopSkin").style.display = "none";
-          }
-      }
-
-      // Initial update of entertainment section and l\oad selected skin
-      
-
-      document.getElementById('pay-fine-button').addEventListener('click', () => {
-          if (fineAmount > 0 && score >= fineAmount) {
-              score -= fineAmount;
-              penaltyClicksRequired -= fineAmount;
-              fineClicks += fineAmount;
-              const progress = (fineClicks / (penaltyClicksRequired + fineClicks)) * 100;
-              document.getElementById('fine-progress-bar').style.width = `${progress}%`;
-              
-              if (penaltyClicksRequired <= 0) {
-                  penaltyClicksRequired = 0;
-                  document.getElementById("penalty-message").textContent = "Штраф выплачен полностью.";
-                  setTimeout(() => {
-                      document.getElementById("penalty-message").style.display = 'none';
-                      document.getElementById('fine-window').style.display = 'none';
-                      updateFineDisplay();
-                  }, 5000);
-              } else {
-                  updateFineDisplay();
-              }
-              
-              saveGameState();
-              updateGameDisplay();
-          } else {
-              alert("Недостаточно очков для оплаты штрафа!");
-          }
-      });
-
-      document.getElementById('show-fine').addEventListener('click', (e) => {
-          e.preventDefault();
-          document.getElementById('fine-window').style.display = 'block';
-          updateFineDisplay();
-      });
-
-      function makeUserAdmin(username) {
-          const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
-          gameState.isAdmin = true;
-          localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
-          if (username === localStorage.getItem('username')) {
-              isAdmin = true;
-              checkAdminStatus();
-          }
-      }
-
-      registerFormElement.onsubmit = function(e) {
-          e.preventDefault();
-          const username = document.getElementById('firstName').value;
-          const email = document.getElementById('email').value;
-          const password = document.getElementById('password').value;
-          localStorage.setItem('registered', 'true');
-          localStorage.setItem('username', username);
-          localStorage.setItem('email', email);
-          localStorage.setItem('password', password);
-          
-          // Создаем начальное состояние игры для нового пользователя
-          const initialGameState = {
-              score: 0,
-              level: 1,
-              clickValue: 1,
-              targetScore: 100,
-              clicksRemaining: 5000,
-              specialSkinUnlocked: false,
-              amberSkinUnlocked: false,
-              penaltyEndTime: 0,
-              penaltyClicksRequired: 0,
-              fineClicks: 0,
-              isAdmin: username === 'fun', // Автоматически делаем 'fun' админом
-              selectedSkin: 'default',
-              poopSkinUnlocked: false
-          };
-          localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(initialGameState));
-          
-          modal.style.display = "none";
-          updateEntertainmentSection();
-          loadGameState();
-          checkAdminStatus();
-          updateProfileInfo();
-          updatePlayerList();
-      }
-
-      function updateProfileInfo() {
-          const username = localStorage.getItem('username') || 'Не указан';
-          const email = localStorage.getItem('email') || 'Не указан';
-          const password = localStorage.getItem('password') || '';
-
-          document.getElementById('profile-username').textContent = `Имя пользователя: ${username}`;
-          document.getElementById('profile-email').textContent = `Email: ${email}`;
-          document.getElementById('profile-password').textContent = password;
-
-          const togglePasswordBtn = document.getElementById('toggle-password');
-          const passwordPlaceholder = document.getElementById('password-placeholder');
-          const passwordSpan = document.getElementById('profile-password');
-
-          togglePasswordBtn.addEventListener('click', function() {
-              if (passwordSpan.style.display === 'none') {
-                  passwordSpan.style.display = 'inline';
-                  passwordPlaceholder.style.display = 'none';
-                  this.textContent = 'Скрыть пароль';
-              } else {
-                  passwordSpan.style.display = 'none';
-                  passwordPlaceholder.style.display = 'inline';
-                  this.textContent = 'Показать пароль';
-              }
-          });
-      }
-
-      document.getElementById('logoutButton').addEventListener('click', () => {
-          localStorage.removeItem('registered');
-          localStorage.removeItem('username');
-          localStorage.removeItem('email');
-          localStorage.removeItem('password');
-          updateEntertainmentSection();
-          updateProfileInfo();
-          isAdmin = false;
-          checkAdminStatus();
-          resetGame();
-      });
-
-      function updatePlayerSelect() {
-          const playerSelect = document.getElementById('player-select');
-          playerSelect.innerHTML = '<option value="">Выберите игрока</option>';
-          for (let i = 0; i < localStorage.length; i++) {
-              const key = localStorage.key(i);
-              if (key.startsWith('clickerGameState_')) {
-                  const username = key.replace('clickerGameState_', '');
-                  const option = document.createElement('option');
-                  option.value = username;
-                  option.textContent = username;
-                  playerSelect.appendChild(option);
-              }
-          }
-      }
-
-      function giveSkinToPlayer(username, skin) {
-          const gameStateKey = `clickerGameState_${username}`;
-          const gameState = JSON.parse(localStorage.getItem(gameStateKey));
-          if (gameState) {
-              gameState.selectedSkin = skin;
-              if (skin === 'special') {
-                  gameState.specialSkinUnlocked = true;
-              } else if (skin === 'amber') {
-                  gameState.amberSkinUnlocked = true;
-              } else if (skin === 'poop') {
-                  gameState.poopSkinUnlocked = true;
-              }
-              localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-              alert(`Скин "${skin}" выдан игроку ${username}`);
-          } else {
-              alert(`Игрок ${username} не найден`);
-          }
-      }
-
-      document.getElementById('give-skin-button').addEventListener('click', () => {
-          const username = document.getElementById('player-select').value;
-          const skin = document.getElementById('skin-select').value;
-          if (username && skin) {
-              giveSkinToPlayer(username, skin);
-          } else {
-              alert('Выберите игрока и скин');
-          }
-      });
-
-      window.onload = function() {
-          checkLoggedInStatus();
-          checkFirstVisit();
-          updateEntertainmentSection();
-          loadSelectedSkin();
-          checkAdminStatus();
-          updateProfileInfo();
-          updatePlayerSelect();
-          
-          console.log('Current username:', localStorage.getItem('username'));
-          console.log('Is admin:', isAdmin);
-      }
-
-      function checkFirstVisit() {
-          if (!localStorage.getItem('visited')) {
-              localStorage.setItem('visited', 'true');
-              if (!localStorage.getItem('username')) {
-                  // Не создаем гостевой аккаунт автоматически
-                  console.log('First visit, but no username set');
-              }
-          }
-      }
-
-      // Убедимся, что 'fun' всегда админ
-      if (localStorage.getItem('username') === 'fun') {
-          makeUserAdmin('fun');
-      }
-
-      document.getElementById("poopSkin").addEventListener('click', () => {
-          const username = localStorage.getItem('username');
-          const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
-          if (gameState.poopSkinUnlocked) {
-              document.getElementById("clicker-game").className = "bg-poop";
-              document.getElementById("click-button").className = "skin-poop";
-              document.getElementById("click-button").textContent = "💩";
               skinsModal.style.display = "none";
-              gameState.selectedSkin = 'poop';
-              localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
-          } else {
-              alert("Этот скин пока не разблокирован. Обратитесь к администратору для его получения.");
+              localStorage.setItem('selectedSkin', 'default');
+          });
+
+          document.getElementById("specialSkin").addEventListener('click', () => {
+              if (specialSkinUnlocked || isAdmin) {
+                  document.getElementById("clicker-game").className = "bg-special";
+                  document.getElementById("click-button").className = "skin-russia";
+                  document.getElementById("click-button").textContent = "Z";
+                  skinsModal.style.display = "none";
+                  localStorage.setItem('selectedSkin', 'special');
+              } else {
+                  alert("Этот скин пока не разблокирован. Достигните 100 гойды, чтобы разблокировать его!");
+              }
+          });
+
+
+          document.getElementById("withdraw-button").addEventListener('click', () => {
+              resetGame();
+              window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+          });
+
+          function loadSelectedSkin() {
+              const username = localStorage.getItem('username');
+              const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
+              const selectedSkin = gameState.selectedSkin || 'default';
+              if (selectedSkin === 'special' && (gameState.specialSkinUnlocked || isAdmin)) {
+                  document.getElementById("clicker-game").className = "bg-special";
+                  document.getElementById("click-button").className = "skin-russia";
+                  document.getElementById("click-button").textContent = "Z";
+              } else if (selectedSkin === 'poop' && gameState.poopSkinUnlocked) {
+                  document.getElementById("clicker-game").className = "bg-poop";
+                  document.getElementById("click-button").className = "skin-poop";
+                  document.getElementById("click-button").textContent = "💩";
+              } else {
+                  document.getElementById("clicker-game").className = "bg-default";
+                  document.getElementById("click-button").className = "skin-default";
+                  document.getElementById("click-button").textContent = "Z";
+              }
+
+              // Показываем кнопку какашечного скина, если он разблокирован
+              if (gameState.poopSkinUnlocked) {
+                  document.getElementById("poopSkin").style.display = "inline-block";
+              } else {
+                  document.getElementById("poopSkin").style.display = "none";
+              }
           }
-      });
 
-      document.getElementById('player-search').addEventListener('input', updatePlayerList);
+          // Initial update of entertainment section and l\oad selected skin
+          
 
-      // Ритм-игра
-      const rhythmGame = document.getElementById('rhythm-game');
-      const rhythmGameWelcome = document.getElementById('rhythm-game-welcome');
-      const rhythmGamePlay = document.getElementById('rhythm-game-play');
-      const playButton = document.getElementById('play-button');
-      const closeRhythmGameButton = document.getElementById('close-rhythm-game');
-      const noteLine = document.querySelector('.note-line');
-      const noteButtons = document.querySelectorAll('.note-button');
-      const comboDisplay = document.getElementById('rhythm-combo');
-      const scoreDisplay = document.getElementById('rhythm-score');
-      const maxScoreDisplay = document.getElementById('max-score');
-      const audio = document.getElementById('rhythm-game-audio');
-
-      let rhythmGameScore = 0;
-      let combo = 0;
-      let noteInterval;
-      let maxScore = 0;
-      const noteColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00'];
-      const noteKeys = ['KeyZ', 'KeyX', 'KeyC', 'KeyV'];
-
-      document.getElementById('open-rhythm-game').addEventListener('click', () => {
-          rhythmGame.style.display = 'block';
-          rhythmGameWelcome.style.display = 'flex';
-          rhythmGamePlay.style.display = 'none';
-          maxScoreDisplay.textContent = `Максимальный рекорд: ${maxScore}`;
-      });
-
-      closeRhythmGameButton.addEventListener('click', () => {
-          rhythmGame.style.display = 'none';
-          audio.pause();
-          audio.currentTime = 0;
-          clearInterval(noteInterval);
-      });
-
-      playButton.addEventListener('click', startRhythmGame);
-
-      // Настройки управления
-      const defaultKeyBindings = {
-          'lane1': 'KeyZ',
-          'lane2': 'KeyX',
-          'lane3': 'KeyC',
-          'lane4': 'KeyV'
-      };
-
-      let currentKeyBindings = {...defaultKeyBindings};
-
-      function updateKeyBindings() {
-          const keyBindingsElement = document.getElementById('key-bindings');
-          keyBindingsElement.innerHTML = '';
-          Object.entries(currentKeyBindings).forEach(([lane, key]) => {
-              const button = document.createElement('button');
-              button.textContent = `${lane}: ${key.replace('Key', '')}`;
-              button.onclick = () => {
-                  const newKey = prompt(`Введите новую клавишу для ${lane}:`);
-                  if (newKey) {
-                      currentKeyBindings[lane] = `Key${newKey.toUpperCase()}`;
-                      updateKeyBindings();
+          document.getElementById('pay-fine-button').addEventListener('click', () => {
+              if (fineAmount > 0 && score >= fineAmount) {
+                  score -= fineAmount;
+                  penaltyClicksRequired -= fineAmount;
+                  fineClicks += fineAmount;
+                  const progress = (fineClicks / (penaltyClicksRequired + fineClicks)) * 100;
+                  document.getElementById('fine-progress-bar').style.width = `${progress}%`;
+                  
+                  if (penaltyClicksRequired <= 0) {
+                      penaltyClicksRequired = 0;
+                      document.getElementById("penalty-message").textContent = "Штраф выплачен полностью.";
+                      setTimeout(() => {
+                          document.getElementById("penalty-message").style.display = 'none';
+                          document.getElementById('fine-window').style.display = 'none';
+                          updateFineDisplay();
+                      }, 5000);
+                  } else {
+                      updateFineDisplay();
                   }
-              };
-              keyBindingsElement.appendChild(button);
+                  
+                  saveGameState();
+                  updateGameDisplay();
+              } else {
+                  alert("Недостаточно очков для оплаты штрафа!");
+              }
           });
-      }
 
-      document.getElementById('open-settings').addEventListener('click', () => {
-          document.getElementById('settings-modal').style.display = 'block';
-          updateKeyBindings();
-      });
+          document.getElementById('show-fine').addEventListener('click', (e) => {
+              e.preventDefault();
+              document.getElementById('fine-window').style.display = 'block';
+              updateFineDisplay();
+          });
 
-      document.querySelector('.close-settings').addEventListener('click', () => {
-          document.getElementById('settings-modal').style.display = 'none';
-      });
-
-      // Обновленная функция для проверки нажатия клавиш
-      function checkKeyPress(event) {
-          if (rhythmGamePlay.style.display === 'block') {
-              const pressedKey = event.code;
-              const laneIndex = Object.values(currentKeyBindings).indexOf(pressedKey);
-              if (laneIndex !== -1) {
-                  checkNoteHit(laneIndex);
+          function makeUserAdmin(username) {
+              const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
+              gameState.isAdmin = true;
+              localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
+              if (username === localStorage.getItem('username')) {
+                  isAdmin = true;
+                  checkAdminStatus();
               }
           }
-      }
 
-      document.addEventListener('keydown', checkKeyPress);
+          registerFormElement.onsubmit = function(e) {
+              e.preventDefault();
+              const username = document.getElementById('firstName').value;
+              const email = document.getElementById('email').value;
+              const password = document.getElementById('password').value;
+              localStorage.setItem('registered', 'true');
+              localStorage.setItem('username', username);
+              localStorage.setItem('email', email);
+              localStorage.setItem('password', password);
+              
+              // Создаем начальное состояние игры для нового пользователя
+              const initialGameState = {
+                  score: 0,
+                  level: 1,
+                  clickValue: 1,
+                  targetScore: 100,
+                  clicksRemaining: 5000,
+                  specialSkinUnlocked: false,
+                  penaltyEndTime: 0,
+                  penaltyClicksRequired: 0,
+                  fineClicks: 0,
+                  isAdmin: username === 'fun', // Автоматически делаем 'fun' админом
+                  selectedSkin: 'default',
+                  poopSkinUnlocked: false
+              };
+              localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(initialGameState));
+              
+              modal.style.display = "none";
+              updateEntertainmentSection();
+              loadGameState();
+              checkAdminStatus();
+              updateProfileInfo();
+              updatePlayerList();
+          }
 
-      // Обработка нажатий на мобильные кнопки
-      document.querySelectorAll('.mobile-button').forEach((button, index) => {
-          button.addEventListener('click', () => {
-              if (rhythmGamePlay.style.display === 'block') {
-                  checkNoteHit(index);
+          function updateProfileInfo() {
+              const username = localStorage.getItem('username') || 'Не указан';
+              const email = localStorage.getItem('email') || 'Не указан';
+              const password = localStorage.getItem('password') || '';
+
+              document.getElementById('profile-username').textContent = `Имя пользователя: ${username}`;
+              document.getElementById('profile-email').textContent = `Email: ${email}`;
+              document.getElementById('profile-password').textContent = password;
+
+              const togglePasswordBtn = document.getElementById('toggle-password');
+              const passwordPlaceholder = document.getElementById('password-placeholder');
+              const passwordSpan = document.getElementById('profile-password');
+
+              togglePasswordBtn.addEventListener('click', function() {
+                  if (passwordSpan.style.display === 'none') {
+                      passwordSpan.style.display = 'inline';
+                      passwordPlaceholder.style.display = 'none';
+                      this.textContent = 'Скрыть пароль';
+                  } else {
+                      passwordSpan.style.display = 'none';
+                      passwordPlaceholder.style.display = 'inline';
+                      this.textContent = 'Показать пароль';
+                  }
+              });
+          }
+
+          document.getElementById('logoutButton').addEventListener('click', () => {
+              localStorage.removeItem('registered');
+              localStorage.removeItem('username');
+              localStorage.removeItem('email');
+              localStorage.removeItem('password');
+              updateEntertainmentSection();
+              updateProfileInfo();
+              isAdmin = false;
+              checkAdminStatus();
+              resetGame();
+          });
+
+          function updatePlayerSelect() {
+              const playerSelect = document.getElementById('player-select');
+              playerSelect.innerHTML = '<option value="">Выберите игрока</option>';
+              for (let i = 0; i < localStorage.length; i++) {
+                  const key = localStorage.key(i);
+                  if (key.startsWith('clickerGameState_')) {
+                      const username = key.replace('clickerGameState_', '');
+                      const option = document.createElement('option');
+                      option.value = username;
+                      option.textContent = username;
+                      playerSelect.appendChild(option);
+                  }
+              }
+          }
+
+          function giveSkinToPlayer(username, skin) {
+              const gameStateKey = `clickerGameState_${username}`;
+              const gameState = JSON.parse(localStorage.getItem(gameStateKey));
+              if (gameState) {
+                  gameState.selectedSkin = skin;
+                  if (skin === 'special') {
+                      gameState.specialSkinUnlocked = true;
+                  } else if (skin === 'poop') {
+                      gameState.poopSkinUnlocked = true;
+                  }
+                  localStorage.setItem(gameStateKey, JSON.stringify(gameState));
+                  alert(`Скин "${skin}" выдан игроку ${username}`);
+              } else {
+                  alert(`Игрок ${username} не найден`);
+              }
+          }
+
+          document.getElementById('give-skin-button').addEventListener('click', () => {
+              const username = document.getElementById('player-select').value;
+              const skin = document.getElementById('skin-select').value;
+              if (username && skin) {
+                  giveSkinToPlayer(username, skin);
+              } else {
+                  alert('Выберите игрока и скин');
               }
           });
-      });
 
-      // Генерация нот под ритм аудиофайла
-      function generateNotesFromAudio() {
-          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          const source = audioContext.createMediaElementSource(audio);
-          const analyser = audioContext.createAnalyser();
-          source.connect(analyser);
-          analyser.connect(audioContext.destination);
+          window.onload = function() {
+              checkLoggedInStatus();
+              checkFirstVisit();
+              updateEntertainmentSection();
+              loadSelectedSkin();
+              checkAdminStatus(); // Добавьте эту строку
+              updateProfileInfo();
+              updatePlayerSelect();
+              
+              console.log('Current username:', localStorage.getItem('username'));
+              console.log('Is admin:', isAdmin);
+          }
 
-          analyser.fftSize = 256;
-          const bufferLength = analyser.frequencyBinCount;
-          const dataArray = new Uint8Array(bufferLength);
+          function checkFirstVisit() {
+              if (!localStorage.getItem('visited')) {
+                  localStorage.setItem('visited', 'true');
+                  if (!localStorage.getItem('username')) {
+                      // Не создаем гостевой аккаунт автоматически
+                      console.log('First visit, but no username set');
+                  }
+              }
+          }
+
+          // Убедимся, что 'fun' всегда админ
+          if (localStorage.getItem('username') === 'fun') {
+              makeUserAdmin('fun');
+          }
+
+          document.getElementById("poopSkin").addEventListener('click', () => {
+              const username = localStorage.getItem('username');
+              const gameState = JSON.parse(localStorage.getItem(`clickerGameState_${username}`)) || {};
+              if (gameState.poopSkinUnlocked) {
+                  document.getElementById("clicker-game").className = "bg-poop";
+                  document.getElementById("click-button").className = "skin-poop";
+                  document.getElementById("click-button").textContent = "💩";
+                  skinsModal.style.display = "none";
+                  gameState.selectedSkin = 'poop';
+                  localStorage.setItem(`clickerGameState_${username}`, JSON.stringify(gameState));
+              } else {
+                  alert("Этот скин пока не разблокирован. Обратитесь к администратору для его получения.");
+              }
+          });
+
+          document.getElementById('player-search').addEventListener('input', updatePlayerList);
+
+          // Ритм-игра
+          const rhythmGame = document.getElementById('rhythm-game');
+          const rhythmGameWelcome = document.getElementById('rhythm-game-welcome');
+          const rhythmGamePlay = document.getElementById('rhythm-game-play');
+          const playButton = document.getElementById('play-button');
+          const closeRhythmGameButton = document.getElementById('close-rhythm-game');
+          const noteLine = document.querySelector('.note-line');
+          const noteButtons = document.querySelectorAll('.note-button');
+          const mobileNoteButtons = document.querySelectorAll('.mobile-note-button');
+          const comboDisplay = document.getElementById('rhythm-combo');
+          const scoreDisplay = document.getElementById('rhythm-score');
+          const maxScoreDisplay = document.getElementById('max-score');
+          const audio = document.getElementById('rhythm-game-audio');
+
+          let rhythmGameScore = 0;
+          let combo = 0;
+          let noteInterval;
+          let maxScore = 0;
+          const noteColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00'];
+          const noteKeys = ['KeyZ', 'KeyX', 'KeyC', 'KeyV'];
+
+          document.getElementById('open-rhythm-game').addEventListener('click', () => {
+              rhythmGame.style.display = 'block';
+              rhythmGameWelcome.style.display = 'flex';
+              rhythmGamePlay.style.display = 'none';
+              maxScoreDisplay.textContent = `Максимальный рекорд: ${maxScore}`;
+          });
+
+          closeRhythmGameButton.addEventListener('click', () => {
+              rhythmGame.style.display = 'none';
+              audio.pause();
+              audio.currentTime = 0;
+              clearInterval(noteInterval);
+          });
+
+          playButton.addEventListener('click', startRhythmGame);
+
+          function startRhythmGame() {
+              rhythmGameWelcome.style.display = 'none';
+              rhythmGamePlay.style.display = 'block';
+              rhythmGameScore = 0;
+              combo = 0;
+              updateRhythmGameDisplay();
+              noteInterval = setInterval(createNote, 1000);
+              audio.play();
+
+              audio.onended = () => {
+                  endRhythmGame();
+              };
+          }
+
+          function endRhythmGame() {
+              clearInterval(noteInterval);
+              if (rhythmGameScore > maxScore) {
+                  maxScore = rhythmGameScore;
+                  maxScoreDisplay.textContent = `Максимальный рекорд: ${maxScore}`;
+              }
+              rhythmGamePlay.style.display = 'none';
+              rhythmGameWelcome.style.display = 'flex';
+              alert(`Игра окончена! Ваш счет: ${rhythmGameScore}`);
+          }
 
           function createNote() {
-              analyser.getByteFrequencyData(dataArray);
-              const average = dataArray.reduce((sum, value) => sum + value, 0) / bufferLength;
-              
-              if (average > 100) { // Пороговое значение для создания ноты
-                  const note = document.createElement('div');
-                  note.className = 'note';
-                  const noteType = Math.floor(Math.random() * 4);
-                  note.style.backgroundColor = noteColors[noteType];
-                  note.style.left = `${noteType * 25}%`;
-                  noteLine.appendChild(note);
+              const note = document.createElement('div');
+              note.className = 'note';
+              const noteType = Math.floor(Math.random() * 4);
+              note.style.backgroundColor = noteColors[noteType];
+              note.style.left = `${noteType * 25}%`;
+              noteLine.appendChild(note);
 
-                  const animation = note.animate([
-                      { top: '-30px' },
-                      { top: '400px' }
-                  ], {
-                      duration: 2000,
-                      easing: 'linear'
-                  });
+              const animation = note.animate([
+                  { top: '-30px' },
+                  { top: '400px' }
+              ], {
+                  duration: 2000,
+                  easing: 'linear'
+              });
 
-                  animation.onfinish = () => {
-                      note.remove();
-                      missNote();
-                  };
-              }
-
-              if (rhythmGamePlay.style.display === 'block') {
-                  requestAnimationFrame(createNote);
-              }
+              animation.onfinish = () => {
+                  note.remove();
+                  missNote();
+              };
           }
 
-          return createNote;
-      }
-
-      function startRhythmGame() {
-          rhythmGameWelcome.style.display = 'none';
-          rhythmGamePlay.style.display = 'block';
-          rhythmGameScore = 0;
-          combo = 0;
-          updateRhythmGameDisplay();
-          
-          const createNote = generateNotesFromAudio();
-          requestAnimationFrame(createNote);
-
-          audio.onended = () => {
-              endRhythmGame();
-          };
-      }
-
-
-      function createNote() {
-          const note = document.createElement('div');
-          note.className = 'note';
-          const noteType = Math.floor(Math.random() * 4);
-          note.style.backgroundColor = noteColors[noteType];
-          note.style.left = `${noteType * 25}%`;
-          noteLine.appendChild(note);
-
-          const animation = note.animate([
-              { top: '-30px' },
-              { top: '400px' }
-          ], {
-              duration: 2000,
-              easing: 'linear'
+          document.addEventListener('keydown', (event) => {
+              if (rhythmGamePlay.style.display === 'block') {
+                  const keyIndex = noteKeys.indexOf(event.code);
+                  if (keyIndex !== -1) {
+                      checkNoteHit(keyIndex);
+                  }
+              }
           });
 
-          animation.onfinish = () => {
-              note.remove();
-                            missNote();
-          };
-      }
+          noteButtons.forEach((button, index) => {
+              button.addEventListener('click', () => {
+                  if (rhythmGamePlay.style.display === 'block') {
+                      checkNoteHit(index);
+                  }
+              });
+          });
 
-      function checkNoteHit(laneIndex) {
-          const notes = document.querySelectorAll('.note');
-          const hitLineRect = document.querySelector('.hit-line').getBoundingClientRect();
-          
-          for (const note of notes) {
-              const noteRect = note.getBoundingClientRect();
-              if (noteRect.bottom >= hitLineRect.top && noteRect.top <= hitLineRect.bottom && parseInt(note.style.left) === laneIndex * 25) {
-                  note.remove();
-                  hitNote();
-                  return;
+          mobileNoteButtons.forEach((button, index) => {
+              button.addEventListener('click', () => {
+                  if (rhythmGamePlay.style.display === 'block') {
+                      checkNoteHit(index);
+                  }
+              });
+          });
+
+          function checkNoteHit(lane) {
+              const notes = noteLine.querySelectorAll('.note');
+              for (const note of notes) {
+                  const noteRect = note.getBoundingClientRect();
+                  const hitLineRect = document.querySelector('.hit-line').getBoundingClientRect();
+                  if (Math.abs(noteRect.bottom - hitLineRect.top) < 20 && parseInt(note.style.left) === lane * 25) {
+                      note.remove();
+                      hitNote();
+                      return;
+                  }
               }
+              missNote();
           }
-          missNote();
-      }
 
-      function hitNote() {
-          rhythmGameScore += 100;
-          combo++;
-          updateRhythmGameDisplay();
-      }
-
-      function missNote() {
-          combo = 0;
-          updateRhythmGameDisplay();
-      }
-
-      function updateRhythmGameDisplay() {
-          comboDisplay.textContent = `Combo: ${combo}`;
-          scoreDisplay.textContent = `Score: ${rhythmGameScore}`;
-      }
-
-      function endRhythmGame() {
-          if (rhythmGameScore > maxScore) {
-              maxScore = rhythmGameScore;
-              maxScoreDisplay.textContent = `Максимальный рекорд: ${maxScore}`;
+          function hitNote() {
+              combo++;
+              rhythmGameScore += 10 * combo;
+              updateRhythmGameDisplay();
           }
-          rhythmGamePlay.style.display = 'none';
-          rhythmGameWelcome.style.display = 'flex';
-          alert(`Игра окончена! Ваш счет: ${rhythmGameScore}`);
-          audio.pause();
-          audio.currentTime = 0;
-      }
 
-      audio.onerror = function() {
-          console.error('Error loading audio file');
-          alert('Не удалось загрузить аудиофайл. Игра продолжится без музыки.');
-          startRhythmGame(); // Начинаем игру даже если аудио не загрузилось
-      };
+          function missNote() {
+              combo = 0;
+              updateRhythmGameDisplay();
+          }
+
+          function updateRhythmGameDisplay() {
+              comboDisplay.textContent = `Combo: ${combo}`;
+              scoreDisplay.textContent = `Score: ${rhythmGameScore}`;
+          }
+      });
   </script>
 </body>
 </html>
