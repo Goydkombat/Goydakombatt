@@ -665,6 +665,72 @@
   </footer>
 
   <script>
+    // Показать/скрыть мод-меню при нажатии клавиши Tab
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Tab') {
+        event.preventDefault();
+        const modMenu = document.getElementById('mod-menu');
+        if (modMenu.style.display === 'none' || modMenu.style.display === '') {
+            modMenu.style.display = 'block';
+        } else {
+            modMenu.style.display = 'none';
+        }
+    }
+});
+
+// Функция для изменения текста
+function changeText() {
+    const newText = document.getElementById('new-text').value;
+    const textElement = document.getElementById('text-to-modify');
+    if (newText) {
+        textElement.textContent = newText;
+        saveToLocalStorage('modifiedText', newText);
+        alert('Text has been changed and saved!');
+    }
+}
+
+// Функция для изменения максимального значения
+function changeMaxValue() {
+    const maxValue = document.getElementById('max-value').value;
+    if (maxValue) {
+        console.log(`Max value changed to: ${maxValue}`);
+        saveToLocalStorage('maxValue', maxValue);
+        alert('Max value has been changed and saved!');
+    }
+}
+
+// Функция для изменения цвета фона
+function changeBgColor() {
+    const bgColor = document.getElementById('bg-color').value;
+    document.body.style.backgroundColor = bgColor;
+    saveToLocalStorage('bgColor', bgColor);
+}
+
+// Функция для сохранения значения в localStorage
+function saveToLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+}
+
+// Функция для загрузки сохраненных значений из localStorage
+function loadFromLocalStorage() {
+    const modifiedText = localStorage.getItem('modifiedText');
+    const maxValue = localStorage.getItem('maxValue');
+    const bgColor = localStorage.getItem('bgColor');
+
+    if (modifiedText) {
+        document.getElementById('text-to-modify').textContent = modifiedText;
+    }
+    if (maxValue) {
+        document.getElementById('max-value').value = maxValue;
+    }
+    if (bgColor) {
+        document.body.style.backgroundColor = bgColor;
+        document.getElementById('bg-color').value = bgColor;
+    }
+}
+
+// Загрузка сохраненных значений при загрузке страницы
+window.onload = loadFromLocalStorage;
       document.addEventListener('DOMContentLoaded', function() {
           let isAdmin = false;
           let adminList = JSON.parse(localStorage.getItem('adminList')) || ['admin']; // По умолчанию 'admin' является админом
