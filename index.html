@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -50,7 +50,9 @@
         <div class="user-status">
             <div class="user-balance">
                 <span class="status-label">Баланс:</span>
-                <span id="balance" class="status-value">0</span>
+                <div class="effect-container">
+                    <span class="status-value">0</span>
+                </div>
             </div>
             <div class="user-level">
                 <span class="status-label">Уровень:</span>
@@ -58,13 +60,13 @@
             </div>
         </div>
 
-        <!-- Главное меню услуг -->
+        <!-- Главное меню -->
         <div class="main-services">
-            <div class="service-card" data-target="clicker-screen">
+            <div class="service-card" data-target="modes-screen">
                 <div class="service-icon">
-                    <i class="fas fa-hand-pointer"></i>
+                    <i class="fas fa-gamepad"></i>
                 </div>
-                <div class="service-name">Кликер</div>
+                <div class="service-name">Игры</div>
             </div>
             <div class="service-card" data-target="shop-screen">
                 <div class="service-icon">
@@ -107,28 +109,54 @@
                 </div>
             </div>
 
-            <!-- Экран кликера -->
-            <div id="clicker-screen" class="content-screen">
+            <!-- Экран режимов -->
+            <div id="modes-screen" class="content-screen">
                 <div class="content-header">
-                    <h2 class="content-title">Кликер</h2>
+                    <h2 class="content-title">Игры</h2>
                 </div>
-                <div class="clicker-content">
-                    <div class="progress-container">
-                        <div class="progress-info">
-                            <span>Прогресс к следующему уровню</span>
-                            <span id="progress-text">0/100</span>
+                <div class="modes-grid">
+                    <div class="mode-item">
+                        <div class="mode-icon">
+                            <i class="fas fa-hand-pointer"></i>
                         </div>
-                        <div class="progress-bar">
-                            <div id="progress-fill"></div>
+                        <div class="mode-info">
+                            <div class="mode-name">Кликер</div>
+                            <div class="mode-description">Кликай и зарабатывай очки</div>
                         </div>
+                        <button class="mode-button" data-mode="clicker">Играть</button>
                     </div>
                     
-                    <div class="click-button-container">
-                        <button id="click-button" class="click-button default-skin">Z</button>
+                    <div class="mode-item">
+                        <div class="mode-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="mode-info">
+                            <div class="mode-name">Бегун</div>
+                            <div class="mode-description">Собирай монеты и уворачивайся от препятствий</div>
+                        </div>
+                        <button class="mode-button" data-mode="runner">Играть</button>
                     </div>
                     
-                    <div class="cooldown-container">
-                        <p id="cooldown-text" class="cooldown-info">Нажимайте на кнопку, чтобы получать баллы!</p>
+                    <div class="mode-item">
+                        <div class="mode-icon">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <div class="mode-info">
+                            <div class="mode-name">Головоломка</div>
+                            <div class="mode-description">Решай головоломки и получай награды</div>
+                        </div>
+                        <button class="mode-button" data-mode="puzzle">Играть</button>
+                    </div>
+                    
+                    <div class="mode-item">
+                        <div class="mode-icon">
+                            <i class="fas fa-fighter-jet"></i>
+                        </div>
+                        <div class="mode-info">
+                            <div class="mode-name">Космический бой</div>
+                            <div class="mode-description">Сражайся с врагами в космосе</div>
+                        </div>
+                        <button class="mode-button" data-mode="space-battle">Играть</button>
                     </div>
                 </div>
             </div>
@@ -220,14 +248,6 @@
                     </div>
                     
                     <div class="skin-item">
-                        <div class="skin-preview neon-skin">Z</div>
-                        <div class="skin-info">
-                            <div class="skin-name">Неон</div>
-                            <button class="select-skin-button" data-skin="neon" disabled>Купить 500</button>
-                        </div>
-                    </div>
-                    
-                    <div class="skin-item">
                         <div class="skin-preview rainbow-skin">Z</div>
                         <div class="skin-info">
                             <div class="skin-name">Радуга</div>
@@ -256,6 +276,86 @@
                         <div class="skin-info">
                             <div class="skin-name">Галактика</div>
                             <button class="select-skin-button" data-skin="galaxy" disabled>Купить 1500</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview matrix-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Матрица</div>
+                            <button class="select-skin-button" data-skin="matrix" disabled>Купить 2000</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview plasma-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Плазма</div>
+                            <button class="select-skin-button" data-skin="plasma" disabled>Купить 2500</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview void-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Пустота</div>
+                            <button class="select-skin-button" data-skin="void" disabled>Купить 3000</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview quantum-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Квантовый</div>
+                            <button class="select-skin-button" data-skin="quantum" disabled>Купить 5000</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview cyber-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Кибер</div>
+                            <button class="select-skin-button" data-skin="cyber" disabled>Купить 3500</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview dragon-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Дракон</div>
+                            <button class="select-skin-button" data-skin="dragon" disabled>Купить 4000</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview demon-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Демон</div>
+                            <button class="select-skin-button" data-skin="demon" disabled>Купить 4500</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview angel-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Ангел</div>
+                            <button class="select-skin-button" data-skin="angel" disabled>Купить 4500</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview toxic-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Токсичный</div>
+                            <button class="select-skin-button" data-skin="toxic" disabled>Купить 3200</button>
+                        </div>
+                    </div>
+                    
+                    <div class="skin-item">
+                        <div class="skin-preview shadow-skin">Z</div>
+                        <div class="skin-info">
+                            <div class="skin-name">Тень</div>
+                            <button class="select-skin-button" data-skin="shadow" disabled>Купить 3800</button>
                         </div>
                     </div>
                 </div>
@@ -337,6 +437,58 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Режим кликера -->
+            <div id="clicker-screen" class="content-screen">
+                <div class="content-header">
+                    <h2 class="content-title">Кликер</h2>
+                    <button class="back-to-modes">Назад к играм</button>
+                </div>
+                <div class="clicker-content">
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span>Прогресс к следующему уровню</span>
+                            <span id="progress-text">0/100</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progress-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="click-button-container">
+                        <button id="click-button" class="click-button default-skin">Z</button>
+                    </div>
+                    
+                    <div class="cooldown-container">
+                        <p id="cooldown-text" class="cooldown-info">Нажимайте на кнопку, чтобы получать баллы!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Режим бегуна -->
+            <div id="runner-screen" class="content-screen game-screen">
+                <h2>Режим: Бегун</h2>
+                <canvas id="runner-canvas"></canvas>
+                <button class="back-to-modes">Назад к играм</button>
+            </div>
+
+            <!-- Режим головоломки -->
+            <div id="puzzle-screen" class="content-screen">
+                <div class="content-header">
+                    <h2 class="content-title">Головоломка</h2>
+                    <button class="back-to-modes">Назад к играм</button>
+                </div>
+                <div id="puzzle-container" class="game-container">
+                    <!-- Здесь будет отображаться головоломка -->
+                </div>
+            </div>
+
+            <!-- Режим космического боя -->
+            <div id="space-battle-screen" class="content-screen game-screen">
+                <h2>Режим: Космический бой</h2>
+                <canvas id="space-battle-canvas"></canvas>
+                <button class="back-to-modes">Назад к играм</button>
+            </div>
         </div>
     </div>
     
@@ -396,6 +548,9 @@
 
     <!-- Уведомление -->
     <div class="notification" id="notification">Действие выполнено успешно!</div>
+
+    <div id="effects-container"></div>
+    <div id="notification"></div>
 
     <script src="script.js"></script>
 </body>

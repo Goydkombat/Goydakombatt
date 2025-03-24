@@ -335,19 +335,36 @@ body {
 
 .content-screen {
     display: none;
-    background-color: white;
-    margin: 15px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    margin: 20px;
 }
 
 .content-screen.active {
     display: block;
 }
 
+.back-to-modes {
+    background: #0d4cd3;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.back-to-modes:hover {
+    background: #0b3ba3;
+}
+
 .content-header {
-    padding: 15px;
-    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .content-title {
@@ -469,28 +486,22 @@ body {
     100% { transform: scale(1); }
 }
 
-/* Скины для кнопки - обновление для нового класса */
+/* Стили для скинов */
 .default-skin {
-    background: linear-gradient(135deg, #0d4cd3, #2a5298);
+    background-color: #0d4cd3;
+    color: white;
 }
 
 .gold-skin {
-    background: linear-gradient(135deg, #FFD700, #DAA520);
-    color: #333;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
-    border: 3px solid #B8860B;
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    color: #ffffff;
+    text-shadow: 0 0 5px #7e5c08;
 }
 
 .amber-skin {
-    background: linear-gradient(135deg, #FFBF00, #FF8C00);
-    color: #333;
-}
-
-.neon-skin {
-    background: black;
-    color: #39FF14;
-    text-shadow: 0 0 10px #39FF14, 0 0 20px #39FF14;
-    border: 2px solid #39FF14;
+    background: linear-gradient(135deg, #ffbf00, #cc7722);
+    color: white;
+    text-shadow: 0 0 5px #8f4f00;
 }
 
 .rainbow-skin {
@@ -515,6 +526,107 @@ body {
     background: linear-gradient(135deg, #FF4500, #8B0000);
     color: #FFD700;
     text-shadow: 0 0 10px #FF4500;
+}
+
+.matrix-skin {
+    background-color: #000;
+    color: #00FF00;
+    text-shadow: 0 0 10px #00FF00;
+    position: relative;
+    overflow: hidden;
+}
+
+.matrix-skin::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, 
+                rgba(0, 255, 0, 0.1) 0%,
+                rgba(0, 255, 0, 0.2) 50%,
+                rgba(0, 255, 0, 0.1) 100%);
+    animation: matrix-flow 2s linear infinite;
+}
+
+@keyframes matrix-flow {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.plasma-skin {
+    background: linear-gradient(135deg, #5d00ff, #ff00c3);
+    color: white;
+    text-shadow: 0 0 15px white;
+    position: relative;
+    overflow: hidden;
+}
+
+.plasma-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.2) 0%,
+        transparent 70%
+    );
+    animation: plasma-pulse 3s ease infinite;
+}
+
+@keyframes plasma-pulse {
+    0%, 100% { transform: scale(0.8); opacity: 0.3; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+.void-skin {
+    background: linear-gradient(135deg, #000022, #000000);
+    color: #6600cc;
+    text-shadow: 0 0 15px #6600cc;
+    position: relative;
+    overflow: hidden;
+}
+
+.void-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at center,
+        rgba(102, 0, 204, 0.2) 0%,
+        transparent 70%
+    );
+    animation: void-pulse 4s ease infinite;
+}
+
+@keyframes void-pulse {
+    0%, 100% { transform: scale(0.8); opacity: 0.3; }
+    50% { transform: scale(1.5); opacity: 0.1; }
+}
+
+.quantum-skin {
+    background: conic-gradient(from 0deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+    color: white;
+    text-shadow: 0 0 15px white;
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(
+        rgba(255, 255, 255, 0.2) 0deg 10deg,
+        transparent 10deg 20deg
+    );
+    animation: quantum-spin 8s linear infinite;
+}
+
+@keyframes quantum-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Магазин */
@@ -1037,4 +1149,713 @@ body {
 
 .mod-buttons button.danger:hover {
     background-color: #b71c1c;
+}
+
+/* Новые скины */
+.cyber-skin {
+    background: linear-gradient(45deg, #00ffff, #000033);
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+    border: 2px solid #00ffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 255, 0.1) 2px,
+        rgba(0, 255, 255, 0.1) 4px
+    );
+    animation: cyber-scan 2s linear infinite;
+}
+
+@keyframes cyber-scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.dragon-skin {
+    background: linear-gradient(135deg, #ff4400, #800000) !important;
+    box-shadow: 0 0 15px rgba(255, 68, 0, 0.6) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.dragon-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M25,25 Q50,0 75,25 T25,25" fill="rgba(255,140,0,0.3)"/></svg>') repeat;
+    background-size: 20px 20px;
+    animation: dragon-scales 2s infinite linear;
+    opacity: 0.5;
+}
+
+.demon-skin {
+    background: linear-gradient(135deg, #ff0000, #330000) !important;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.demon-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="none" stroke="rgba(255,0,0,0.3)" stroke-width="2"/></svg>') repeat;
+    background-size: 30px 30px;
+    animation: demon-symbols 3s infinite linear;
+    opacity: 0.5;
+}
+
+@keyframes dragon-scales {
+    0% { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(-20px) translateY(-20px); }
+}
+
+@keyframes demon-symbols {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.angel-skin {
+    background: linear-gradient(135deg, #ffffff, #e6e6ff);
+    color: #4d4dff;
+    text-shadow: 0 0 15px #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.angel-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, white, transparent);
+    animation: angel-glow 3s ease infinite;
+}
+
+@keyframes angel-glow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
+.toxic-skin {
+    background: linear-gradient(135deg, #00ff00, #003300);
+    color: #99ff99;
+    text-shadow: 0 0 15px #00ff00;
+    position: relative;
+}
+
+.toxic-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at center,
+        rgba(0, 255, 0, 0.2) 0%,
+        transparent 70%
+    );
+    animation: toxic-bubble 2s ease-in-out infinite;
+}
+
+@keyframes toxic-bubble {
+    0% { transform: scale(0.8); opacity: 0.3; }
+    50% { transform: scale(1.2); opacity: 0.6; }
+    100% { transform: scale(0.8); opacity: 0.3; }
+}
+
+.shadow-skin {
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+    color: #666666;
+    text-shadow: 0 0 15px #333333;
+    position: relative;
+    overflow: hidden;
+}
+
+.shadow-skin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 45%,
+        rgba(51, 51, 51, 0.5) 50%,
+        transparent 55%
+    );
+    animation: shadow-move 3s linear infinite;
+}
+
+@keyframes shadow-move {
+    0% { transform: translateX(-100%) translateY(-100%); }
+    100% { transform: translateX(100%) translateY(100%); }
+}
+
+/* Стили для режимов игры */
+.modes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    padding: 15px;
+}
+
+.mode-item {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mode-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.mode-icon {
+    width: 50px;
+    height: 50px;
+    background: #e3effd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mode-icon i {
+    font-size: 24px;
+    color: #0d4cd3;
+}
+
+.mode-info {
+    flex: 1;
+}
+
+.mode-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.mode-description {
+    font-size: 14px;
+    color: #666;
+}
+
+.mode-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    background: #0d4cd3;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.mode-button:hover {
+    background: #0a3baa;
+}
+
+.mode-button.selected {
+    background: #4CAF50;
+}
+
+.mode-button.selected:hover {
+    background: #388E3C;
+}
+
+/* Стили для игровых экранов */
+.game-screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.game-screen.active {
+    display: block;
+}
+
+.game-screen h2 {
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.game-screen canvas {
+    display: block;
+    margin: 0 auto;
+    background: #000;
+    border: 2px solid #333;
+}
+
+.back-to-modes {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.back-to-modes:hover {
+    background: #444;
+}
+
+#effects-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* Эффекты скинов */
+.demon-energy {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,0,0,0.5) 0%, rgba(0,0,0,0) 70%);
+    animation: demon-pulse 1s ease-out;
+    z-index: 1000;
+}
+
+.ritual-circle {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="red" stroke-width="2"/><path d="M50,5 L50,95 M5,50 L95,50 M15,15 L85,85 M85,15 L15,85" stroke="red" stroke-width="1"/></svg>');
+    animation: ritual-rotate 3s linear infinite;
+    opacity: 0.7;
+    z-index: 999;
+}
+
+.demon-runes {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="20" y="50" font-family="Arial" font-size="20" fill="red">⛧</text><text x="60" y="50" font-family="Arial" font-size="20" fill="red">⛥</text><text x="40" y="80" font-family="Arial" font-size="20" fill="red">⛤</text></svg>');
+    animation: runes-fade 2s ease-in-out infinite;
+    opacity: 0.5;
+    z-index: 998;
+}
+
+.demon-flames {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(0deg, #ff0000, #ff6600, #ffcc00);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: flames-rise 1.5s ease-out infinite;
+    z-index: 997;
+}
+
+@keyframes demon-pulse {
+    0% { transform: scale(0); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.7; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes ritual-rotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes runes-fade {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+    100% { opacity: 0.2; transform: scale(0.8); }
+}
+
+@keyframes flames-rise {
+    0% { transform: translateY(50%) scale(0.8); opacity: 0.5; }
+    50% { transform: translateY(-20%) scale(1.2); opacity: 0.8; }
+    100% { transform: translateY(-50%) scale(0.8); opacity: 0; }
+}
+
+/* Обновленные эффекты для других скинов */
+.dragon-breath {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(45deg, #ff4400, #ff8800, #ffaa00);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: dragon-breath-animation 1s ease-out;
+    z-index: 996;
+}
+
+.dragon-scales {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M25,25 Q50,0 75,25 T25,25" fill="rgba(255,140,0,0.3)"/></svg>') repeat;
+    animation: scales-shift 2s infinite linear;
+    opacity: 0.6;
+    z-index: 995;
+}
+
+@keyframes dragon-breath-animation {
+    0% { transform: scaleY(0) translateY(50%); opacity: 1; }
+    50% { transform: scaleY(1.2) translateY(-30%); opacity: 0.8; }
+    100% { transform: scaleY(1.5) translateY(-50%); opacity: 0; }
+}
+
+@keyframes scales-shift {
+    0% { transform: translateX(0) translateY(0) rotate(0deg); }
+    100% { transform: translateX(-20px) translateY(-20px) rotate(360deg); }
+}
+
+/* Эффекты матрицы */
+.matrix-rain {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0,255,0,0) 0%, rgba(0,255,0,0.2) 50%, rgba(0,255,0,0) 100%);
+    animation: matrix-fall 1s linear infinite;
+    z-index: 994;
+}
+
+.matrix-symbols {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="50" font-family="monospace" font-size="20" fill="lime">01</text><text x="50" y="50" font-family="monospace" font-size="20" fill="lime">10</text></svg>') repeat;
+    animation: symbols-fade 2s linear infinite;
+    opacity: 0.4;
+    z-index: 993;
+}
+
+@keyframes matrix-fall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+@keyframes symbols-fade {
+    0% { opacity: 0.2; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.2; }
+}
+
+/* Эффекты для галактики */
+.galaxy-effect {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle at center,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(148, 0, 211, 0.8) 20%,
+        rgba(75, 0, 130, 0.7) 40%,
+        rgba(0, 0, 139, 0.6) 60%,
+        rgba(0, 0, 0, 0) 80%
+    );
+    animation: galaxy-spin 4s linear infinite;
+    z-index: 990;
+}
+
+.galaxy-stars {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 15px 15px;
+    animation: stars-twinkle 3s ease-in-out infinite;
+    z-index: 989;
+}
+
+.galaxy-nebula {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: conic-gradient(
+        from 0deg,
+        rgba(255, 0, 255, 0.3),
+        rgba(0, 255, 255, 0.3),
+        rgba(255, 255, 0, 0.3),
+        rgba(255, 0, 255, 0.3)
+    );
+    filter: blur(20px);
+    animation: nebula-flow 6s linear infinite;
+    z-index: 988;
+}
+
+.universe-portal {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle at center,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(0, 0, 255, 0.8) 20%,
+        rgba(128, 0, 128, 0.6) 40%,
+        rgba(0, 0, 0, 0) 70%
+    );
+    transform: scale(0);
+    animation: portal-open 3s ease-out forwards;
+    z-index: 987;
+}
+
+@keyframes galaxy-spin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes stars-twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes nebula-flow {
+    0% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+    50% { transform: rotate(180deg) scale(1.3); opacity: 0.6; }
+    100% { transform: rotate(360deg) scale(1); opacity: 0.3; }
+}
+
+@keyframes portal-open {
+    0% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
+    100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+/* Обновленные эффекты для ангела */
+.angel-light {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 223, 186, 0.7) 30%,
+        rgba(255, 255, 255, 0) 70%
+    );
+    animation: divine-light 3s ease infinite;
+    z-index: 993;
+}
+
+.angel-wings {
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><path d="M100,10 C130,10 160,40 180,90 C160,80 130,70 100,70 C70,70 40,80 20,90 C40,40 70,10 100,10" fill="white" opacity="0.7"/></svg>') no-repeat center;
+    animation: wings-flap 4s ease-in-out infinite;
+    z-index: 992;
+}
+
+.angel-blessing {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: repeating-radial-gradient(
+        circle at center,
+        rgba(255, 215, 0, 0.3) 0px,
+        transparent 20px,
+        rgba(255, 215, 0, 0.3) 40px
+    );
+    animation: blessing-pulse 2s ease infinite;
+    z-index: 991;
+}
+
+@keyframes divine-light {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.4); opacity: 0.8; }
+}
+
+@keyframes wings-flap {
+    0%, 100% { transform: scaleX(1); }
+    50% { transform: scaleX(1.2); }
+}
+
+@keyframes blessing-pulse {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+    50% { transform: scale(1.3) rotate(180deg); opacity: 0.6; }
+}
+
+/* Обновленные эффекты для матрицы */
+.matrix-rain {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg,
+        rgba(0, 255, 0, 0) 0%,
+        rgba(0, 255, 0, 0.3) 50%,
+        rgba(0, 255, 0, 0) 100%
+    );
+    animation: matrix-cascade 1.5s linear infinite;
+    z-index: 994;
+}
+
+.matrix-code {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="20" font-family="monospace" font-size="10" fill="lime">10110</text><text x="50" y="40" font-family="monospace" font-size="10" fill="lime">01001</text><text x="30" y="60" font-family="monospace" font-size="10" fill="lime">11010</text><text x="70" y="80" font-family="monospace" font-size="10" fill="lime">00101</text></svg>') repeat;
+    animation: code-fade 2s linear infinite;
+    opacity: 0.6;
+    z-index: 993;
+}
+
+.matrix-glitch {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0, 255, 0, 0.5) 45%,
+        rgba(0, 255, 0, 0.5) 55%,
+        transparent 100%
+    );
+    animation: glitch-effect 0.3s linear infinite;
+    z-index: 992;
+}
+
+@keyframes matrix-cascade {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+@keyframes code-fade {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+@keyframes glitch-effect {
+    0% { transform: translateX(-100%) skewX(-45deg); }
+    100% { transform: translateX(100%) skewX(-45deg); }
+}
+
+/* Обновленные эффекты для плазмы */
+.plasma-core {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle,
+        rgba(255, 0, 255, 0.9) 0%,
+        rgba(128, 0, 255, 0.7) 30%,
+        rgba(0, 0, 255, 0.5) 60%,
+        transparent 100%
+    );
+    animation: plasma-pulse 2s ease infinite;
+    z-index: 994;
+}
+
+.plasma-field {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: conic-gradient(
+        from 0deg,
+        rgba(255, 0, 255, 0.5),
+        rgba(0, 255, 255, 0.5),
+        rgba(255, 0, 255, 0.5)
+    );
+    filter: blur(10px);
+    animation: field-rotate 4s linear infinite;
+    z-index: 993;
+}
+
+.plasma-particles {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background-image: radial-gradient(
+        rgba(255, 0, 255, 0.8) 1px,
+        transparent 1px
+    );
+    background-size: 10px 10px;
+    animation: particles-dance 3s linear infinite;
+    z-index: 992;
+}
+
+@keyframes plasma-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.3); opacity: 0.9; }
+}
+
+@keyframes field-rotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes particles-dance {
+    0% { transform: rotate(0deg) scale(0.8); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(0.8); }
+}
+
+/* Обновленные эффекты для квантового скина */
+.quantum-field {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: conic-gradient(
+        from 0deg,
+        rgba(0, 255, 255, 0.5),
+        rgba(255, 0, 255, 0.5),
+        rgba(255, 255, 0, 0.5),
+        rgba(0, 255, 255, 0.5)
+    );
+    animation: quantum-fluctuation 4s linear infinite;
+    z-index: 994;
+}
+
+.quantum-particles {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.8) 1px,
+        transparent 1px
+    ) repeat;
+    background-size: 20px 20px;
+    animation: particle-entangle 3s ease-in-out infinite;
+    z-index: 993;
+}
+
+.quantum-wave {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: repeating-radial-gradient(
+        circle at center,
+        rgba(0, 255, 255, 0.3) 0px,
+        transparent 20px,
+        rgba(255, 0, 255, 0.3) 40px
+    );
+    animation: wave-collapse 5s linear infinite;
+    z-index: 992;
+}
+
+@keyframes quantum-fluctuation {
+    0% { transform: rotate(0deg) scale(1); filter: hue-rotate(0deg); }
+    50% { transform: rotate(180deg) scale(1.3); filter: hue-rotate(180deg); }
+    100% { transform: rotate(360deg) scale(1); filter: hue-rotate(360deg); }
+}
+
+@keyframes particle-entangle {
+    0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.4; }
+    50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+}
+
+@keyframes wave-collapse {
+    0% { transform: scale(0.8) rotate(0deg); opacity: 0.3; }
+    50% { transform: scale(1.4) rotate(180deg); opacity: 0.6; }
+    100% { transform: scale(0.8) rotate(360deg); opacity: 0.3; }
 } 
