@@ -81,9 +81,9 @@ const ADMIN_USERS = ['admin', 'testadmin', 'root', 'moderator'];
 // Добавляем режимы игры
 const GAME_MODES = {
     clicker: 'Кликер',
-    runner: 'Бегун',
-    puzzle: 'Головоломка',
-    'space-battle': 'Космический бой'
+    runner: 'В разработке',
+    puzzle: 'В разработке',
+    'space-battle': 'В разработке'
 };
 
 // Состояние режимов игры
@@ -2386,4 +2386,5 @@ document.addEventListener('touchend', function(event) {
         gameModesState['space-battle'].keys.ArrowRight = false;
         gameModesState['space-battle'].keys.Space = false;
     }
+
 });
